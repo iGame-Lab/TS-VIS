@@ -1,0 +1,8 @@
+#backend
+__pycache__/
+db.sqlite3
+*.pyc
+.idea/
+__cache__/
+discard
+*.rdb
