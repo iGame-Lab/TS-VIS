@@ -16,7 +16,8 @@
  =============================================================
 """
 from utils.cache_io import CacheIO
-from utils.path_utils import get_file_path
+from utils.vis_logging import get_logger
+from utils.logfile_utils import path_parser
 from .audio_read import audio_read
 from backend.api.utils import get_api_params
 import base64
@@ -36,26 +37,25 @@ def audio_meta_provider(file_path):
 def audio_provider(file_path, step):
     res = CacheIO(file_path).get_cache()
     if res:
-        return audio_read(data=res, step=step) \
-            .get_data()
+        return audio_read(data=res, step=step).get_data()
     else:
         raise ValueError('Parameter error, no data found')
 
 
 def get_audio_meta_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag']
-    uid, trainJobName, run, tag = get_api_params(request, params)
+    params = ['run', 'tag']
+    run, tag = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'audio', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'audio', tag)
     data = audio_meta_provider(file_path)
     return {tag: data}
 
 
 def get_audio_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag', 'step']
-    uid, trainJobName, run, tag, step = get_api_params(request, params)
+    params = ['run', 'tag', 'step']
+    run, tag, step = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'audio', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'audio', tag)
     data = base64.b64encode(audio_provider(file_path, step=int(step)))
     res = "data:audio/wav;base64,%s" % data.decode()
     if data:

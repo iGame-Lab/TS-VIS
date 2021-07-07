@@ -23,8 +23,8 @@ from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     JsonResponse, HttpResponse
 from utils.redis_utils import RedisInstance
 import json
-from utils.path_utils import id2logdir
-from utils.config_utils import ConfigInstance
+from utils.vis_logging import get_logger
+from log_parser import LogParser
 
 
 def validate_get_request(request, func, accept_params=None, args=None):
@@ -166,42 +166,21 @@ def sort_func(x):
 
 
 def get_init_data(request):
-    params = ['id', 'trainJobName']
-    uid, trainJobName = get_api_params(request, params)
-    _id = request.session.session_key
-    if not _id:
-        request.session.create()
-        _id = request.session.session_key
-
-    logdir, cachedir = id2logdir(uid, trainJobName)
-    unique_task = uid + '_' + trainJobName
-    msg = {
-        "type": "run",
-        "uid": unique_task,
-        "logdir": str(logdir),
-        "cachedir": str(cachedir)
-    }
-    RedisInstance.send_message(json.dumps(msg))
-    request.session[_id] = uid
+    logdir, cachedir = get_logger().logdir, get_logger().cachedir
+    _parser = LogParser(logdir, cachedir)
+    # TODO 下一步调用解析函数，开始解析日志
+    _parser.start_parse()
     # 如果已经读到内容，则继续下一步操作
-    c_time = time.time()
-    is_init_finish(unique_task)
-    print(time.time() - c_time)
+    # c_time = time.time()
+    # is_init_finish(unique_task)
+    # print(time.time() - c_time)
 
-    return {
-        'msg': 'success',
-        'session_id': _id
-    }
+    return { 'msg': 'success' }
 
 
 def get_category_data(request):
-    params = ['uid', 'trainJobName']
-    uid, trainJobName = get_api_params(request, params)
-    if RedisInstance.exist(uid):
-        cache_path = Path(RedisInstance.get(uid))
-        res = process_category(cache_path)
-    else:
-        raise ValueError('ID was not found')
+    cache_path = get_logger().cachedir
+    res = process_category(cache_path)
     return res
 
 
@@ -209,18 +188,6 @@ def response_wrapper(fn):
     def inner(*args, **kwargs):
         try:
             res = fn(*args, **kwargs)
-            _sid = args[0].session.session_key
-            _session = args[0].session.get(_sid, '')
-            _uid = _session if _session else args[0].GET.get('id')
-            _job = args[0].GET.get('trainJobName')
-            # 更新session过期时间
-            if _uid and _job:
-                aus = _uid + '_' + _job
-                RedisInstance.set(
-                    aus + "_is_alive",
-                    time.time()
-                    + 60 * ConfigInstance.conf_user_expiration_time()
-                )
             if not isinstance(res, HttpResponse):
                 return JsonResponse({
                     'code': 200,
@@ -249,7 +216,7 @@ def response_wrapper(fn):
 def get_api_params(request, params):
     res = {}
     for params_name in params:
-        # 若参数名为’uid'，表示需要从session中获取，并与'trainJobName'字段拼接
+        # 若参数名为'uid'，表示需要从session中获取，并与'trainJobName'字段拼接
         if params_name == 'uid':
             p = request.session[request.session.session_key]
         else:

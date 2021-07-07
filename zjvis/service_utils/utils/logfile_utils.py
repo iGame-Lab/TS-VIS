@@ -16,34 +16,27 @@
  =============================================================
 """
 from pathlib import Path
-from .redis_utils import RedisInstance
-from .config_utils import ConfigInstance
 
 
-def id2logdir(uid, trainJobName):
-    _base = Path(ConfigInstance.conf_logdir_base()).absolute()
-    log_dir = _base / uid / trainJobName / "visualizedlog"
-    try:
-        int(uid)
-    except ValueError:
-        _base = Path("../demo_logs").absolute()
-        log_dir = _base / uid / "logs"
+def get_runinfo(logdir):
+    """
+    给定日志目录，返回有哪些run（文件夹）
 
-    cache_dir = Path("../__cache__").absolute() / uid / trainJobName
-    return log_dir, cache_dir
+    """
+    p = Path(logdir)
+    dirs = sorted(f for f in p.rglob('*') if f.is_dir())
+    res = {}
+    files = [f for f in p.glob('*')]
+    if files:
+        res['.'] = p.absolute()
+    for dir in dirs:
+        res[dir.name] = dir.absolute()
+    return res
 
-
-def get_file_path(uid, run, type, tag):
-    _key = uid + '_' + run + '_' + type + '_' + tag
-    try:
-        _res = RedisInstance.get(_key)
-        _path = Path(RedisInstance.get(_res))
-    except TypeError:
-        raise OSError('Redis key {} not found according to request '
-                      'parameters, please check the parameters\n _path={}'
-                      .format(_key, _res))
-    return _path
-
+def is_available_flie(filename):
+    filename = Path(filename)
+    return True if filename.suffix == '.json' or "events" in filename.name\
+                   or "projector" in filename.name else False
 
 def path_parser(cache_path, run, type, tag):
     run = run if not (run == '.') else 'root'

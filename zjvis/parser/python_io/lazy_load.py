@@ -19,30 +19,21 @@ from pathlib import Path
 from typing import Union
 import os
 
-from utils.redis_utils import RedisInstance
 from python_io.dictionary_watcher import start_run_watcher
 from python_io.logfile_loader import Trace_Thread
 
 
 class LazyLoad:
-    def __init__(
-            self,
-            run: str,
-            rundir: Union[str, Path],
-    ):
+    def __init__(self, run: str, rundir: Union[str, Path]):
         self.run = run
         self.rundir = rundir
 
     # 惰性加载，在初始化的时候加载目前日志中的所有数据
-    def init_load(self, uid, cache_path):
+    def init_load(self, cache_path):
         # 开启文件监听
-        start_run_watcher(self.run, str(self.rundir), uid, cache_path)
+        start_run_watcher(self.run, str(self.rundir), cache_path)
         files = [f for f in self.rundir.glob("*") if f.is_file()]
         for file in files:
-            # 设置每个文件的初始加载状态都为False
-            # (redis不支持Boolen类型，存为0或1代替)
-            RedisInstance.set("{}_{}_{}_is_finish".format(uid, self.run,
-                              file.name), 0)
             current_size = os.path.getsize(str(file))
-            Trace_Thread(self.run, file, current_size, uid, cache_path)\
-                .start()
+            _thread = Trace_Thread(self.run, file, current_size, cache_path)
+            _thread.start()

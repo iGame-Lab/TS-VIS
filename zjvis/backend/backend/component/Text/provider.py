@@ -16,7 +16,8 @@
  =============================================================
 """
 from utils.cache_io import CacheIO
-from utils.path_utils import get_file_path
+from utils.vis_logging import get_logger
+from utils.logfile_utils import path_parser
 from .text_read import text_read
 from backend.api.utils import get_api_params
 
@@ -33,9 +34,9 @@ def text_provider(file_path):
 
 
 def get_text_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag']
-    uid, trainJobName, run, tag = get_api_params(request, params)
+    params = ['run', 'tag']
+    run, tag = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'text', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'text', tag)
     data = text_provider(file_path)
     return {tag: data}

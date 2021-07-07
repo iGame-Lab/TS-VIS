@@ -442,6 +442,5 @@ def get_data(graph):
     data_search(data, level, edges_info, edges_info_num, edges_info_list, edges_control_info, build=False)
 
     # 数据存入
-    # TODO
     # 放回data
     return data

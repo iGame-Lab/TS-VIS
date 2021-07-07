@@ -17,18 +17,18 @@
 """
 from utils.cache_io import CacheIO
 from .hparams_read import hparams_read
-from utils.path_utils import get_file_path
+from utils.vis_logging import get_logger
+from utils.logfile_utils import path_parser
 from backend.api.utils import get_api_params
 
 
-def hparams_provider(uid, run):
-    file_path1 = get_file_path(uid, run, 'hyperparm', 'hparams')
+def hparams_provider(run):
+    file_path1 = path_parser(get_logger().cachedir, run, 'hyperparm', 'hparams')
     _data = CacheIO(file_path1).get_cache()
     return hparams_read(_data, None).get_data()
 
 
 def get_hparams_data(request):
-    params = ['uid', 'trainJobName', 'run']
-    uid, trainJobName, run = get_api_params(request, params)
-
-    return hparams_provider(uid=uid, run=run)
+    params = ['run']
+    run = get_api_params(request, params)
+    return hparams_provider(run=run)
