@@ -16,12 +16,12 @@
  =============================================================
 """
 import re
-import time
+import sys
 import urllib.parse
 from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     JsonResponse, HttpResponse
-import json
 from utils.vis_logging import get_logger
+sys.path.append('../parser')
 from log_parser import LogParser
 
 
