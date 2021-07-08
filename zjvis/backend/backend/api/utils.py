@@ -20,7 +20,6 @@ import time
 import urllib.parse
 from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     JsonResponse, HttpResponse
-from utils.redis_utils import RedisInstance
 import json
 from utils.vis_logging import get_logger
 from log_parser import LogParser
@@ -70,31 +69,6 @@ def validate_post_request(request, func, accept_params=None, args=None):
         return func(request, *args)
     else:
         return HttpResponseBadRequest('parameter lost!')
-
-
-def is_init_finish(uid):
-    _current_file_count = 0
-    ctime = time.time()
-    try:
-        _, response = RedisInstance.brpop('parser_statu' + uid, timeout=5)
-    except TypeError:
-        raise ValueError('Parse service not responding')
-    response = json.loads(response)
-    if response['code'] == 200:
-        while True:
-            keys = RedisInstance.keys(uid + '*' + "is_finish")
-            # 如果完成标志还没设置或完成标志还未设置完成
-            if not keys or _current_file_count != len(keys):
-                _current_file_count = len(keys)
-                time.sleep(0.1)
-                continue
-            res = [int(RedisInstance.get(k)) for k in keys]
-            if all(res) or time.time() - ctime >= 30:
-                break
-            else:
-                time.sleep(1)
-    else:
-        raise ValueError(response['msg'])
 
 
 def get_classified_label(tags):
