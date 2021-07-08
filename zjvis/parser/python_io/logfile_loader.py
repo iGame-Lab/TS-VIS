@@ -16,7 +16,6 @@
  =============================================================
 """
 import threading
-import time
 import json
 from io import BytesIO
 from pathlib import Path
@@ -49,13 +48,16 @@ class Trace_Thread(threading.Thread):
         filename = Path(self.filename)
         if filename.suffix == ".json":
             self.load_model_file(filename)
+            # 已完成graph文件解析，将完成标志放入队列
+            self.comm.put({self.name: True})
             return
         f = open(filename, "rb")
         # for event file
         if "event" in filename.name:
             _io = BytesIO(f.read(current_size))
             self.load_event_file(_io)
-            # 已完成日志解析，将完成标志放入队列
+            # print(self.name + " is finish parsing")
+            # 已完成event文件解析，将完成标志放入队列
             self.comm.put({self.name: True})
             # TODO 为什么写不进去？只有退出了才可以写进去内容
             # while True:
@@ -68,6 +70,8 @@ class Trace_Thread(threading.Thread):
         # for projector file
         elif "projector" in filename.name:
             self.load_projector_file(f)
+            # 已完成projector文件解析，将完成标志放入队列
+            self.comm.put({self.name: True})
 
     def set_cache(self, file_name, data):
         if not file_name.parent.exists():
