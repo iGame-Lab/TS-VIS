@@ -5,7 +5,7 @@ tsne_mp==0.1.13
 crc32c==2.0
 tensorboard==2.1.0
 Django==3.0.3
-absl==0.0
+absl-py==0.9.0
 Pillow==8.3.1
 protobuf==3.17.3
 scikit_learn==0.24.2
