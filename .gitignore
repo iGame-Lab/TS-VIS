@@ -1,4 +1,4 @@
-#backend
+# backend
 __pycache__/
 db.sqlite3
 *.pyc
@@ -6,3 +6,7 @@ db.sqlite3
 __cache__/
 discard
 *.rdb
+
+# cache files
+__viscache__
+test/

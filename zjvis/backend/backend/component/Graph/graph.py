@@ -351,7 +351,7 @@ graph_op = [
                  "Group Normalization",
                  "Local Response Norm", "Batch Norm", "Weight Norm",
                  "Layer Norm", "Instance Norm", "Consine Norm",
-                 "Group Norm"]
+                 "Group Norm", "Normalization"]
     },
     {
         "op": "Math&Activation&Pooling",

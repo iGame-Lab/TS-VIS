@@ -20,6 +20,7 @@ import time
 import json
 from io import BytesIO
 from pathlib import Path
+from queue import Queue
 from tbparser import SummaryReader
 from tbparser import Projector_Reader
 from utils.cache_io import CacheIO
@@ -28,12 +29,13 @@ import pickle
 
 
 class Trace_Thread(threading.Thread):
-    def __init__(self, runname, filename, current_size, cache_path):
+    def __init__(self, runname, filename, current_size, cache_path, comm: Queue):
         threading.Thread.__init__(self, name=filename.name)
         self.runname = runname
         self.cache_path = cache_path
         self.filename = filename
         self.current_size = current_size
+        self.comm = comm
         # 该日志中是否有超参数
         self.has_hparams = False
         self.first_write = False
@@ -53,6 +55,8 @@ class Trace_Thread(threading.Thread):
         if "event" in filename.name:
             _io = BytesIO(f.read(current_size))
             self.load_event_file(_io)
+            # 已完成日志解析，将完成标志放入队列
+            self.comm.put({self.name: True})
             # TODO 为什么写不进去？只有退出了才可以写进去内容
             # while True:
             #     rest = f.read()

@@ -16,28 +16,15 @@
  =============================================================
 """
 import sys
+import time
 sys.path.append('../service_utils')
 from utils import logfile_utils
 from python_io.lazy_load import LazyLoad
-from multiprocessing import Process
+from multiprocessing import Process, Queue
 from pathlib import Path
 from shutil import rmtree
 from utils.redis_utils import RedisInstance
-import json
 
-
-def load_logs(run_dirs, cache_path):
-    msg = '({}) starts successfully'.format(run_dirs)
-    print(msg)
-    for key, val in run_dirs.items():
-        LazyLoad(key, val).init_load(cache_path=cache_path)
-
-
-def set_cache_path(cache_dir):
-    cache_dir = Path(cache_dir).absolute()
-    if cache_dir.exists():
-        rmtree(cache_dir)
-    return cache_dir.absolute()
 #
 #
 # class Master:
@@ -117,11 +104,33 @@ class LogParser:
             run_dirs = logfile_utils.get_runinfo(self._logdir)
             # 如果有相关日志
             if run_dirs:
-                p = Process(target=load_logs, args=(run_dirs, cache_path))
-                p.start()
+                load_logs(run_dirs, cache_path)
             else:
                 # TODO 引发一个异常
                 pass
         else:
             # TODO 引发一个异常
             pass
+
+
+def load_logs(run_dirs, cache_path):
+    msg = '({}) starts successfully'.format(run_dirs)
+    print(msg)
+    comm_queue = Queue()
+    start_time = time.time()
+    # 给每一个run开一个进程
+    for key, val in run_dirs.items():
+        _ll = LazyLoad(key, val, comm_queue)
+        p = Process(target=_ll.init_load, args=(cache_path, ))
+        p.start()
+    while comm_queue.qsize() != len(run_dirs):
+        if time.time() - start_time >= 30:
+            break
+        time.sleep(0.5)
+
+
+def set_cache_path(cache_dir):
+    cache_dir = Path(cache_dir).absolute()
+    if cache_dir.exists():
+        rmtree(cache_dir)
+    return cache_dir.absolute()

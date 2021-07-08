@@ -18,7 +18,6 @@
 import re
 import time
 import urllib.parse
-from pathlib import Path
 from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     JsonResponse, HttpResponse
 from utils.redis_utils import RedisInstance
@@ -216,12 +215,7 @@ def response_wrapper(fn):
 def get_api_params(request, params):
     res = {}
     for params_name in params:
-        # 若参数名为'uid'，表示需要从session中获取，并与'trainJobName'字段拼接
-        if params_name == 'uid':
-            p = request.session[request.session.session_key]
-        else:
-            p = request.GET.get(params_name)
-
+        p = request.GET.get(params_name)
         if not p:
             msg = "{} :Parameter request error, parameter '{}' not found" \
                 .format(request.path, params_name)
@@ -229,10 +223,8 @@ def get_api_params(request, params):
         else:
             res[params_name] = p
 
-    params_key = res.keys()
-    if 'uid' in params_key and 'trainJobName' in params_key:
-        res['uid'] = res['uid'] + '_' + res['trainJobName']
     ret = list(res.values())
+    # 对url编码的字符串进行解码
     for i, r in enumerate(ret):
         ret[i] = urllib.parse.unquote(r)
         if '%' in ret[i]:
