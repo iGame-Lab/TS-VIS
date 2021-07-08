@@ -16,7 +16,8 @@
  =============================================================
 """
 from utils.cache_io import CacheIO
-from utils.path_utils import get_file_path
+from utils.vis_logging import get_logger
+from utils.logfile_utils import path_parser
 from .exception_read import Exception_read
 from backend.api.utils import get_api_params
 
@@ -25,8 +26,7 @@ def exception_meta_provider(file_path):
     # read from cache
     res = CacheIO(file_path).get_cache()
     if res:
-        exception_meta_data = Exception_read(data=res) \
-            .get_meta_data()
+        exception_meta_data = Exception_read(data=res).get_meta_data()
         return exception_meta_data
     else:
         raise ValueError('Parameter error, no data found')
@@ -36,8 +36,7 @@ def exception_provider(file_path, step):
     res = CacheIO(file_path).get_cache()
     if res:
         # raw_data
-        data = Exception_read(data=res, step=step) \
-            .get_data()
+        data = Exception_read(data=res, step=step).get_data()
         return data
     else:
         raise ValueError('Parameter error, no data found')
@@ -47,8 +46,7 @@ def exception_box_provider(file_path, step, limit):
     res = CacheIO(file_path).get_cache()
     if res:
         # raw_data
-        data = Exception_read(data=res, step=step) \
-            .get_outlier(limit)
+        data = Exception_read(data=res, step=step).get_outlier(limit)
         return data
     else:
         raise ValueError('Parameter error, no data found')
@@ -58,27 +56,26 @@ def exception_hist_provider(file_path, step):
     res = CacheIO(file_path).get_cache()
     if res:
         # raw_data
-        data = Exception_read(data=res, step=step) \
-            .get_histogram()
+        data = Exception_read(data=res, step=step).get_histogram()
         return data
     else:
         raise ValueError('Parameter error, no data found')
 
 
 def get_exception_meta_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag']
-    uid, trainJobName, run, tag = get_api_params(request, params)
+    params = ['run', 'tag']
+    run, tag = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'exception', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'exception', tag)
     data = exception_meta_provider(file_path)
     return {tag: data}
 
 
 def get_exception_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag', 'step']
-    uid, trainJobName, run, tag, step = get_api_params(request, params)
+    params = ['run', 'tag', 'step']
+    run, tag, step = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'exception', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'exception', tag)
     data = exception_provider(file_path, step=int(step))
 
     if data:
@@ -88,10 +85,10 @@ def get_exception_data(request):
 
 
 def get_exception_hist_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag', 'step']
-    uid, trainJobName, run, tag, step = get_api_params(request, params)
+    params = ['run', 'tag', 'step']
+    run, tag, step = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'exception', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'exception', tag)
     data = exception_hist_provider(file_path, step=int(step))
 
     if data:
@@ -101,10 +98,10 @@ def get_exception_hist_data(request):
 
 
 def get_exception_box_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag', 'step', 'up', 'down']
-    uid, trainJobName, run, tag, step, up, down = get_api_params(request, params)
+    params = ['run', 'tag', 'step', 'up', 'down']
+    run, tag, step, up, down = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'exception', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'exception', tag)
     data = exception_box_provider(file_path, step=int(step), limit=[float(up), float(down)])
 
     if data:

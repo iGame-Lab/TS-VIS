@@ -21,11 +21,11 @@ import sys
 sys.path.append("../service_utils")
 
 FLAGS = flags.FLAGS
-flags.DEFINE_string("port", None, "Specify django port.")
+flags.DEFINE_string("port", "9898", "Specify HTTP server port.")
+flags.DEFINE_string("logdir", None, "Specify visual log directory")
 
 # 指定必须输入的参数
-flags.mark_flag_as_required("port")
-
+flags.mark_flag_as_required("logdir")
 
 def run_migrate(argv):
     argvs = [

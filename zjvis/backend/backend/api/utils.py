@@ -16,15 +16,13 @@
  =============================================================
 """
 import re
-import time
+import sys
 import urllib.parse
-from pathlib import Path
 from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     JsonResponse, HttpResponse
-from utils.redis_utils import RedisInstance
-import json
-from utils.path_utils import id2logdir
-from utils.config_utils import ConfigInstance
+from utils.vis_logging import get_logger
+sys.path.append('../parser')
+from log_parser import LogParser
 
 
 def validate_get_request(request, func, accept_params=None, args=None):
@@ -71,31 +69,6 @@ def validate_post_request(request, func, accept_params=None, args=None):
         return func(request, *args)
     else:
         return HttpResponseBadRequest('parameter lost!')
-
-
-def is_init_finish(uid):
-    _current_file_count = 0
-    ctime = time.time()
-    try:
-        _, response = RedisInstance.brpop('parser_statu' + uid, timeout=5)
-    except TypeError:
-        raise ValueError('Parse service not responding')
-    response = json.loads(response)
-    if response['code'] == 200:
-        while True:
-            keys = RedisInstance.keys(uid + '*' + "is_finish")
-            # 如果完成标志还没设置或完成标志还未设置完成
-            if not keys or _current_file_count != len(keys):
-                _current_file_count = len(keys)
-                time.sleep(0.1)
-                continue
-            res = [int(RedisInstance.get(k)) for k in keys]
-            if all(res) or time.time() - ctime >= 30:
-                break
-            else:
-                time.sleep(1)
-    else:
-        raise ValueError(response['msg'])
 
 
 def get_classified_label(tags):
@@ -166,42 +139,21 @@ def sort_func(x):
 
 
 def get_init_data(request):
-    params = ['id', 'trainJobName']
-    uid, trainJobName = get_api_params(request, params)
-    _id = request.session.session_key
-    if not _id:
-        request.session.create()
-        _id = request.session.session_key
-
-    logdir, cachedir = id2logdir(uid, trainJobName)
-    unique_task = uid + '_' + trainJobName
-    msg = {
-        "type": "run",
-        "uid": unique_task,
-        "logdir": str(logdir),
-        "cachedir": str(cachedir)
-    }
-    RedisInstance.send_message(json.dumps(msg))
-    request.session[_id] = uid
+    logdir, cachedir = get_logger().logdir, get_logger().cachedir
+    _parser = LogParser(logdir, cachedir)
+    # TODO 下一步调用解析函数，开始解析日志
+    _parser.start_parse()
     # 如果已经读到内容，则继续下一步操作
-    c_time = time.time()
-    is_init_finish(unique_task)
-    print(time.time() - c_time)
+    # c_time = time.time()
+    # is_init_finish(unique_task)
+    # print(time.time() - c_time)
 
-    return {
-        'msg': 'success',
-        'session_id': _id
-    }
+    return { 'msg': 'success' }
 
 
 def get_category_data(request):
-    params = ['uid', 'trainJobName']
-    uid, trainJobName = get_api_params(request, params)
-    if RedisInstance.exist(uid):
-        cache_path = Path(RedisInstance.get(uid))
-        res = process_category(cache_path)
-    else:
-        raise ValueError('ID was not found')
+    cache_path = get_logger().cachedir
+    res = process_category(cache_path)
     return res
 
 
@@ -209,18 +161,6 @@ def response_wrapper(fn):
     def inner(*args, **kwargs):
         try:
             res = fn(*args, **kwargs)
-            _sid = args[0].session.session_key
-            _session = args[0].session.get(_sid, '')
-            _uid = _session if _session else args[0].GET.get('id')
-            _job = args[0].GET.get('trainJobName')
-            # 更新session过期时间
-            if _uid and _job:
-                aus = _uid + '_' + _job
-                RedisInstance.set(
-                    aus + "_is_alive",
-                    time.time()
-                    + 60 * ConfigInstance.conf_user_expiration_time()
-                )
             if not isinstance(res, HttpResponse):
                 return JsonResponse({
                     'code': 200,
@@ -249,12 +189,7 @@ def response_wrapper(fn):
 def get_api_params(request, params):
     res = {}
     for params_name in params:
-        # 若参数名为’uid'，表示需要从session中获取，并与'trainJobName'字段拼接
-        if params_name == 'uid':
-            p = request.session[request.session.session_key]
-        else:
-            p = request.GET.get(params_name)
-
+        p = request.GET.get(params_name)
         if not p:
             msg = "{} :Parameter request error, parameter '{}' not found" \
                 .format(request.path, params_name)
@@ -262,10 +197,8 @@ def get_api_params(request, params):
         else:
             res[params_name] = p
 
-    params_key = res.keys()
-    if 'uid' in params_key and 'trainJobName' in params_key:
-        res['uid'] = res['uid'] + '_' + res['trainJobName']
     ret = list(res.values())
+    # 对url编码的字符串进行解码
     for i, r in enumerate(ret):
         ret[i] = urllib.parse.unquote(r)
         if '%' in ret[i]:

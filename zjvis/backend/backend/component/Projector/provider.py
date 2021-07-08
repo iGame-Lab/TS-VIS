@@ -18,7 +18,8 @@
 from PIL import Image
 import io
 from utils.cache_io import CacheIO
-from utils.path_utils import get_file_path
+from utils.vis_logging import get_logger
+from utils.logfile_utils import path_parser
 from .projector_read import projector_read
 from .projector_reduction import projector_reduction
 from backend.api.utils import get_api_params
@@ -82,12 +83,12 @@ def projector_provider(file_path, step, method, dims, samples=1000):
 
 
 def get_projector_meta_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag']
-    uid, trainJobName, run, tag = get_api_params(request, params)
+    params = ['run', 'tag']
+    run, tag = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'embedding', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'embedding', tag)
     sample_tag = 'sample_' + tag.replace('/', '#').replace(':', '$')
-    sample_file_path = get_file_path(uid, run, 'embedding',sample_tag)
+    sample_file_path = path_parser(get_logger().cachedir, run, 'embedding',sample_tag)
     data = projector_meta_provider(file_path,sample_file_path)
     return {
         tag: data[0],
@@ -98,10 +99,10 @@ def get_projector_meta_data(request):
 
 
 def get_projector_raw_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag', 'step']
-    uid, trainJobName, run, tag, step = get_api_params(request, params)
+    params = ['run', 'tag', 'step']
+    run, tag, step = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'embedding', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'embedding', tag)
     data = projector_raw_provider(file_path, step=int(step))
 
     if data:
@@ -111,11 +112,11 @@ def get_projector_raw_data(request):
 
 
 def get_projector_sample_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag', 'index']
-    uid, trainJobName, run, tag, index = get_api_params(request, params)
+    params = ['run', 'tag', 'index']
+    run, tag, index = get_api_params(request, params)
 
     sample_tag = 'sample_' + tag.replace('/', '#').replace(':', '$')
-    file_path = get_file_path(uid, run, 'embedding', sample_tag)
+    file_path = path_parser(get_logger().cachedir, run, 'embedding', sample_tag)
     sample = projector_sample_provider(file_path, index=int(index))
 
     if sample:
@@ -141,15 +142,15 @@ def get_projector_sample_data(request):
 
 
 def get_projector_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag', 'step', 'method']
-    uid, trainJobName, run, tag, step, method = get_api_params(request, params)
+    params = ['run', 'tag', 'step', 'method']
+    run, tag, step, method = get_api_params(request, params)
     # 可选参数
     if request.GET.get('dims'):
         dims = int(request.GET.get('dims'))
     else:
         dims = None
 
-    file_path = get_file_path(uid, run, 'embedding', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'embedding', tag)
     data = projector_provider(file_path, step=int(step), method=method, dims=dims)
 
     if data:

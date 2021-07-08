@@ -17,7 +17,8 @@
 """
 import json
 from utils.cache_io import CacheIO
-from utils.path_utils import get_file_path
+from utils.vis_logging import get_logger
+from utils.logfile_utils import path_parser
 from .s_graph_read import get_s_graph_data, get_c_graph_data
 from .graph import graph_op
 from backend.api.utils import get_api_params
@@ -36,8 +37,8 @@ def graph_provider(file_path):
 
 
 def get_graph_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag']
-    uid, trainJobName, run, tag = get_api_params(request, params)
+    params = ['run', 'tag']
+    run, tag = get_api_params(request, params)
 
-    file_path = get_file_path(uid, run, 'graph', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'graph', tag)
     return json.dumps(graph_provider(file_path))

@@ -17,7 +17,8 @@
 """
 from utils.cache_io import CacheIO
 from .hist_read import histogram_read
-from utils.path_utils import get_file_path
+from utils.vis_logging import get_logger
+from utils.logfile_utils import path_parser
 from backend.api.utils import get_api_params
 
 
@@ -32,12 +33,12 @@ def hist_provider(file_path, samples=None):
 
 
 def get_histogram_data(request):
-    params = ['uid', 'trainJobName', 'run', 'tag']
-    uid, trainJobName, run, tag = get_api_params(request, params)
+    params = ['run', 'tag']
+    run, tag = get_api_params(request, params)
     # 可选参数 sample
     samples = request.GET.get('samples')
     samples = int(samples) if samples else None
 
-    file_path = get_file_path(uid, run, 'hist', tag)
+    file_path = path_parser(get_logger().cachedir, run, 'hist', tag)
     data = hist_provider(file_path, samples=samples)
     return {tag: data}

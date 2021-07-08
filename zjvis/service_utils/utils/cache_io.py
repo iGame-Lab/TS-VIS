@@ -17,14 +17,6 @@
 """
 import pickle
 
-
-def path_parser(cache_path, run, type, tag):
-    run = run if not (run == '.') else 'root'
-    tag = tag.replace('/', '#').replace(':', '$')
-    file_path = cache_path / run / type / tag
-    return file_path
-
-
 class CacheIO:
     file_io = {}
 
