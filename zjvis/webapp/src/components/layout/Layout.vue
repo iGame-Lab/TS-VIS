@@ -1308,7 +1308,7 @@ export default {
 
   /deep/ .el-input__inner {
     font-size: 14px;
-    color: white;
+    color: #909399;
   }
 
   /deep/ .el-tag {
