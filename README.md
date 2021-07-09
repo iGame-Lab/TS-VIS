@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 ```
 cd ./zjvis/backend
-python ./main.py --logdir=../demo_logs
+python ./main.py --logdir=../test
 ```
 
 ## 前端请求
