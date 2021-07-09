@@ -141,13 +141,7 @@ def sort_func(x):
 def get_init_data(request):
     logdir, cachedir = get_logger().logdir, get_logger().cachedir
     _parser = LogParser(logdir, cachedir)
-    # TODO 下一步调用解析函数，开始解析日志
     _parser.start_parse()
-    # 如果已经读到内容，则继续下一步操作
-    # c_time = time.time()
-    # is_init_finish(unique_task)
-    # print(time.time() - c_time)
-
     return { 'msg': 'success' }
 
 

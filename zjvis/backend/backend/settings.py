@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from utils.config_utils import ConfigInstance
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '42n5q5ki33%^l(0^63q7%(#sd0v#n^_gxkld-c*g_#1#ewrf1f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = ConfigInstance.conf_django_debug()
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-SESSION_COOKIE_AGE = 60 * ConfigInstance.conf_user_expiration_time()
+SESSION_COOKIE_AGE = 60 * 60
 
 CACHES = {
  'default': {
