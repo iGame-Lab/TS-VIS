@@ -38,8 +38,8 @@ def is_available_flie(filename):
     return True if filename.suffix == '.json' or "events" in filename.name\
                    or "projector" in filename.name else False
 
-def path_parser(cache_path, run, type, tag):
+def path_parser(cache_path, run, category, tag):
     run = run if not (run == '.') else 'root'
     tag = tag.replace('/', '#').replace(':', '$')
-    file_path = cache_path / run / type / tag
+    file_path = cache_path / run / category / tag
     return file_path

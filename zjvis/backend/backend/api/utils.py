@@ -197,4 +197,6 @@ def get_api_params(request, params):
         ret[i] = urllib.parse.unquote(r)
         if '%' in ret[i]:
             ret[i] = urllib.parse.unquote(ret[i])
+    # 只有一个结果则不返回列表
+    ret = ret[0] if len(ret) == 1 else ret
     return ret
