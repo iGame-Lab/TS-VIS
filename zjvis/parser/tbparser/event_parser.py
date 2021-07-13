@@ -1,8 +1,6 @@
 import struct
 import numpy as np
 import json
-import sys
-from typing import Union, Optional
 from oneflow.proto.plugin_hparams_pb2 import HParamsPluginData
 from oneflow.proto.graph_pb2 import GraphDef
 

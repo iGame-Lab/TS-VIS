@@ -23,7 +23,6 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import io
-import time
 from typing import Iterable, Optional
 from oneflow.proto.event_pb2 import Event
 from crc32c import crc32c

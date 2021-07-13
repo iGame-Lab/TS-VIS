@@ -58,7 +58,7 @@ class Trace_Thread(threading.Thread):
             return
 
         # for event file
-        if "event" in filename.name:
+        elif "event" in filename.name:
             fd = open(filename, "rb")
             reader = SummaryReader(fd)
             for items in reader:
