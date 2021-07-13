@@ -141,7 +141,7 @@ def _get_embedding(value):
         embedding = projector.embedding
         return dict(tag = value.tag,
                     value = _decoder_tensor(embedding.value),
-                    label = _decoder_tensor(embedding.label),
+                    label = _decoder_tensor(embedding.label) if embedding.HasField('label') else np.array([]),
                     type = 'embedding')
 
 def _get_exception(value):
