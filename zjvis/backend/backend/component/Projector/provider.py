@@ -24,7 +24,7 @@ from .projector_read import projector_read
 from .projector_reduction import projector_reduction
 from backend.api.utils import get_api_params
 import base64
-
+import numpy as np
 
 def projector_meta_provider(file_path, sample_file_path):
     # read from cache
@@ -122,7 +122,7 @@ def get_projector_sample_data(request):
     if sample:
         _io = io.BytesIO()
         if sample['type'] == 'image':
-            _img = Image.fromarray(sample['val'])
+            _img = Image.fromarray(sample['val'].astype(np.uint8))
             _img.save(_io, "png")
             _content = _io.getvalue()
             _data = base64.b64encode(_content)

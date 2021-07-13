@@ -23,6 +23,7 @@ from queue import Queue
 
 from python_io.dictionary_watcher import start_run_watcher
 from python_io.logfile_loader import Trace_Thread
+from utils.logfile_utils import is_available_flie
 
 
 class LazyLoad:
@@ -35,7 +36,7 @@ class LazyLoad:
     def init_load(self, cache_path):
         # 开启文件监听
         start_run_watcher(self.run, str(self.rundir), cache_path)
-        files = [f for f in self.rundir.glob("*") if f.is_file()]
+        files = [f for f in self.rundir.glob("*") if is_available_flie(f)]
         # 线程间通信的队列
         comm_queue = Queue()
         for file in files:

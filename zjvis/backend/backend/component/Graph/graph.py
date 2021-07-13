@@ -287,11 +287,11 @@ class Proxy:
     def _get_links(self):
         links = defaultdict(list)
         for node in self._nodes:
-            to_name_without = get_source_name(node["name"])
-            from_names = node["inputs"]
+            to_name_without = get_source_name(node.name)
+            from_names = node.input
             if from_names:
                 for from_name in from_names:
-                    name = node["name"]
+                    name = node.name
                     from_name_without_ = get_source_name(from_name)
                     if "^" in from_name:
                         name = "^" + name
@@ -304,8 +304,8 @@ class Proxy:
     def _set_graph(self):
         G = Graph()
         for node in self._nodes:
-            tmp_node = Node(node["name"], node["op"])
-            links = self._links[node["name"]]
+            tmp_node = Node(node.name, node.op)
+            links = self._links[node.name]
             if links:
                 for f, t in links:
                     f_without = get_source_name(f)
@@ -313,7 +313,7 @@ class Proxy:
                         tmp_node.add_output(t)
                     else:
                         tmp_node.add_input(f)
-            tmp_node.set_attr(node["attrs"])
+            tmp_node.set_attr(node.attr)
             G.add_node(tmp_node)
         return G
 
@@ -351,7 +351,7 @@ graph_op = [
                  "Group Normalization",
                  "Local Response Norm", "Batch Norm", "Weight Norm",
                  "Layer Norm", "Instance Norm", "Consine Norm",
-                 "Group Norm", "Normalization"]
+                 "Group Norm"]
     },
     {
         "op": "Math&Activation&Pooling",

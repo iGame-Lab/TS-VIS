@@ -19,7 +19,8 @@ import json
 from utils.cache_io import CacheIO
 from utils.vis_logging import get_logger
 from utils.logfile_utils import path_parser
-from .s_graph_read import get_s_graph_data, get_c_graph_data
+from .graph_read import get_data as graph_get_data
+from .s_graph_read import get_s_graph_data
 from .graph import graph_op
 from backend.api.utils import get_api_params
 
@@ -28,8 +29,7 @@ def graph_provider(file_path):
     res = CacheIO(file_path).get_cache()
     if res:
         return {
-            'net': get_s_graph_data(res) if "s_graph" in str(file_path)
-            else get_c_graph_data(res),
+            'net': get_s_graph_data(res) if isinstance(res, str) else graph_get_data(res),
             'operator': graph_op
         }
     else:

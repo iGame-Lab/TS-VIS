@@ -37,11 +37,9 @@ class LogParser:
             if run_dirs:
                 load_logs(run_dirs, cache_path)
             else:
-                # TODO 引发一个异常
-                pass
+                raise FileNotFoundError("The folder {} is empty".format(self._logdir))
         else:
-            # TODO 引发一个异常
-            pass
+            raise FileExistsError("No such dictionary {}".format(self._logdir))
 
 
 def load_logs(run_dirs, cache_path):

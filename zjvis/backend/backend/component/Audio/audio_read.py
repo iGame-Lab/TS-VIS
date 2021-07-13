@@ -49,3 +49,5 @@ class audio_read:
                 return _data['value']['string_val'][0] \
                     if 'string_val' in _data['value'].keys() else \
                     _data['value']['encoded_audio_string']
+
+        raise Exception(f'cannot find data in step = {self.step}')

@@ -16,12 +16,12 @@
  =============================================================
 """
 from pathlib import Path
+support = ["events", ".json"]
 
 
 def get_runinfo(logdir):
     """
     给定日志目录，返回有哪些run（文件夹）
-
     """
     p = Path(logdir)
     dirs = sorted(f for f in p.rglob('*') if f.is_dir())
@@ -29,14 +29,17 @@ def get_runinfo(logdir):
     files = [f for f in p.glob('*')]
     if files:
         res['.'] = p.absolute()
-    for dir in dirs:
-        res[dir.name] = dir.absolute()
+    for _dir in dirs:
+        res[_dir.name] = _dir.absolute()
     return res
 
 def is_available_flie(filename):
     filename = Path(filename)
-    return True if filename.suffix == '.json' or "events" in filename.name\
-                   or "projector" in filename.name else False
+    if filename.is_file():
+        for _s in support:
+            if _s in filename.name:
+                return True
+    return False
 
 def path_parser(cache_path, run, category, tag):
     run = run if not (run == '.') else 'root'
