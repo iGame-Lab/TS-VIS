@@ -31,7 +31,7 @@ def get_parser(value, step, wall_time):
 
     elif value.HasField('metadata'):
         if value.metadata.plugin_data.plugin_name == 'hparams':
-            value = _get_hparams
+            value = _get_hparams(value)
     else:
         raise Exception(f'cannot parse this data: {value}')
 

@@ -30,5 +30,5 @@ def hparams_provider(run):
 
 def get_hparams_data(request):
     params = ['run']
-    [run] = get_api_params(request, params)
+    run = get_api_params(request, params)
     return hparams_provider(run=run)
