@@ -40,11 +40,15 @@ class projector_read:
             for _data in self.data:
                 if _data['step'] == self.step:
                     return [_data['value'].tolist(), _data['label'].tolist()]
+
+            raise Exception(f'cannot find data in step = {self.step}')
         # 请求样本索引，返回样本图像
         else:
-            _data = self.data[0]
+            _data = self.data[0]['value']
             # 获取指定step
             return {
                 'val': _data['X'][self.index].squeeze(),
                 'type': _data['type']
             }
+
+

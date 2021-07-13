@@ -32,6 +32,8 @@ class Exception_read:
                 res = [Histogram(_data['value']).get_data()]
                 return res
 
+        raise Exception(f'cannot find data in step = {self.step}')
+
     def get_flatten_shape(self, k):
         n = math.floor(pow(k / 2, 0.5))
         if n == 0:
@@ -116,6 +118,7 @@ class Exception_read:
                 flatten_data = self.flatten(data)
                 res = [_shape, _min, _max, _mean, flatten_data.tolist()]
                 return res
+        raise Exception(f'cannot find data in step = {self.step}')
 
     def get_outlier(self, limit):
         for _data in self.data:
@@ -123,3 +126,4 @@ class Exception_read:
                 data = _data['value']
                 res = self.box_exception(data, limit)
                 return res
+        raise Exception(f'cannot find data in step = {self.step}')

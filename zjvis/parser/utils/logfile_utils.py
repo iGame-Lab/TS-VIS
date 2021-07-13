@@ -29,8 +29,8 @@ def get_runinfo(logdir):
     files = [f for f in p.glob('*')]
     if files:
         res['.'] = p.absolute()
-    for dir in dirs:
-        res[dir.name] = dir.absolute()
+    for _dir in dirs:
+        res[_dir.name] = _dir.absolute()
     return res
 
 def is_available_flie(filename):

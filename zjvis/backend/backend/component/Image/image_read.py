@@ -41,3 +41,5 @@ class image_read:
         for _data in self.data:
             if _data['step'] == self.step:
                 return _data['value']['encoded_image_string']
+
+        raise Exception(f'cannot find data in step = {self.step}')

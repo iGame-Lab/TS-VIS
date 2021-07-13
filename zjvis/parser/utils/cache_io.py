@@ -20,7 +20,8 @@ import pickle
 class CacheIO:
     file_io = {}
 
-    def __init__(self, file_path):
+    def __init__(self, file_path, mod='wb'):
+        self.mod = mod
         self.file_path = file_path
 
     def get_file_io(self):
@@ -31,7 +32,7 @@ class CacheIO:
             # 判断文件是否存在，不存在则创建并打开返回文件指针
             if not self.file_path.parent.exists():
                 self.file_path.parent.mkdir(parents=True, exist_ok=True)
-            f = open(self.file_path, 'wb')
+            f = open(self.file_path, self.mod)
             self.file_io[self.file_path] = f
         return f
 

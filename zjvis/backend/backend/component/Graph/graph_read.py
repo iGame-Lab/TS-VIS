@@ -316,7 +316,7 @@ def data_build(tree, graph, data, level, curr_path=None):
                 if (key != "_output_shapes") & (key != "shape"):
                     node_attr[key] = str(node_info.attr[key]).replace('\n', '')
                 elif key == "shape":
-                    node_attr[key] = node_info.attr[key]
+                    node_attr[key] = str(node_info.attr[key]).replace('\n', '')
                 elif key == "_output_shapes":
                     # 在_output_shapes中用一个list存储当前节点到其他节点边的维度信息，每一个是一个shape
                     shape_list = node_info.attr[key].list.shape
