@@ -194,7 +194,7 @@ export default {
       font-size: 10px;
     }
   }
-  /deep/.box-card{
+  .box-card{
     height: 100%;
     width: 100%;
     // min-width: 400px;
@@ -246,7 +246,7 @@ export default {
         font-size: 20px;
       }
       /deep/.el-checkbox{
-        font-size:20px;
+        font-size: 20px;
       }
       /deep/.el-checkbox__input.is-checked .el-checkbox__inner{
         background-color:#8F8BD9;

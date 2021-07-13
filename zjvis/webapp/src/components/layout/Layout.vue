@@ -1016,11 +1016,10 @@ export default {
     // }
     // TODO 临时解决方案，最终使用上面的方案
     const params = {
-      id: 'user1',
       trainJobName: 'test'
     }
     this.setParams(params);
-    this.initWaitingPage(params);
+    this.initWaitingPage({});
   },
   mounted() {
     const h = 

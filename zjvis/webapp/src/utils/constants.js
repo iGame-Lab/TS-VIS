@@ -1,13 +1,13 @@
 /*
  * @Author: your name
  * @Date: 2021-03-30 10:18:06
- * @LastEditTime: 2021-04-02 18:18:29
+ * @LastEditTime: 2021-07-09 10:54:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \frontend\src\utils\constants.js
  */
 const HOSTNAME = window.location.origin + '/'
-const DJANGOHOSTNAME = 'http://localhost:8013/'
+const DJANGOHOSTNAME = 'http://localhost:9898/'
 // const DJANGOHOSTNAME = process.env.VUE_APP_VISUAL_IMG_API
 // const DJANGOHOSTNAME = 'http://192.168.157.100:8001'
 // const DJANGOHOSTNAME = '' // 生成服务器静态页面接口

@@ -1,3 +1,4 @@
+
 import axios from 'axios'
 // import Config from '@/settings'
 // import { getToken } from '@/utils/auth'
@@ -44,7 +45,7 @@ service.interceptors.response.use(
 
 const useGet = (url, params) => {
   const user = store.state.params
-  params['trainJobName'] = user.trainJobName
+  // params['trainJobName'] = user.trainJobName
   // console.log(url, params)
   return service.get(url, { params })
 }
