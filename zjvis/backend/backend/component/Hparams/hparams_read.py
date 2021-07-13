@@ -65,9 +65,9 @@ class hparams_read:
                 })
             current_hparams_info[group_name]["start_time_secs"] = \
                 hp.session_start_info.start_time_secs
-            for i, metric in enumerate(session_start_info.metrics):
-                self.res['metrics'][i]['tag'] = metric
-                value = session_start_info.metrics[metric]
-                _data = get_proto_value(value)
-                self.res['metrics'][i]['value'].append(_data)
+
+            for i, tag in enumerate(session_start_info.metrics):
+                if tag in self.scalar_data:
+                    self.res['metrics'][i]['tag'] = tag
+                    self.res['metrics'][i]['value'].append(self.scalar_data[tag])
             self.res["hparamsInfo"].append(current_hparams_info)
