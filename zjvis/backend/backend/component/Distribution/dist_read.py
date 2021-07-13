@@ -84,7 +84,6 @@ class distribution_read:
         bucket = left_edge + (x - weights_cumsum_pre) * bucket_width / weight_width
         return bucket
 
-
     def get_data(self):
         """
         返回distribution数据
