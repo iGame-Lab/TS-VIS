@@ -19,7 +19,7 @@ import sys
 import time
 sys.path.append('../service_utils')
 from utils import logfile_utils
-from python_io.lazy_load import LazyLoad
+from loader.lazy_load import LazyLoad
 from multiprocessing import Process, Queue
 from pathlib import Path
 from shutil import rmtree
@@ -56,7 +56,7 @@ def load_logs(run_dirs, cache_path):
         if time.time() - start_time >= 30:
             break
         time.sleep(0.5)
-
+    comm_queue.queue.clear()
 
 def set_cache_path(cache_dir):
     cache_dir = Path(cache_dir).absolute()

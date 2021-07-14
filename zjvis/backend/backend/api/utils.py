@@ -147,7 +147,6 @@ def get_init_data(request):
     return { 'msg': 'success' }
 
 
-
 def get_category_data(request):
     cache_path = get_logger().cachedir
     res = process_category(cache_path)

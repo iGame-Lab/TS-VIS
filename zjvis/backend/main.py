@@ -17,8 +17,6 @@
 """
 from absl import app, flags
 import manage
-import sys
-sys.path.append("../service_utils")
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string("port", "9898", "Specify HTTP server port.")

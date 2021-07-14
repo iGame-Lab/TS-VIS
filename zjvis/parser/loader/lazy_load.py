@@ -21,8 +21,8 @@ import os
 import time
 from queue import Queue
 
-from python_io.dictionary_watcher import start_run_watcher
-from python_io.logfile_loader import Trace_Thread
+from loader.dictionary_watcher import start_run_watcher
+from loader.logfile_loader import Trace_Thread
 from utils.logfile_utils import is_available_flie
 
 
@@ -45,4 +45,5 @@ class LazyLoad:
             _thread.start()
         while len(files) != comm_queue.qsize():
             time.sleep(0.5)
+        comm_queue.queue.clear()
         self.comm.put({self.run: True})
