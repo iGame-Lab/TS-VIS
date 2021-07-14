@@ -31,7 +31,7 @@ def get_parser(value, step, wall_time):
 
     elif value.HasField('metadata'):
         if value.metadata.plugin_data.plugin_name == 'hparams':
-            value = _get_hparams
+            value = _get_hparams(value)
     else:
         raise Exception(f'cannot parse this data: {value}')
 
@@ -141,7 +141,7 @@ def _get_embedding(value):
         embedding = projector.embedding
         return dict(tag = value.tag,
                     value = _decoder_tensor(embedding.value),
-                    label = _decoder_tensor(embedding.label),
+                    label = _decoder_tensor(embedding.label) if embedding.HasField('label') else np.array([]),
                     type = 'embedding')
 
 def _get_exception(value):

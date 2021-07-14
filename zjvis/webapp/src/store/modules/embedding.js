@@ -202,6 +202,11 @@ const mutations = {
   },
   setCurData: (state, param) => {
     state.curData.data = param[0].slice(0)
+    if(param[1].slice(0).length == 0) { // 防止后端数据tag为空
+      for(let i = 0; i < param[0].length; i++) {
+        param[1].push('NULL');
+      }
+    }
     state.curData.label = param[1].slice(0)
     state.curData.labelType = []
     state.curData.echaLabelNumber = {}

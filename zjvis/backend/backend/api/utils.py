@@ -16,14 +16,12 @@
  =============================================================
 """
 import re
-import sys
 import urllib.parse
 from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     JsonResponse, HttpResponse
 from utils.vis_logging import get_logger
-sys.path.append('../parser')
 from log_parser import LogParser
-
+from django.core.cache import cache
 
 def validate_get_request(request, func, accept_params=None, args=None):
     """Check if method of request is GET and request params is legal
@@ -139,9 +137,11 @@ def sort_func(x):
 
 
 def get_init_data(request):
-    logdir, cachedir = get_logger().logdir, get_logger().cachedir
-    _parser = LogParser(logdir, cachedir)
-    _parser.start_parse()
+    if not cache.get('finished'):
+        logdir, cachedir = get_logger().logdir, get_logger().cachedir
+        _parser = LogParser(logdir, cachedir)
+        _parser.start_parse()
+        cache.set('finished', True)
     return { 'msg': 'success' }
 
 
@@ -171,6 +171,8 @@ def response_wrapper(fn):
                 _str_tb += _st
                 _tb = _tb.tb_next
             msg = "{}: Trace: {}".format(str(e), _str_tb)
+            import logging
+            logging.error(msg)
             return JsonResponse({
                 'code': 500,
                 'msg': msg,

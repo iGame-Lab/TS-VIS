@@ -18,10 +18,10 @@
 import threading
 from pathlib import Path
 from queue import Queue
-from tbparser import SummaryReader
+from visparser import SummaryReader
 from utils.cache_io import CacheIO
 from utils.logfile_utils import path_parser
-from tbparser.event_parser import filter_graph
+from visparser.event_parser import filter_graph
 
 
 class Trace_Thread(threading.Thread):

@@ -27,7 +27,7 @@
     }
     /deep/.el-image{
       width: 100%;
-      height: auto;
+      height: 400px;
     }
     /deep/.el-image__preview{
       width: 100%;
@@ -148,12 +148,18 @@
           </el-row>
         </div>
       </div>
-      <div class="imagecontent">
-        <!-- <img :src="imgurl"> -->
-        <el-image
-          :src="imgurl"
-          :preview-src-list="[imgurl]"
-        />
+      <div class="imagecontent demo-image__placeholder">
+        <div class="block">
+          <!-- <span class="demonstration">默认</span> -->
+          <el-image
+            :src="imgurl"
+            :preview-src-list="[imgurl]"
+          >
+            <div slot="placeholder" class="image-slot">
+              加载中<span class="dot">...</span>
+            </div>
+          </el-image>
+        </div>
       </div>
       <el-slider
         v-model="scrollvalue"
@@ -219,8 +225,8 @@ export default {
     const params = {
       step: this.imagecontent[0].step.toString(),
       run: this.content.run,
-      tag: Object.keys(this.content.value)[0],
-      trainJobName: this.getParams.trainJobName
+      tag: Object.keys(this.content.value)[0]
+      // trainJobName: this.getParams.trainJobName
     }
     await http.useGet(port.category.image_raw, params)
       .then(res => {
