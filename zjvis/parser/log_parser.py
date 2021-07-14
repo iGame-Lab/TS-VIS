@@ -15,9 +15,7 @@
  limitations under the License.
  =============================================================
 """
-import sys
 import time
-sys.path.append('../service_utils')
 from utils import logfile_utils
 from loader.lazy_load import LazyLoad
 from multiprocessing import Process, Queue
