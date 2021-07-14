@@ -22,7 +22,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 from collections.abc import Iterable
-from tbparser.events_reader import EventsFileReader
+from visparser.events_reader import EventsFileReader
 from .event_parser import get_parser, get_graph
 
 class SummaryReader(Iterable):

@@ -18,7 +18,7 @@
 import os
 from watchdog.observers.polling import PollingObserver
 from watchdog.events import *
-from python_io.logfile_loader import Trace_Thread
+from loader.logfile_loader import Trace_Thread
 from utils.logfile_utils import *
 
 
