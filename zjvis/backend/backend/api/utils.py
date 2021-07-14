@@ -16,12 +16,10 @@
  =============================================================
 """
 import re
-import sys
 import urllib.parse
 from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     JsonResponse, HttpResponse
 from utils.vis_logging import get_logger
-sys.path.append('../parser')
 from log_parser import LogParser
 from django.core.cache import cache
 
