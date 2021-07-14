@@ -171,6 +171,8 @@ def response_wrapper(fn):
                 _str_tb += _st
                 _tb = _tb.tb_next
             msg = "{}: Trace: {}".format(str(e), _str_tb)
+            import logging
+            logging.error(msg)
             return JsonResponse({
                 'code': 500,
                 'msg': msg,
