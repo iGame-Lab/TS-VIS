@@ -165,13 +165,13 @@
                     </el-scrollbar>
                   </div>
                   <div v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample_type'] == 'image' && getMessage != ''" class="image">
-                    <el-scrollbar style="height: 100%">
+                    <!-- <el-scrollbar style="height: 100%"> -->
                       <el-image
                         :src="getPanelSampleData['url']"
                         :preview-src-list="[getPanelSampleData['url']]"
                         class="image"
                       />
-                    </el-scrollbar>
+                    <!-- </el-scrollbar> -->
                   </div>
                   <div v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample_type'] == 'audio' && getMessage != ''" class="image">
                     <el-scrollbar style="height: 100%">
