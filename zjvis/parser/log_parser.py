@@ -56,7 +56,7 @@ def load_logs(run_dirs, cache_path):
         if time.time() - start_time >= 30:
             break
         time.sleep(0.5)
-    comm_queue.queue.clear()
+    comm_queue.close()
 
 def set_cache_path(cache_dir):
     cache_dir = Path(cache_dir).absolute()
