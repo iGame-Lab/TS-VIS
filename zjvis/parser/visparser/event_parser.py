@@ -23,15 +23,16 @@ def get_parser(value, step, wall_time):
     elif value.HasField('histo'):
         value = _get_hist(value)
 
-    elif value.HasField('tensor'):
-        value = _get_text(value)
-
     elif value.HasField('projector'):
         value = _get_projector(value)
 
     elif value.HasField('metadata'):
         if value.metadata.plugin_data.plugin_name == 'hparams':
             value = _get_hparams(value)
+
+    elif value.HasField('tensor'):
+        value = _get_text(value)
+
     else:
         raise Exception(f'cannot parse this data: {value}')
 
