@@ -37,7 +37,7 @@ def image(name, tensor):
 
 def text(name, text_string):
     tensor = TensorProto(string_val=[text_string.encode(encoding='utf_8')])
-    metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='texts'))
+    metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='text'))
     return Summary(value=[Summary.Value(tag=name,
                                         tensor=tensor,
                                         metadata=metadata)])
