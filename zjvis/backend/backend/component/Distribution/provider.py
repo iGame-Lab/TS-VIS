@@ -16,7 +16,6 @@
  =============================================================
 """
 from utils.cache_io import CacheIO
-from utils.vis_logging import get_logger
 from utils.logfile_utils import path_parser
 from .dist_read import distribution_read
 from backend.api.utils import get_api_params
@@ -39,6 +38,7 @@ def get_distribution_data(request):
     samples = request.GET.get('samples')
     samples = int(samples) if samples else None
 
+    from utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'hist', tag)
     data = dist_provider(file_path, samples=samples)
     return {tag: data}

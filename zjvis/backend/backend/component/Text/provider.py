@@ -16,7 +16,6 @@
  =============================================================
 """
 from utils.cache_io import CacheIO
-from utils.vis_logging import get_logger
 from utils.logfile_utils import path_parser
 from .text_read import text_read
 from backend.api.utils import get_api_params
@@ -37,6 +36,7 @@ def get_text_data(request):
     params = ['run', 'tag']
     run, tag = get_api_params(request, params)
 
+    from utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'text', tag)
     data = text_provider(file_path)
     return {tag: data}

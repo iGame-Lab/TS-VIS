@@ -18,7 +18,6 @@
 from PIL import Image
 import io
 from utils.cache_io import CacheIO
-from utils.vis_logging import get_logger
 from utils.logfile_utils import path_parser
 from .projector_read import projector_read
 from .projector_reduction import projector_reduction
@@ -86,6 +85,7 @@ def get_projector_meta_data(request):
     params = ['run', 'tag']
     run, tag = get_api_params(request, params)
 
+    from utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'embedding', tag)
     sample_tag = 'sample_' + tag.replace('/', '#').replace(':', '$')
     sample_file_path = path_parser(get_logger().cachedir, run, 'embedding',sample_tag)
@@ -102,6 +102,7 @@ def get_projector_raw_data(request):
     params = ['run', 'tag', 'step']
     run, tag, step = get_api_params(request, params)
 
+    from utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'embedding', tag)
     data = projector_raw_provider(file_path, step=int(step))
 
@@ -115,6 +116,7 @@ def get_projector_sample_data(request):
     params = ['run', 'tag', 'index']
     run, tag, index = get_api_params(request, params)
 
+    from utils.vis_logging import get_logger
     sample_tag = 'sample_' + tag.replace('/', '#').replace(':', '$')
     file_path = path_parser(get_logger().cachedir, run, 'embedding', sample_tag)
     sample = projector_sample_provider(file_path, index=int(index))
@@ -150,6 +152,7 @@ def get_projector_data(request):
     else:
         dims = None
 
+    from utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'embedding', tag)
     data = projector_provider(file_path, step=int(step), method=method, dims=dims)
 

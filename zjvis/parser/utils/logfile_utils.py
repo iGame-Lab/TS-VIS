@@ -44,5 +44,7 @@ def is_available_flie(filename):
 def path_parser(cache_path, run, category, tag):
     run = run if not (run == '.') else 'root'
     tag = tag.replace('/', '#').replace(':', '$')
+    assert isinstance(cache_path, Path), \
+        f"Parameter cache_path must be a instance of {Path.__name__}"
     file_path = cache_path / run / category / tag
     return file_path

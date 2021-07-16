@@ -15,37 +15,38 @@
  limitations under the License.
  =============================================================
 """
-from absl import app, flags
-import manage
 import sys
+import manage
+from command_line import get_cmd_line
 sys.path.append('../parser')
 sys.path.append('../')
 
-FLAGS = flags.FLAGS
-flags.DEFINE_string("port", "9898", "Specify HTTP server port.")
-flags.DEFINE_string("logdir", None, "Specify visual log directory")
-
-# 指定必须输入的参数
-flags.mark_flag_as_required("logdir")
-
-def run_migrate(argv):
+def run_migrate(args):
     argvs = [
-        argv[0],
+        sys.argv[0],
         "migrate",
     ]
     manage.main(argvs)
 
-
-def run_main(argv):
+def run_test(args):
     argvs = [
-        argv[0],
+        sys.argv[0],
+        "test",
+        "tests"
+    ]
+    manage.main(argvs)
+
+def run_main(args):
+    argvs = [
+        sys.argv[0],
         "runserver",
-        "0.0.0.0:" + FLAGS.port,
+        "0.0.0.0:" + args.port,
         "--noreload",
     ]
     manage.main(argvs)
 
 
 if __name__ == "__main__":
-    # app.run(run_migrate)
-    app.run(run_main)
+    programs = {"runserver": run_main, "migrate": run_migrate, "test": run_test}
+    cmd_line = get_cmd_line()
+    programs[cmd_line.action](cmd_line.args)

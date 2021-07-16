@@ -29,6 +29,20 @@ ALLOWED_HOSTS = ['*']
 
 SESSION_COOKIE_AGE = 60 * 60
 
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'ERROR',
+#     },
+# }
+
 CACHES = {
  'default': {
   'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # 指定缓存使用的引擎

@@ -45,7 +45,7 @@ audio::-webkit-media-controls-panel{
         <el-divider />
         <el-row>
           <el-col :span="6"><el-tag class="bottom">STEP</el-tag></el-col>
-          <el-col :span="18" class="center"><span>{{ audiocontent[scrollvalue].step }}</span></el-col>
+          <el-col :span="18" class="center"><span>{{ audiocontent[scrollvalue].step}}</span></el-col>
         </el-row>
         <el-divider />
         <el-row>
@@ -65,7 +65,9 @@ audio::-webkit-media-controls-panel{
           v-model="scrollvalue"
           :max="audiocontent.length - 1"
           :disabled="audiocontent.length - 1===0"
-          class="slider" />
+          :format-tooltip="formatTooltip"
+          class="slider"
+          />
       </div>
     </el-col>
   </div>
@@ -178,7 +180,13 @@ export default {
       param['checked'] = this.checked
       param['copyToData'] = false
       this.setAudioData(param)
-    }
+    },
+    formatTooltip(val) {
+      if (val === null) {
+        return 0
+      }
+      return this.audiocontent[val]['step']
+    },
   }
 }
 </script>

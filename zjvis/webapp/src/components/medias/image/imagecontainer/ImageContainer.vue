@@ -165,6 +165,7 @@
         v-model="scrollvalue"
         :max="imagecontent.length - 1"
         :disabled="imagecontent.length - 1===0"
+        :format-tooltip="formatTooltip"
         class="slider" />
     </el-col>
   </div>
@@ -272,7 +273,13 @@ export default {
     scaleSmall() {
       this.size = 8
       this.scaleLargeSmall = false
-    }
+    },
+    formatTooltip(val) {
+      if (val === null) {
+        return 0
+      }
+      return this.imagecontent[val]['step']
+    },
   }
 
 }
