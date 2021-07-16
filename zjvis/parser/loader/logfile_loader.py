@@ -54,7 +54,7 @@ class Trace_Thread(threading.Thread):
                 CacheIO(sg_file_path).set_cache(data=_sg_content)
                 CacheIO(cg_file_path).set_cache(data=_cg_content)
             # 已完成graph文件解析，将完成标志放入队列
-            self.comm.put({self.name: True})
+            self.comm.put(self.name)
             return
 
         # for event file
@@ -77,7 +77,7 @@ class Trace_Thread(threading.Thread):
 
             # print(self.name + " is finish parsing")
             # 已完成event文件解析，将完成标志放入队列
-            self.comm.put({self.name: True})
+            self.comm.put(self.name)
 
             # TODO 为什么写不进去？只有退出了才可以写进去内容
             # while True:

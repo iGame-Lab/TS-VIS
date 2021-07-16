@@ -15,7 +15,6 @@
  limitations under the License.
  =============================================================
 """
-import time
 from utils import logfile_utils
 from loader.lazy_load import LazyLoad
 from multiprocessing import Process, Queue
@@ -44,16 +43,22 @@ def load_logs(run_dirs, cache_path):
     msg = '({}) starts successfully'.format(run_dirs)
     print(msg)
     comm_queue = Queue()
+    import time
     start_time = time.time()
+
+    proc_pool = {}
     # 给每一个run开一个进程
-    for key, val in run_dirs.items():
-        _ll = LazyLoad(key, val, comm_queue)
-        p = Process(target=_ll.init_load, args=(cache_path, ))
+    for _run, _dir in run_dirs.items():
+        proc_pool[_run] = object()
+        _ll = LazyLoad(_run, _dir, comm_queue)
+        p = Process(target=_ll.init_load, args=(cache_path, ), name=_run)
         p.start()
-    while comm_queue.qsize() != len(run_dirs):
+    assert len(proc_pool) == len(run_dirs)
+    while len(proc_pool):
+        _signal = comm_queue.get()
+        proc_pool.pop(_signal)
         if time.time() - start_time >= 30:
             break
-        time.sleep(0.5)
     comm_queue.close()
 
 def set_cache_path(cache_dir):
