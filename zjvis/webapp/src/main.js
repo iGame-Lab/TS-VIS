@@ -10,7 +10,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
+// import router from './router'
 // import iView from 'view-design'
 // import 'view-design/dist/styles/iview.css'
 import store from './store'
@@ -21,6 +21,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/icon/iconfont.css'
 // import '//at.alicdn.com/t/font_1809513_34f3xf94tc.css'
+import router from './router'
 
 Vue.config.productionTip = false
 // Vue.use(iView)
