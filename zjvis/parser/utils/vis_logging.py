@@ -3,7 +3,7 @@
 # @Author  : MSH
 # @FileName: vis_logging.py
 # @Software: PyCharm
-from absl import flags
+from command_line import get_cmd_line
 from pathlib import Path
 
 class VisLogging:
@@ -15,9 +15,10 @@ class VisLogging:
             cls._instance = object.__new__(cls)
         return cls._instance
 
-    def __init__(self, path):
-        self._logging_path = Path(path)
-        self._cache_path = self._logging_path.parent / "__viscache__"
+    def __init__(self, cmd_line):
+        if cmd_line.action != "migrate":
+            self._logging_path = Path(cmd_line.args.logdir)
+            self._cache_path = self._logging_path.parent / "__viscache__"
 
     @property
     def logdir(self):
@@ -28,7 +29,7 @@ class VisLogging:
         return self._cache_path
 
 
-_logging = VisLogging(flags.FLAGS.logdir)
+_logging = VisLogging(get_cmd_line())
 
 def get_logger():
     return _logging

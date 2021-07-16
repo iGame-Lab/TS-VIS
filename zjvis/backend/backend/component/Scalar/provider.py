@@ -17,7 +17,6 @@
 """
 from utils.cache_io import CacheIO
 from .scalar_read import scalar_read
-from utils.vis_logging import get_logger
 from utils.logfile_utils import path_parser
 from backend.api.utils import get_api_params
 
@@ -36,5 +35,6 @@ def get_scalar_data(request):
     params = ['run', 'tag']
     run, tag = get_api_params(request, params)
 
+    from utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'scalar', tag)
     return { tag: scalar_provider(file_path) }

@@ -17,12 +17,13 @@
 """
 from utils.cache_io import CacheIO
 from .hparams_read import hparams_read
-from utils.vis_logging import get_logger
 from utils.logfile_utils import path_parser
 from backend.api.utils import get_api_params
 
 
 def hparams_provider(run):
+    from utils.vis_logging import get_logger
+
     file_path1 = path_parser(get_logger().cachedir, run, 'hyperparm', 'hparams')
     _data = CacheIO(file_path1).get_cache()
 
@@ -32,7 +33,7 @@ def hparams_provider(run):
     for tag in metrics:
         file_path1 = path_parser(get_logger().cachedir, run, 'scalar', tag)
         scalar = CacheIO(file_path1).get_cache()[-1]
-        scalar_data[tag]=scalar['value']
+        scalar_data[tag] = scalar['value']
 
     return hparams_read(_data, scalar_data).get_data()
 

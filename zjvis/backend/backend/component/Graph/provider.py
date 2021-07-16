@@ -17,7 +17,6 @@
 """
 import json
 from utils.cache_io import CacheIO
-from utils.vis_logging import get_logger
 from utils.logfile_utils import path_parser
 from .graph_read import get_data as graph_get_data
 from .s_graph_read import get_s_graph_data
@@ -40,5 +39,6 @@ def get_graph_data(request):
     params = ['run', 'tag']
     run, tag = get_api_params(request, params)
 
+    from utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'graph', tag)
     return json.dumps(graph_provider(file_path))

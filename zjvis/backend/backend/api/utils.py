@@ -19,8 +19,6 @@ import re
 import urllib.parse
 from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     JsonResponse, HttpResponse
-from utils.vis_logging import get_logger
-from log_parser import LogParser
 from django.core.cache import cache
 
 def validate_get_request(request, func, accept_params=None, args=None):
@@ -138,6 +136,10 @@ def sort_func(x):
 
 def get_init_data(request):
     if not cache.get('finished'):
+        # 从这里import不会在启动的时候加载很多东西
+        from log_parser import LogParser
+        from utils.vis_logging import get_logger
+
         logdir, cachedir = get_logger().logdir, get_logger().cachedir
         _parser = LogParser(logdir, cachedir)
         _parser.start_parse()
@@ -146,6 +148,7 @@ def get_init_data(request):
 
 
 def get_category_data(request):
+    from utils.vis_logging import get_logger
     cache_path = get_logger().cachedir
     res = process_category(cache_path)
     return res
