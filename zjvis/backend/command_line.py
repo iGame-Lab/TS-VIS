@@ -39,6 +39,7 @@ class CommandLine:
         parser_mr = subparsers.add_parser('test', help='Run test for RESTful API')
         parser_mr.add_argument('--testdir', dest="logdir", type=str,
                                help='Specify test log directory', required=True)
+        parser_mr.add_argument('testcase', type=str, help='Testcase for test')
         parser_mr.set_defaults(action="test")
 
         if len(sys.argv) < 2:
