@@ -712,8 +712,23 @@ export default {
       const minUp = y(q1) + top // min往上走不能超过minUp
       const minDown = y(boxPercent[index][1][0]) + top // min往下走不能超过minDown
       let curMinPosition = top + y(min)
-      svg.append('g')
-        .append('line')
+      const ming = svg.append('g')
+      // min line的背景，扩大鼠标的选中的范围
+      ming.append('line')
+        .attr('class', `excepDownLine${index}`)
+        .attr('x1', center - width / 2)
+        .attr('x2', center + width / 2)
+        .attr('y1', function _nonName() {
+          return top + y(min)
+        })
+        .attr('y2', function _nonName() {
+          return top + y(min)
+        })
+        .attr('stroke', 'black')
+        .attr('stroke-width', '20')
+        .attr('stroke-opacity', '0')
+
+      const minLineFront = ming.append('line')
         .attr('class', `excepDownLine${index}`)
         .attr('x1', center - width / 2)
         .attr('x2', center + width / 2)
@@ -725,19 +740,16 @@ export default {
         })
         .attr('stroke', 'black')
         .attr('stroke-width', '2')
-        .on('mouseover', function _nonName() {
-          d3.select(this).style('cursor', 's-resize')
-        })
+      ming.on('mouseover', function _nonName() {
+        d3.select(this).style('cursor', 's-resize')
+      })
         .call(d3.drag().on('drag', function _nonName() {
+          if (d3.event.y > minDown || d3.event.y < minUp) return
           curMinPosition = d3.event.y
-          if (d3.event.y > minDown) {
-            curMinPosition = minDown
-          } else if (d3.event.y < minUp) {
-            curMinPosition = minUp
-          }
           d3.select(this).attr('y1', curMinPosition).attr('y2', curMinPosition)
           centerLine.attr('y1', curMinPosition)
           downText.attr('y', curMinPosition + 10).text(y.invert(curMinPosition - top).toFixed(4))
+          minLineFront.attr('y1', curMinPosition).attr('y2', curMinPosition)
         })
           .on('end', function _nonName() {
             // 停止拖拽时更新js中的min和max，并向后端请求数据
@@ -750,8 +762,22 @@ export default {
       const maxUp = y(boxPercent[index][1][5]) + top
       let curMaxPosition = top + y(max)
       // max
-      svg.append('g')
-        .append('line')
+      const maxg = svg.append('g')
+      // max line的背景，扩大鼠标的选中的范围
+      maxg.append('line')
+        .attr('class', `excepUpLine${index}`)
+        .attr('x1', center - width / 2)
+        .attr('x2', center + width / 2)
+        .attr('y1', function _nonName() {
+          return top + y(max)
+        })
+        .attr('y2', function _nonName() {
+          return top + y(max)
+        })
+        .attr('stroke', 'black')
+        .attr('stroke-width', '20')
+        .attr('stroke-opacity', '0')
+      const maxLineFront = maxg.append('line')
         .attr('class', `excepUpLine${index}`)
         .attr('x1', center - width / 2)
         .attr('x2', center + width / 2)
@@ -763,19 +789,16 @@ export default {
         })
         .attr('stroke', 'black')
         .attr('stroke-width', '2')
-        .on('mouseover', function _nonName() {
-          d3.select(this).style('cursor', 's-resize')
-        })
+      maxg.on('mouseover', function _nonName() {
+        d3.select(this).style('cursor', 's-resize')
+      })
         .call(d3.drag().on('drag', function _nonName() {
+          if (d3.event.y < maxUp || d3.event.y > maxDown) return
           curMaxPosition = d3.event.y
-          if (d3.event.y < maxUp) {
-            curMaxPosition = maxUp
-          } else if (d3.event.y > maxDown) {
-            curMaxPosition = maxDown
-          }
           d3.select(this).attr('y1', curMaxPosition).attr('y2', curMaxPosition)
           centerLine.attr('y2', curMaxPosition)
           upText.attr('y', curMaxPosition).text(y.invert(curMaxPosition - top).toFixed(4))
+          maxLineFront.attr('y1', curMaxPosition).attr('y2', curMaxPosition)
         })
           .on('end', function _nonName() {
             that.getOneStepBoxData('up', y.invert(curMaxPosition - top), index)
