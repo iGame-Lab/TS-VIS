@@ -811,10 +811,14 @@ export default {
           if (g.node(v).sub_net.length !== 0) {
             const names = v.split('/')
             const layer = names.length
+            // const fillCurrent = d3
+            //  .select(`[id="${v}"]`)
+            //  .select('rect')
+            //  .style('fill')
             const fillCurrent = d3
               .select(`[id="${v}"]`)
               .select('rect')
-              .style('fill')
+              .attr('oracle')
             expandNode.push({
               uid: v,
               layer,
