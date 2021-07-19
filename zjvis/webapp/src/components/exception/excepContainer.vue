@@ -40,6 +40,13 @@
 .excepContainerContent{
   padding: 1%;
 }
+.colorMatrix {
+  padding: 1% 2% 3% 2%;
+}
+.excepRectDiv {
+  border: 1px dashed grey;
+  padding: 1%;
+}
 .excepRectLegend{
   height: 410px;
 }
@@ -66,27 +73,33 @@
         <div class="excepHead"><span style="font-weight:600;">{{ oneData[0] }}</span>/<span>{{ oneData[1] }}</span></div>
         <div class="curStep">当前步：{{ myAllStep[curStepIndex] }}</div>
       </div>
-      <el-row :gutter="30" class="excepContainerContent">
-        <el-col :span="10" class="excepLeft">
-          <div :id="excepHistId" class="excepHist" />
+      <el-row :gutter="24" class="excepContainerContent">
+        <el-col :span="12">
           <div class="excepBoxStep">
             <div :id="excepBoxId" class="excepBox" />
             <div :id="excepStepAxisId" class="excepStepAxis" />
           </div>
         </el-col>
-        <el-col :span="12" class="excepRectLegend">
-          <div class="excepRectDiv" style="height:100%;">
-            <el-scrollbar style="height:100%;">
-              <canvas :id="excepCanvasId">
-                您的浏览器不支持 HTML5 canvas 标签。
-              </canvas>
-            </el-scrollbar>
-          </div>
-        </el-col>
-        <el-col :span="2" class="excepLegend">
-          <div :id="excepLegendId" />
+        <el-col :span="12" class="excepLeft">
+          <div :id="excepHistId" class="excepHist" />
         </el-col>
       </el-row>
+      <div class="colorMatrix">
+        <el-row>
+          <el-col :span="19" :offset="1" class="excepRectLegend">
+            <div class="excepRectDiv" style="height:100%;">
+              <el-scrollbar style="height:100%;">
+                <canvas :id="excepCanvasId">
+                  您的浏览器不支持 HTML5 canvas 标签。
+                </canvas>
+              </el-scrollbar>
+            </div>
+          </el-col>
+          <el-col :span="2" :offset="1" class="excepLegend">
+            <div :id="excepLegendId" />
+          </el-col>
+        </el-row>
+      </div>
     </el-card>
   </div>
 </template>
@@ -390,7 +403,7 @@ export default {
     // 画颜色矩阵的legend
     drawExcepLedgend() {
       d3.select(`#${this.excepLegendId}`).select('svg').remove()
-      const legendWidth = 100
+      const legendWidth = 120
       const legendHeight = 300
       const legendRectWidth = 25
       const legendRectHeight = 135
@@ -512,10 +525,11 @@ export default {
       const allStep = this.myAllStep
       const stepArrayLen = allStep.length - 1
       const maxStep = allStep[stepArrayLen]
-      const stepXScale = d3.scaleLinear().domain([allStep[0], maxStep]).range([0, stepWidth]).nice()
-      const stepXScale2 = d3.scalePoint().domain(this.myAllStep).range([0, stepWidth])
-      const stepXAxis = stepSvg.append('g').call(d3.axisBottom().scale(stepXScale2))
-        .attr('transform', `translate(${padding.left},${padding.top})`) // .attr('class', 'axis')
+      const stepXScale = d3.scaleLinear().domain([allStep[0], maxStep]).range([0, stepWidth]) // .nice()
+      // const stepXScale2 = d3.scalePoint().domain(this.myAllStep).range([0, stepWidth]) // 不连续domain与连续的range之间的映射
+      // const stepXAxis = stepSvg.append('g').call(d3.axisBottom().scale(stepXScale2)) // 好像没有必要
+      const stepXAxis = stepSvg.append('g').call(d3.axisBottom().scale(stepXScale))
+        .attr('transform', `translate(${padding.left},${padding.top})`)
       stepSvg.append('g').append('text').text('step:').attr('x', 20).attr('y', padding.top + 5)
         .attr('fill', 'black').style('font-size', '12px')
       const that = this
@@ -735,6 +749,7 @@ export default {
       const maxDown = y(q3) + top
       const maxUp = y(boxPercent[index][1][5]) + top
       let curMaxPosition = top + y(max)
+      // max
       svg.append('g')
         .append('line')
         .attr('class', `excepUpLine${index}`)
