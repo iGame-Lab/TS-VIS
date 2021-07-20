@@ -6,7 +6,6 @@ import threading
 import multiprocessing
 from queue import Empty
 from .proto import event_pb2
-from .proto import graph_pb2
 from crc32c import crc32c
 import os
 import socket
@@ -31,10 +30,11 @@ class EventFileIO(object):
         """ 写数据到文件中 """
         w = self.fd.write
         header = struct.pack('Q', len(data))
-        w(header)
-        w(struct.pack('I', _masked_crc32c(header)))
-        w(data)
-        w(struct.pack('I', _masked_crc32c(data)))
+        bytes = header
+        bytes += struct.pack('I', _masked_crc32c(header))
+        bytes += data
+        bytes += struct.pack('I', _masked_crc32c(data))
+        w(bytes)
 
     def _read_and_check(self, size: int, checksum_size: int):
         """ 按照特定格式从文件中读取checksum_size大小的内容 """
@@ -162,6 +162,11 @@ class EventsWriter(object):
         if not os.path.exists(file_parent):
             os.makedirs(file_parent, exist_ok=True)
         self._fileIO = EventFileIO(open(fileName, 'wb'))
+
+        # 写入版本信息
+        _event = event_pb2.Event(wall_time = time.time(), file_version = 'brain.Event:2')
+        self.write_event(_event)
+        self.flush()
 
     def write_event(self, event):
         """ 将event写入文件 """
