@@ -17,37 +17,44 @@
 """
 from pathlib import Path
 from typing import Union
-import os
 from queue import Queue
 
-from loader.dictionary_watcher import start_run_watcher
 from loader.logfile_loader import Trace_Thread
 from utils.logfile_utils import is_available_flie
 
-
 class LazyLoad:
-    def __init__(self, run: str, rundir: Union[str, Path], comm):
+    def __init__(self, run: str, rundir: Union[str, Path], comm = None):
         self.run = run
         self.rundir = rundir
         self.comm = comm
 
     # 惰性加载，在初始化的时候加载目前日志中的所有数据
-    def init_load(self, cache_path):
-        # 开启文件监听
-        start_run_watcher(self.run, str(self.rundir), cache_path)
+    def init_load(self, cache_path, is_init=False):
+
         files = [f for f in self.rundir.glob("*") if is_available_flie(f)]
         thread_pool = {}
-        # 线程间通信的队列
+        # 构建线程间通信的队列
         comm_queue = Queue()
+        finished = set()
         for file in files:
-            thread_pool[file.name] = object()
-            current_size = os.path.getsize(str(file))
-            _thread = Trace_Thread(self.run, file, current_size, cache_path, comm_queue)
+            _thread = Trace_Thread(self.run, file, cache_path, comm_queue, is_init)
             _thread.start()
 
-        assert len(thread_pool) == len(files)
-        while len(thread_pool):
-            _signal = comm_queue.get()
-            thread_pool.pop(_signal)
-        comm_queue.queue.clear()
-        self.comm.put(self.run)
+            finished.add(file.name)
+            thread_pool[file.name] = _thread
+
+        # 判断是否完成初始化加载
+        if is_init:
+            assert len(finished) == len(files)
+            while len(finished) >0 :
+                _signal = comm_queue.get()
+                finished.remove(_signal)
+            comm_queue.queue.clear()
+
+            # 通知解析服务主进程，该run文件夹已完成加载
+            assert self.comm is not None, f'{self.__name__}.comm must be a Queue in init stage.'
+            self.comm.put(self.run)
+
+        # run进程等待文件解析线程
+        for file, t in thread_pool.items():
+            t.join()

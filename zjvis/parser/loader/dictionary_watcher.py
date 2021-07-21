@@ -21,27 +21,28 @@ from watchdog.events import *
 from loader.logfile_loader import Trace_Thread
 from utils.logfile_utils import *
 
-
 class Watcher_Handler(FileSystemEventHandler):
-    def __init__(self, run, cache_path):
+    def __init__(self, run, path, cache_path, event):
         self.runname = run
+        self.runpath = path
         self.cache_path = cache_path
+        self._event = event
 
     def on_created(self, event):
-        print("创建--> %s" % event.src_path)
         filename = Path(event.src_path)
         if filename.is_file():
+            print("创建文件 --> %s" % event.src_path)
             if is_available_flie(event.src_path):
-                current_size = os.path.getsize(event.src_path)
-                Trace_Thread(self.runname, filename, current_size, self.cache_path).start()
+                runname = self.runname if filename.parent == self.runpath else filename.parts[-2]
+                Trace_Thread(runname,filename,self.cache_path, event=self._event).start()
             else:
                 print("非有效日志文件 %s" % filename.name)
         else:
             pass
 
 
-def start_run_watcher(run, path, cache_path):
-    event_handler = Watcher_Handler(run, cache_path)
+def start_run_watcher(run, path, cache_path, event):
+    event_handler = Watcher_Handler(run, path, cache_path, event)
     observer = PollingObserver()
-    observer.schedule(event_handler, path, recursive=False)
+    observer.schedule(event_handler, path, recursive=True)
     observer.start()

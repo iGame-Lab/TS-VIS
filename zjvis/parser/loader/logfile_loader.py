@@ -15,9 +15,9 @@
  limitations under the License.
  =============================================================
 """
+import time
 import threading
 from pathlib import Path
-from queue import Queue
 from visparser import SummaryReader
 from utils.cache_io import CacheIO
 from utils.logfile_utils import path_parser
@@ -25,20 +25,22 @@ from visparser.event_parser import filter_graph
 
 
 class Trace_Thread(threading.Thread):
-    def __init__(self, runname, filename, current_size, cache_path, comm: Queue):
+    def __init__(self, runname, filename, cache_path, comm = None, is_init = False, event=None):
         threading.Thread.__init__(self, name=filename.name)
+        self.daemon =True
         self.runname = runname
         self.cache_path = cache_path
         self.filename = filename
-        self.current_size = current_size
         self.comm = comm
-        self.first_write = False
+        self.is_init = is_init
+        self.event = event
+
 
     def run(self):
         print('监听文件 %s' % self.filename)
-        self.trace(self.current_size)
+        self.trace()
 
-    def trace(self, current_size):
+    def trace(self):
         filename = Path(self.filename)
         if filename.suffix == ".json":
             with open(filename, "r") as f:
@@ -54,36 +56,38 @@ class Trace_Thread(threading.Thread):
                 CacheIO(sg_file_path).set_cache(data=_sg_content)
                 CacheIO(cg_file_path).set_cache(data=_cg_content)
             # 已完成graph文件解析，将完成标志放入队列
-            self.comm.put(self.name)
+            if self.comm:
+                self.comm.put(self.name)
             return
 
         # for event file
-        elif "event" in filename.name:
+        if "event" in filename.name:
             fd = open(filename, "rb")
-            reader = SummaryReader(fd)
-            for items in reader:
-                if items['type'] == "graph":
-                    file_path = path_parser(self.cache_path, self.runname,
-                                            items['type'], tag='c_graph')
-                    CacheIO(file_path).set_cache(data=items['value'])
-                elif items['type'] == "hparams":
-                    file_path = path_parser(self.cache_path, self.runname,
-                                            'hyperparm', tag='hparams')
-                    CacheIO(file_path, mod='ab').set_cache(data=items['value'])
+            while True:
+                reader = SummaryReader(fd)
+                for items in reader:
+                    if items['type'] == "graph":
+                        file_path = path_parser(self.cache_path, self.runname,
+                                                items['type'], tag='c_graph')
+                        CacheIO(file_path).set_cache(data=items['value'])
+                    elif items['type'] == "hparams":
+                        file_path = path_parser(self.cache_path, self.runname,
+                                                'hyperparm', tag='hparams')
+                        CacheIO(file_path, mod='ab').set_cache(data=items['value'])
+                    else:
+                        file_path = path_parser(self.cache_path, self.runname,
+                                                items['type'], tag=items['tag'])
+                        CacheIO(file_path).set_cache(data=items)
+
+                # print(self.name + " is finish parsing")
+                # 已完成event文件解析，将完成标志放入队列
+                if self.is_init and self.comm:
+                    self.comm.put(self.name)
+                    self.is_init = False
+
+                # 线程是否结束
+                if isinstance(self.event, threading.Event) and self.event.is_set():
+                    break
                 else:
-                    file_path = path_parser(self.cache_path, self.runname,
-                                            items['type'], tag=items['tag'])
-                    CacheIO(file_path).set_cache(data=items)
+                    time.sleep(1)
 
-            # print(self.name + " is finish parsing")
-            # 已完成event文件解析，将完成标志放入队列
-            self.comm.put(self.name)
-
-            # TODO 为什么写不进去？只有退出了才可以写进去内容
-            # while True:
-            #     rest = f.read()
-            #     if not rest:
-            #         time.sleep(2)
-            #         continue
-            #     _io = BytesIO(rest)
-            #     self.load_event_file(_io)
