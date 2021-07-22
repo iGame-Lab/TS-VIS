@@ -272,6 +272,24 @@ export default {
       'setDq0Show',
       'setUpDownValue'
     ]),
+    // 科学计数法
+    numberChangeToE(d) {
+      if (d > 10000) {
+        const numLen = d.toString().length - 1
+        return `${d / Math.pow(10, numLen)}e+${numLen}`
+      } else if (d < 0.001) {
+        if (d === 0) return d
+        const dString = d.toString()
+        let i = 3
+        for (; i < dString.length; i++) {
+          if (dString[i] !== '0') {
+            break
+          }
+        }
+        return `${(d * Math.pow(10, i - 1)).toFixed(1)}e-${(i - 1)}`
+      }
+      return d
+    },
     // 画直方图
     drawExcepHist() {
       d3.select(`#${this.excepHistId}`).select('svg').remove()
@@ -294,15 +312,11 @@ export default {
       const histxAxis = d3.axisBottom()
         .scale(this.histxScale)
         .ticks(7)
+        .tickFormat(d => this.numberChangeToE(d))
       const histyAxis = d3.axisLeft()
         .scale(histyScale)
-        .tickFormat(d => {
-          if (d > 10000) {
-            const numLen = d.toString().length - 1
-            return `${d / (10 ** numLen)}e+${numLen}`
-          }
-          return d
-        })
+        .ticks(7)
+        .tickFormat(d => this.numberChangeToE(d))
       histSvg.append('g').call(histxAxis).attr('transform', `translate(0, ${histHeight})`)
       histSvg.append('g').call(histyAxis)
       const that = this
@@ -705,7 +719,7 @@ export default {
         valueMin1 = valueMin2
       }
       this.boxYScale = d3.scaleLinear().domain([valueMin1, valueMax1]).range([bigBoxHeight, 0]).nice()
-      bigBoxSvg.append('g').call(d3.axisLeft().scale(this.boxYScale).ticks(7))
+      bigBoxSvg.append('g').call(d3.axisLeft().scale(this.boxYScale).ticks(7).tickFormat(d => this.numberChangeToE(d)))
         .attr('transform', `translate(${padding.left},${padding.top})`)
       const width = (dw - 10) / 2
       const rectWidth = dw - 6
