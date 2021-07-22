@@ -812,9 +812,9 @@ export default {
             const names = v.split('/')
             const layer = names.length
             // const fillCurrent = d3
-            //  .select(`[id="${v}"]`)
-            //  .select('rect')
-            //  .style('fill')
+            //   .select(`[id="${v}"]`)
+            //   .select('rect')
+            //   .style('fill')
             const fillCurrent = d3
               .select(`[id="${v}"]`)
               .select('rect')
@@ -932,10 +932,14 @@ export default {
           }
           if (!info) {
             info = { info: '无信息' }
+            self.$message({
+              type: 'info',
+              message: `节点${nodeId}不属于当前图`
+            })
           } else {
             const { inNode, outNode } = info
             for (let i = 0; i < inNode.length; i += 1) {
-              const nodeId = `#${idTransformerFrontend(inNode[i])}`
+              const nodeId = idTransformerFrontend(`#${(inNode[i])}`)
               if (
                 !d3
                   .select(nodeId)
@@ -970,11 +974,14 @@ export default {
             }
             if (self.lastAssistClick === this.id) {
               self.lastAssistClick = ''
+              var oldfill = d3.select(idTransformerFrontend(`#${this.id}`)).select('rect').attr('oracle')
+              d3.select(idTransformerFrontend(`#${this.id}`)).select('rect').attr('clicked', null).style('fill', oldfill)
             } else {
               self.lastAssistClick = this.id
+              d3.select(idTransformerFrontend(`#${this.id}`)).select('rect').attr('clicked', 'clicked').style('fill', 'chartreuse')
             }
             for (let i = 0; i < outNode.length; i += 1) {
-              const nodeId = `#${idTransformerFrontend(outNode[i])}`
+              const nodeId = idTransformerFrontend(`#${(outNode[i])}`)
               if (
                 !d3
                   .select(nodeId)
@@ -1019,7 +1026,7 @@ export default {
                 info.inNode.push(tmp[i].nodeId)
                 var oldfill = d3
                   .select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                   .select('rect')
                   .attr('oldfill')
@@ -1032,33 +1039,33 @@ export default {
                   //   .attr('oracle')
 
                   d3.select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                     .select('rect')
                     .attr('dir', null)
                     // .style('fill', oldfill)
                   d3.select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                     .select('rect')
                     .attr('oldfill', undefined)
 
-                  colour(`#del__${idTransformerFrontend(tmp[i].nodeId)}`)
+                  colour(idTransformerFrontend(`#del__${(tmp[i].nodeId)}`))
                 } else {
                   const fill = d3
                     .select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                     .select('rect')
                     .attr('fill')
                   d3.select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                     .select('rect')
                     .style('fill', 'blue')
                     .attr('dir', 'in')
                   d3.select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                     .select('rect')
                     .attr('oldfill', fill)
@@ -1068,7 +1075,7 @@ export default {
                 info.outNode.push(tmp[i].nodeId)
                 var oldfill = d3
                   .select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                   .select('rect')
                   .attr('oldfill')
@@ -1081,32 +1088,32 @@ export default {
                   //   .attr('oracle')
 
                   d3.select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                     .select('rect')
                     .style('fill', oldfill)
                     .attr('dir', null)
                   d3.select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                     .select('rect')
                     .attr('oldfill', undefined)
-                  colour(`#del__${idTransformerFrontend(tmp[i].nodeId)}`)
+                  colour(idTransformerFrontend(`#del__${(tmp[i].nodeId)}`))
                 } else {
                   const fill = d3
                     .select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                     .select('rect')
                     .attr('fill')
                   d3.select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                     .select('rect')
                     .style('fill', 'red')
                     .attr('dir', 'out')
                   d3.select(
-                    `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                    idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                   )
                     .select('rect')
                     .attr('oldfill', fill)
@@ -1126,7 +1133,7 @@ export default {
           nodeName = nodeName.slice(0, nodeName.length)
           const nodeId = idTransformerFrontend(nodeKey.id)
           const nodeThis = d3.select(nodeKey)
-          let currName = ''
+          var currName = ''
           let nodeFromID = ''
           let nodeToID = ''
           nodeThis.append('text')
@@ -1281,6 +1288,15 @@ export default {
               d3.select(`#${nodeId}`)
                 .select('rect')
                 .style('fill', 'rgb(102, 102, 102)')
+            } else if (
+              d3
+                .select(`#${nodeId}`)
+                .select('rect')
+                .style('fill') === 'chartreuse'
+            ) {
+              d3.select(`#${nodeId}`)
+                .select('rect')
+                .style('fill', 'chartreuse')
             } else {
               d3.select(`#${nodeId}`)
                 .select('rect')
@@ -1304,11 +1320,13 @@ export default {
             }
           })
           nodeThis.on('mouseleave', () => {
-            if (nodeName.length > 12) {
-              currName = `${nodeName.slice(0, 12)}...`
+            // console.log(nodeName)
+            if (nodeName.length > 26) {
+              currName = `${nodeName.slice(0, 13)}...`
             } else {
-              currName = nodeName
+              currName = `${nodeName.slice(0, 13)}`
             }
+            // currName = nodeName
             d3.select(`#${nodeId}`).attr('flag', 0)
             d3.select(`#${nodeId}`)
               .select('.label')
@@ -1322,7 +1340,20 @@ export default {
               .select('text')
               .attr('transform', 'translate(0,0)')
             d3.select('#messageBox').remove()
+            // console.log(d3
+            //   .select(`#${nodeId}`)
+            //   .select('rect')
+            //   .style('fill'))
             if (
+              d3
+                .select(`#${nodeId}`)
+                .select('rect')
+                .style('fill') === 'chartreuse'
+            ) {
+              d3.select(`#${nodeId}`)
+                .select('rect')
+                .style('fill', 'chartreuse')
+            } else if (
               d3
                 .select(`#${nodeId}`)
                 .select('rect')
@@ -1402,7 +1433,7 @@ export default {
                     break
                   }
                 }
-                const dEdgeID = `#${idTransformerFrontend(edgeID)}`
+                const dEdgeID = idTransformerFrontend(`#${(edgeID)}`)
                 d3.select(dEdgeID)
                   .select('.path')
                   .style('stroke', 'red')
@@ -1411,8 +1442,8 @@ export default {
                 //   .select('g')
                 //   .select('text')
                 //   .attr('fill', 'red')
-                nodeFromID = `#${idTransformerFrontend(v.v)}`
-                nodeToID = `#${idTransformerFrontend(v.w)}`
+                nodeFromID = idTransformerFrontend(`#${(v.v)}`)
+                nodeToID = idTransformerFrontend(`#${(v.w)}`)
                 d3.select(nodeFromID)
                   .select('rect')
                   .style('stroke', 'red')
@@ -1420,13 +1451,13 @@ export default {
                   .select('rect')
                   .style('stroke', 'red')
               })
-              var coldfill = d3.select(`#${idTransformerFrontend(nodeKey.id)}`)
+              var coldfill = d3.select(idTransformerFrontend(`#${(nodeKey.id)}`))
                 .select('rect')
                 .style('fill')
-              d3.select(`#${idTransformerFrontend(nodeKey.id)}`)
+              d3.select(idTransformerFrontend(`#${(nodeKey.id)}`))
                 .select('rect')
                 .style('stroke', 'red')
-                .style('fill', 'rgb(102, 102, 102)')
+                .style('fill', 'chartreuse')
                 .attr('coldfill', coldfill)
                 .attr('clicked', 'clicked')
 
@@ -1453,7 +1484,7 @@ export default {
                   info.inNode.push(tmp[i].nodeId)
                   var oldfill = d3
                     .select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                     .select('rect')
                     .attr('oldfill')
@@ -1466,33 +1497,33 @@ export default {
                     //   .attr('oracle')
 
                     d3.select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                       .select('rect')
                       // .style('fill', oldfill)
                       .attr('dir', null)
                     d3.select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                       .select('rect')
                       .attr('oldfill', undefined)
-                    colour(`#del__${idTransformerFrontend(tmp[i].nodeId)}`)
+                    colour(idTransformerFrontend(`#del__${(tmp[i].nodeId)}`))
                   } else {
                     const fill = d3
                       .select(
-                        `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                        idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                       )
                       .select('rect')
                       .attr('fill')
                     d3.select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                       .select('rect')
                       .attr('dir', 'in')
                       .style('fill', 'blue')
 
                     d3.select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                       .select('rect')
                       .attr('oldfill', fill)
@@ -1502,7 +1533,7 @@ export default {
                   info.outNode.push(tmp[i].nodeId)
                   var oldfill = d3
                     .select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                     .select('rect')
                     .attr('oldfill')
@@ -1515,33 +1546,33 @@ export default {
                     //   .attr('oracle')
 
                     d3.select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                       .select('rect')
                       .attr('dir', null)
                       // .style('fill', oldfill)
                     d3.select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                       .select('rect')
                       .attr('oldfill', undefined)
-                    colour(`#del__${idTransformerFrontend(tmp[i].nodeId)}`)
+                    colour(idTransformerFrontend(`#del__${(tmp[i].nodeId)}`))
                   } else {
                     const fill = d3
                       .select(
-                        `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                        idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                       )
                       .select('rect')
                       .attr('fill')
                     d3.select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                       .select('rect')
                       .attr('dir', 'out')
                       .style('fill', 'red')
 
                     d3.select(
-                      `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                      idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                     )
                       .select('rect')
                       .attr('oldfill', fill)
@@ -1594,7 +1625,7 @@ export default {
         // 为控制边添加虚线
         g.edges().forEach((v) => {
           const edgeID = `${v.v}__${v.w}`
-          const dEdgeID = `#${idTransformerFrontend(edgeID)}`
+          const dEdgeID = idTransformerFrontend(`#${(edgeID)}`)
           if (isDashed[edgeID] === 'true') {
             d3.select(dEdgeID)
               .select('.path')
@@ -1642,7 +1673,7 @@ export default {
                   .select('rect')
                   .style('fill', 'rgb(102, 102, 102)')
                   .attr('edit', 'edit')
-                  .attr('clicked', null)
+                  // .attr('clicked', null)
                 // const edgeGroup = Array.from(d3.selectAll('.edgePath')._groups[0])
                 // const edgeLabelGroup = d3.selectAll('.edgeLabel')._groups[0]
                 edges.forEach((v) => {
@@ -1684,17 +1715,19 @@ export default {
                   .select('rect')
                   // .style('fill', oldfill)
                   .attr('edit', null)
-                  .attr('clicked', null)
+                  // .attr('clicked', null)
                 colour(`[id='${nodeId}']`)
-                const edgeGroup = Array.from(d3.selectAll('.edgePath')._groups[0])
+                // const edgeGroup = Array.from(d3.selectAll('.edgePath')._groups[0])
                 // const edgeLabelGroup = d3.selectAll('.edgeLabel')._groups[0]
                 edges.forEach((v) => {
                   const edgeId = idTransformerFrontend(`#${`${v.v}__${v.w}`}`)
                   d3.select(edgeId)
                     // .select('.path')
                     .style('visibility', 'visible')
-                  const edgeDom = document.getElementById(`${v.v}__${v.w}`)
-                  const index = edgeGroup.indexOf(edgeDom)
+
+                    // .style('stroke', 'black')
+                  // const edgeDom = document.getElementById(`${v.v}__${v.w}`)
+                  // const index = edgeGroup.indexOf(edgeDom)
                   // edgeLabelGroup[index].attributes.style.value = 'opacity: 1;visibility:visible'
                 })
               }
@@ -1778,16 +1811,23 @@ export default {
                   const nodeId = this.id.split('__')[1]
                   if (self.lastAssistClick === this.id) {
                     self.lastAssistClick = ''
+                    var oldfill = d3.select(idTransformerFrontend(`#${this.id}`)).select('rect').attr('oracle')
+                    d3.select(idTransformerFrontend(`#${this.id}`)).select('rect').attr('clicked', null).style('fill', oldfill)
                   } else {
                     self.lastAssistClick = this.id
+                    d3.select(idTransformerFrontend(`#${this.id}`)).select('rect').attr('clicked', 'clicked').style('fill', 'chartreuse')
                   }
                   let info = getDelNodeInfo(nodeId, nodeInfo)
                   if (!info) {
                     info = { info: '无信息' }
+                    self.$message({
+                      type: 'info',
+                      message: `节点${nodeId}不属于当前图`
+                    })
                   } else {
                     const { inNode, outNode } = info
                     for (let i = 0; i < inNode.length; i += 1) {
-                      const nodeId = `#${idTransformerFrontend(inNode[i])}`
+                      const nodeId = idTransformerFrontend(`#${(inNode[i])}`)
                       if (
                         !d3
                           .select(nodeId)
@@ -1823,7 +1863,7 @@ export default {
                       }
                     }
                     for (let i = 0; i < outNode.length; i += 1) {
-                      const nodeId = `#${idTransformerFrontend(outNode[i])}`
+                      const nodeId = idTransformerFrontend(`#${outNode[i]}`)
                       if (
                         !d3
                           .select(nodeId)
@@ -1870,7 +1910,7 @@ export default {
                         info.inNode.push(tmp[i].nodeId)
                         var oldfill = d3
                           .select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                           .select('rect')
                           .attr('oldfill')
@@ -1878,37 +1918,37 @@ export default {
                         if (oldfill) {
                           oldfill = d3
                             .select(
-                              `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                              idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                             )
                             .select('rect')
                             .attr('orcale')
 
                           d3.select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                             .select('rect')
                             .style('fill', oldfill)
                             .attr('dir', null)
                           d3.select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                             .select('rect')
                             .attr('oldfill', undefined)
                         } else {
                           const fill = d3
                             .select(
-                              `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                              idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                             )
                             .select('rect')
                             .attr('fill')
                           d3.select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                             .select('rect')
                             .style('fill', 'blue')
                             .attr('dir', 'in')
                           d3.select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                             .select('rect')
                             .attr('oldfill', fill)
@@ -1918,7 +1958,7 @@ export default {
                         info.outNode.push(tmp[i].nodeId)
                         var oldfill = d3
                           .select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                           .select('rect')
                           .attr('oldfill')
@@ -1931,32 +1971,32 @@ export default {
                           //   .attr('oracle')
 
                           d3.select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                             .select('rect')
                             // .style('fill', oldfill)
                             .attr('dir', null)
                           d3.select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                             .select('rect')
                             .attr('oldfill', undefined)
-                          colour(`#del__${idTransformerFrontend(tmp[i].nodeId)}`)
+                          colour(idTransformerFrontend(`#del__${(tmp[i].nodeId)}`))
                         } else {
                           const fill = d3
                             .select(
-                              `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                              idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                             )
                             .select('rect')
                             .attr('fill')
                           d3.select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                             .select('rect')
                             .style('fill', 'red')
                             .attr('dir', 'out')
                           d3.select(
-                            `#del__${idTransformerFrontend(tmp[i].nodeId)}`
+                            idTransformerFrontend(`#del__${(tmp[i].nodeId)}`)
                           )
                             .select('rect')
                             .attr('oldfill', fill)
@@ -1980,7 +2020,7 @@ export default {
                   }
                 }
                 d3.select(
-                  `#${idTransformerFrontend(nodeId)}`
+                  idTransformerFrontend(`#${(nodeId)}`)
                 ).style('visibility', 'hidden')
                 changeTag = 1
                 self.curg.removeNode(nodeId)
@@ -2132,7 +2172,7 @@ export default {
       if (!val) {
         return
       }
-      const nodeId = `#${idTransformerFrontend(val)}`
+      const nodeId = idTransformerFrontend(`#${(val)}`)
       const node = d3.select(nodeId)
       // eslint-disable-next-line
       if(!node["_groups"][0][0]) {
@@ -2328,7 +2368,7 @@ export default {
           const edgeGroup = Array.from(d3.selectAll('.edgePath')._groups[0])
           // const edgeLabelGroup = d3.selectAll('.edgeLabel')._groups[0]
           edges.forEach((v) => {
-            const edgeId = `#${idTransformerFrontend(v)}`
+            const edgeId = idTransformerFrontend(`#${(v)}`)
             d3.select(edgeId)
               // .select('.path')
               .style('visibility', 'visible')
@@ -2355,7 +2395,7 @@ export default {
             break
           }
         }
-        const dEdgeID = `#${idTransformerFrontend(edgeID)}`
+        const dEdgeID = idTransformerFrontend(`#${(edgeID)}`)
         d3.select(dEdgeID)
           .select('.path')
           .style('stroke', 'black')
@@ -2446,6 +2486,8 @@ export default {
       const { nodeInfo, idTransformerFrontend, colour } = this
       const nodeId = this.lastAssistClick.split('__')[1]
       const info = this.getDelNodeInfo(nodeId, nodeInfo)
+      var oldfill = d3.select(idTransformerFrontend(`#${this.lastAssistClick}`)).select('rect').attr('oracle')
+      d3.select(idTransformerFrontend(`#${this.lastAssistClick}`)).select('rect').attr('clicked', null).style('fill', oldfill)
       const { inNode, outNode } = info
       for (let i = 0; i < inNode.length; i += 1) {
         const nodeId = idTransformerFrontend(`#${inNode[i]}`)
@@ -2553,8 +2595,41 @@ export default {
       this.lastAssistClick = ''
     },
     idTransformerFrontend(id) {
+      var index = 0
       var id = id.replace(/\//g, '\\/').replace(/\(/g, '\\(').replace(/\)/g, '\\)').replace(/\]/g, '\\]').replace(/\[/g, '\\[').replace(/\./g, '\\.')
-      return id
+      if (id[0] === '#') {
+        index = 1
+      }
+      var newId = ''
+      // console.log(id)
+      while ((!isNaN(parseInt(id[index]))) && index < id.length) {
+        // console.log(parseInt(id[index]), typeof (parseInt(id[index])))
+        newId = `${newId}\\3${id[index]}`
+        index += 1
+      }
+      newId = `${newId}${id.substring(index)}`
+      if (id[0] === '#') {
+        newId = `#${newId}`
+      }
+      return newId
+      // var name = id.substring(1, id.length)
+      // if (id[0] !== '#') {
+      //   name = id.split('__')[0]
+      //   if (typeof (parseInt(name)) === 'number') {
+      //     const list = name.split('')
+      //     var id = `\\3${list.join('\\3')}`
+      //     return id
+      //   }
+      // } else {
+      //   if (typeof (parseInt(name)) === 'number') {
+      //     const list = name.split('')
+      //     var id = `#${list.slice(0).join('\\3')}`
+      //     console.log(id)
+      //     return id
+      //   }
+      // }
+
+      // return id
     },
     edgeLabelAnimation() {
       const edgeGroup = Array.from(d3.selectAll('.edgePath')._groups[0])
@@ -2566,10 +2641,19 @@ export default {
           .attr('marker-start', 'url(#dot)').style('fill', 'none')
         newPath
           .on('mouseover', () => {
+            const stroke = d3.select(edge).select('path').style('stroke')
+            if (stroke === 'red') {
+              d3.select(edge).select('path').attr('clicked', 'clicked')
+            }
             d3.select(edge).select('path').style('stroke', 'red')
             d3.select(edgeLabelGroup[index]).style('visibility', 'visible')
           }).on('mouseleave', () => {
-            d3.select(edge).select('path').style('stroke', 'black')
+            const clicked = d3.select(edge).select('path').attr('clicked')
+            if (clicked === 'clicked') {
+              d3.select(edge).select('path').attr('clicked', null)
+            } else {
+              d3.select(edge).select('path').style('stroke', 'black')
+            }
             d3.select(edgeLabelGroup[index]).style('visibility', 'hidden')
           })
       })
@@ -2577,24 +2661,22 @@ export default {
     colorCopy() {
       Array.from(d3.selectAll('.node')._groups[0]).forEach((v) => {
         var color = d3.select(v).select('rect').style('fill')
-        // console.log(d3.select(v))
         d3.select(v).select('rect').attr('oracle', color)
       })
     },
     colour(id) {
-      // console.log(id)
       const clicked = d3.select(id).select('rect').attr('clicked')
       const edit = d3.select(id).select('rect').attr('edit')
       const dir = d3.select(id).select('rect').attr('dir')
-      if (clicked === 'clicked' || edit === 'edit') {
-        // console.log(id)
+      if (clicked === 'clicked') {
+        d3.select(id).select('rect').style('fill', 'chartreuse')
+      } else if (edit === 'edit') {
         d3.select(id).select('rect').style('fill', 'rgb(102, 102, 102)')
       } else if (dir === 'in') {
         d3.select(id).select('rect').style('fill', 'blue')
       } else if (dir === 'out') {
         d3.select(id).select('rect').style('fill', 'red')
       } else {
-        // console.log(id)
         var oldcolor = d3.select(id).select('rect').attr('oracle')
         d3.select(id).select('rect').style('fill', oldcolor)
       }
