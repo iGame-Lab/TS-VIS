@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-# @Time    : 2021/7/17 15:28
+# @Time    : 2021/7/22 19:52
 # @Author  : MSH
-# @FileName: test_scalar_request.py
+# @FileName: test_hyperparm_request.py
 # @Software: PyCharm
 from django.test import TestCase
 import json
-import random
 
-class TestScalarRequest(TestCase):
+class TestHyperparmRequest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -22,23 +21,21 @@ class TestScalarRequest(TestCase):
             _cate_res = self.client.get("/api/getCategory", format="json")
             self.category = json.loads(_cate_res.content)["data"]
 
-    def test_get_scalar(self):
+    def test_get_hparams(self):
         self.init_test()
         _run = ""
-        _tag = ""
         for k in self.category.keys():
-            if "scalar" in self.category[k].keys():
+            if "hyperparm" in self.category[k].keys():
                 _run = k
-                _tag = random.choice(list(self.category[k]['scalar'].keys()))
                 break
 
         try:
-            assert _run != "" and _tag != "", "There is no scalar data in test logs."
+            assert _run != "", "There is no hyperparm data in test logs."
         except AssertionError as e:
             import logging
             logging.error(str(e))
             return
 
-        res = self.client.get("/api/scalar", {'run': _run, 'tag': _tag})
+        res = self.client.get("/api/hyperparm", {'run': _run})
         _json = json.loads(res.content)
         self.assertEqual(_json["code"], 200)

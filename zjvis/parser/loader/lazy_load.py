@@ -23,7 +23,7 @@ from loader.logfile_loader import Trace_Thread
 from utils.logfile_utils import is_available_flie
 
 class LazyLoad:
-    def __init__(self, run: str, rundir: Union[str, Path], comm = None):
+    def __init__(self, run: str, rundir: Union[str, Path], comm=None):
         self.run = run
         self.rundir = rundir
         self.comm = comm
@@ -46,7 +46,7 @@ class LazyLoad:
         # 判断是否完成初始化加载
         if is_init:
             assert len(finished) == len(files)
-            while len(finished) >0 :
+            while len(finished) > 0:
                 _signal = comm_queue.get()
                 finished.remove(_signal)
             comm_queue.queue.clear()
