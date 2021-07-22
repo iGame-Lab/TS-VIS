@@ -6,7 +6,6 @@ import threading
 import multiprocessing
 from queue import Empty
 from .proto import event_pb2
-from .proto import graph_pb2
 from crc32c import crc32c
 import os
 import socket
@@ -18,20 +17,27 @@ def _masked_crc32c(data):
     x = _u32(crc32c(data))
     return _u32(((x >> 15) | _u32(x << 17)) + 0xa282ead8)
 
-# from typing import BinaryIO
 class EventFileIO(object):
     def __init__(self, fileIo):
-        self.fd = fileIo  #open(path, 'wb')
+        """
+            对event文件进行读写
+        Args:
+            fileIo: event文件的处理IO
+        """
+        self.fd = fileIo
 
     def write(self, data):
+        """ 写数据到文件中 """
         w = self.fd.write
         header = struct.pack('Q', len(data))
-        w(header)
-        w(struct.pack('I', _masked_crc32c(header)))
-        w(data)
-        w(struct.pack('I', _masked_crc32c(data)))
+        bytes = header
+        bytes += struct.pack('I', _masked_crc32c(header))
+        bytes += data
+        bytes += struct.pack('I', _masked_crc32c(data))
+        w(bytes)
 
     def _read_and_check(self, size: int, checksum_size: int):
+        """ 按照特定格式从文件中读取checksum_size大小的内容 """
         data = self.fd.read(size)
         if not data:
             return None
@@ -46,6 +52,7 @@ class EventFileIO(object):
         return data
 
     def read(self):
+        """ 从文件中读取一个event数据 """
         header_size = struct.calcsize('Q')
         checksum_size = struct.calcsize('I')
         header = self._read_and_check(header_size, checksum_size)
@@ -58,9 +65,11 @@ class EventFileIO(object):
             return data
 
     def flush(self):
+        """ 强制写入文件 """
         self.fd.flush()
 
     def close(self):
+        """ 关闭文件处理io """
         self.fd.close()
 
     def __enter__(self):
@@ -70,11 +79,20 @@ class EventFileIO(object):
         self.close()
 
 class EventFileWriter(object):
-    def __init__(self, logdir, max_queue_size=10, flush_secs=120, name=None):
+    def __init__(self, logdir, max_queue_size=10, flush_secs=120, name=None, filename_suffix=''):
+        """
+            创建一个event文件写入器
+        Args:
+            logdir: event文件的写入目录
+            max_queue_size: 强制写入日志信息到文件前的event队列的大小，默认为10
+            flush_secs: 强制写入日志信息的时间间隔，默认为120s
+            name: 文件写入器的名字
+            filename_suffix: event文件的后缀名
+        """
         file_name = f'events.out.{socket.gethostname()}'
         file_name = f'{name}.{file_name}' if isinstance(name, str) else file_name
 
-        self._logFileName = os.path.join(logdir,  file_name)
+        self._logFileName = os.path.join(logdir,  file_name + filename_suffix)
         self._event_queue = multiprocessing.Queue(max_queue_size)
         self._events_writer = EventsWriter(self._logFileName)
         self._flush_secs = flush_secs
@@ -85,9 +103,11 @@ class EventFileWriter(object):
         def cleanup():
             self.close()
 
+        # 登记线程退出时要执行的函数，负责写event的线程应为守护线程
         atexit.register(cleanup)
 
     def add_event(self, event, step=None):
+        """ 添加一个event到写入队列 """
         event.wall_time = time.time()
         if step is not None:
             event.step = int(step)
@@ -95,6 +115,7 @@ class EventFileWriter(object):
         self._event_queue.put(event)
 
     def add_summary(self, summary, global_step=None):
+        """ 添加一个event到日志文件 """
         event = event_pb2.Event(summary=summary)
         self.add_event(event, global_step)
 
@@ -109,6 +130,7 @@ class EventFileWriter(object):
 
 
     def add_graph(self, graph_profile):
+        """ 判断模型图的类型，并写入日志文件 """
         if 'graph_pb2.GraphDef' in str(type(graph_profile)):  # tensorflow
             event = event_pb2.Event(graph_def=graph_profile.SerializeToString())
             self.add_event(event)
@@ -130,13 +152,24 @@ class EventFileWriter(object):
 
 class EventsWriter(object):
     def __init__(self, fileName):
+        """
+            events写入器, 写event到文件
+        Args:
+            fileName: events 要写入的文件名
+        """
         self._lock = threading.Lock()
         file_parent = os.path.dirname(fileName)
         if not os.path.exists(file_parent):
             os.makedirs(file_parent, exist_ok=True)
         self._fileIO = EventFileIO(open(fileName, 'wb'))
 
+        # 写入版本信息
+        _event = event_pb2.Event(wall_time = time.time(), file_version = 'brain.Event:2')
+        self.write_event(_event)
+        self.flush()
+
     def write_event(self, event):
+        """ 将event写入文件 """
         if not isinstance(event, event_pb2.Event):
             raise TypeError("Expected an event_pb2.Event proto, "
                             " but got %s" % type(event))
@@ -158,6 +191,13 @@ class EventsWriter(object):
 
 class EventWriteThread(threading.Thread):
     def __init__(self, queue, eventsWriter, flushSecs):
+        """
+            负责将event写入文件的线程
+        Args:
+            queue: 队列，记录待写入的events
+            eventsWriter: 文件写入器
+            flushSecs: 强制刷新写入文件的时间间隔
+        """
         super().__init__()
         self.daemon =True
         self._queue = queue

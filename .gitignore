@@ -10,4 +10,4 @@ frontend/
 
 # cache files
 __viscache__
-test/
+dev_test_file/

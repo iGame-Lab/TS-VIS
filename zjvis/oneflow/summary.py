@@ -11,6 +11,7 @@ from .proto.plugin_hparams_pb2 import HParamsPluginData, SessionStartInfo
 from .utils import make_image,make_histogram, _prepare_video, make_video
 
 def scalar(name, scalar_value):
+    """ 转换标量数据到potobuf格式 """
     scalar = make_np(scalar_value)
     assert (scalar.squeeze().ndim == 0), 'scalar should be 0D'
     scalar = float(scalar)
@@ -20,7 +21,18 @@ def scalar(name, scalar_value):
                                         metadata=metadata)])
 
 def image(name, tensor):
+    """ 转换图像数据到potobuf格式 """
     tensor = make_np(tensor)
+    ndim = tensor.ndim
+
+    if ndim == 2:
+        tensor = np.expand_dims(tensor, -1)
+    elif ndim == 3:
+        if tensor.shape[2]>4:
+            raise Exception(f'the expected image type is (LA), (RGB), (RGBA), and the third dimension is less than 4, '
+                            f'but get shape {tensor.shape}')
+    else:
+        raise Exception(f'the shape of image must be (H,W) or (H,W,C), but get shape {tensor.shape}' )
 
     height, width, channel = tensor.shape
     image_str = make_image(tensor)
@@ -36,6 +48,7 @@ def image(name, tensor):
                                         metadata=metadata)])
 
 def text(name, text_string):
+    """ 转换文本数据到potobuf格式 """
     tensor = TensorProto(string_val=[text_string.encode(encoding='utf_8')])
     metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='text'))
     return Summary(value=[Summary.Value(tag=name,
@@ -43,6 +56,7 @@ def text(name, text_string):
                                         metadata=metadata)])
 
 def histogram(name, tensor, max_bins):
+    """ 转换直方图数据到potobuf格式 """
     values = make_np(tensor)
     sum_sq, bucket_limit, bucket = make_histogram(values.astype(float), max_bins)
     hist = HistogramProto(min=values.min(), max=values.max(), num=len(values.reshape(-1)),
@@ -54,6 +68,7 @@ def histogram(name, tensor, max_bins):
                                         metadata=metadata)])
 
 def audio(name, audio_data, sample_rate):
+    """ 转换音频数据到potobuf格式 """
     import soundfile
     tensor = make_np(audio_data)
     if abs(tensor).max() > 1:
@@ -81,6 +96,7 @@ def audio(name, audio_data, sample_rate):
                                         metadata=metadata)])
 
 def video(name, vidio_data, fps=4):
+    """ 转换视频数据到potobuf格式 """
     tensor = make_np(vidio_data)  # Only 5D tensor is supported, dataformats="NTCHW"
 
     tensor = _prepare_video(tensor)
@@ -110,6 +126,7 @@ def set_hparams(k, v):
         k.string_value = getattr(v, '__name__', str(v))
 
 def hparams(hparam_dict=None, metric_dict=None, tag=None):
+    """ 转换超参数数据到potobuf格式 """
     tag = str(time.time()) if tag is None else tag
     ssi = SessionStartInfo(group_name=tag)
     if not (hparam_dict or metric_dict):
@@ -130,6 +147,7 @@ def hparams(hparam_dict=None, metric_dict=None, tag=None):
 
 
 def make_tensor(tensor):
+    """ 转换numpy数组到potobuf格式 """
     shape = projector_pb2.Tensor.TensorShape(dim=[projector_pb2.Tensor.TensorShape.Dim(size=d)
                                                   for d in tensor.shape])
 
@@ -138,6 +156,7 @@ def make_tensor(tensor):
                                 tensor_content=tensor.tobytes())
 
 def embedding_sample(name, tensor, sample_type):
+    """ 转换高维数据的样本到potobuf格式 """
     tensor = make_np(tensor)
 
     Sample = Projector.Embedding.Sample
@@ -158,6 +177,7 @@ def embedding_sample(name, tensor, sample_type):
 
 
 def embedding(name, tensor, label):
+    """ 转换高维数据到potobuf格式 """
     tensor = make_np(tensor)
 
     if label is not None:
@@ -174,6 +194,7 @@ def embedding(name, tensor, label):
 
 
 def exception(name, tensor):
+    """ 转换异常数据到potobuf格式 """
     tensor = make_np(tensor)
     projector = Projector(exception=Projector.Exception(value = make_tensor(tensor)))
     metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='exceptions'))

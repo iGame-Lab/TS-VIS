@@ -36,10 +36,11 @@ class CommandLine:
         parser_mr.set_defaults(action="migrate")
 
         # 添加子命令 test
-        parser_mr = subparsers.add_parser('test', help='Run test for RESTful API')
-        parser_mr.add_argument('--testdir', dest="logdir", type=str,
+        parser_ts = subparsers.add_parser('test', help='Run test for RESTful API')
+        parser_ts.add_argument('--testdir', dest="logdir", type=str,
                                help='Specify test log directory', required=True)
-        parser_mr.set_defaults(action="test")
+        parser_ts.add_argument('testcase', type=str, help='Testcase for test')
+        parser_ts.set_defaults(action="test")
 
         if len(sys.argv) < 2:
             parser.error("A logdir must be specified. "

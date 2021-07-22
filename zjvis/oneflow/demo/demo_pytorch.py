@@ -1,5 +1,4 @@
 import torch
-import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
@@ -27,12 +26,14 @@ class Minist(nn.Module):
         return x
 
 def train(epochs=10):
+    batchSize = 32
+    lrate = 1e-3
     transform = transforms.Compose([transforms.ToTensor(),
                                     transforms.Normalize(mean=[0.5], std=[0.5])])
 
     # create dataset and loader
-    train_dataset = datasets.MNIST(root='./MNIST', train=True, transform = transform, download=False)
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True,num_workers=4)
+    train_dataset = datasets.MNIST(root='./data/MNIST', train=True, transform = transform, download=False)
+    train_loader = DataLoader(train_dataset, batch_size=batchSize, shuffle=True,num_workers=4)
 
     # get test samples for embedding
     test_x, test_y = next(iter(train_loader))  # [x, y]  = (B,1,84,84), (B,)
@@ -40,7 +41,7 @@ def train(epochs=10):
 
     net = Minist()
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+    optimizer = torch.optim.SGD(net.parameters(), lr=lrate, momentum=0.9)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     net = net.to(device)
@@ -49,16 +50,19 @@ def train(epochs=10):
     # add graph， hparams, embedding_sample,
     # the tag of embedding and embedding_sample must be same.
     summarywriter = SummaryWriter('./logs/torch/')
-    summarywriter.add_graph(net, torch.unsqueeze(train_dataset[0][0].to(device), 0), verbose=False)
+    summarywriter.add_graph(net, (test_x.to(device),), verbose=False)
     summarywriter.add_embedding_sample('minist', test_x.cpu().numpy(), 'image')
     summarywriter.add_hparams(tag='mnist',
-                              hparam_dict={'lrate': 0.001,
-                                           'batchSize': 32},
+                              hparam_dict={'lrate': lrate,
+                                           'batchSize': batchSize,
+                                           'epoch':epochs},
                               metric_dict={'loss':0.1})
 
     train_accs = []
     train_loss = []
     for epoch in range(epochs):
+        train_loss.clear()
+        train_accs.clear()
         for i, data in enumerate(train_loader, 0):
             # data = [inputs, labels]
             inputs, labels = data[0].to(device), data[1].to(device)
@@ -90,7 +94,6 @@ def train(epochs=10):
                 summarywriter.add_scalar('loss', loss.cpu().item(), step)
 
                 image =  inputs[0].permute(1,2,0).cpu().numpy()
-                image = np.concatenate((image,image,image),axis=2)
                 summarywriter.add_image('image', image, step)
 
                 weight = net.conv1.weight.data.cpu().numpy()

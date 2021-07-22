@@ -29,7 +29,7 @@ class Exception_read:
         for _data in self.data:
             if _data['step'] == self.step:
                 # [min,max,buckets]
-                res = [Histogram(_data['value']).get_data()]
+                res = [Histogram(_data['value'],buckets_count=100).get_data()]
                 return res
 
         raise Exception(f'cannot find data in step = {self.step}')
@@ -91,7 +91,12 @@ class Exception_read:
 
     def get_meta_data(self):
         if self.data:
-            _data = self.data
+            steps = len(self.data)
+            if steps > 50:
+                idx = np.linspace(0, steps - 1, 50, dtype=np.int)
+                _data = [self.data[i] for i in idx]
+            else:
+                _data = self.data
         else:
             return None
         steps = []

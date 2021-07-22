@@ -32,7 +32,7 @@ def run_test(args):
     argvs = [
         sys.argv[0],
         "test",
-        "tests"
+        args.testcase
     ]
     manage.main(argvs)
 

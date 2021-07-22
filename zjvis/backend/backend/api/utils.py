@@ -81,6 +81,8 @@ def get_classified_label(tags):
 
 
 def process_category(path):
+    if not path.exists():
+        return {}
     runs = {}
     for run in path.iterdir():
         if run.is_dir():

@@ -34,8 +34,8 @@
   <div>
     <div class="temp">
       <div id="excepDisplay" :class="['display-panel']">
-        <div v-for="(item, index) in allData" v-show="excepRunShow[item[0]]" :key="index" class="excepContDiv">
-          <excepContainer :oneData="item" :index="index" :oneAllStep="allStep[index]" />
+        <div v-if="getExceptionShow">
+          <excepContainer :oneData="getAllData[0]" :index="0" :oneAllStep="getAllStep[0]" />
         </div>
       </div>
     </div>
@@ -51,27 +51,24 @@ export default {
   components: {
     excepContainer
   },
-  data() {
-    return {
-      allData: [],
-      allStep: [],
-      excepRunShow: {}
-    }
-  },
   computed: {
-    ...mapExceptionGetters(['getRun', 'getAllStep', 'getAllData', 'getInitStateFlag', 'getErrorMessage', 'getFreshFlag']),
+    ...mapExceptionGetters(['getRun', 'getTag', 'getAllStep', 'getAllData', 'getInitStateFlag', 'getErrorMessage', 'getExceptionShow']),
     ...mapLayoutStates(['userSelectRunFile'])
   },
   watch: {
-    getAllData(val) {
-      this.allData = val
-    },
-    getAllStep(val) {
-      this.allStep = val
-      this.fetchAllData()
-    },
-    userSelectRunFile() {
-      this.setRunShow()
+    userSelectRunFile(val) {
+      if (!this.getExceptionShow) return
+      // 稳定后再响应run的变化
+      let index = 0
+      for (let i = 0; i < this.getRun.length; i++) {
+        if (val === this.getRun[i]) {
+          index = i
+          break
+        }
+      }
+      const param = { run: val, tag: this.getTag[index][0], index: index }
+      this.setCurRunTag(param)
+      this.fetchAllStep()
     },
     getErrorMessage(val) {
       this.$message({
@@ -81,36 +78,14 @@ export default {
     }
   },
   created() {
-    // 在当前页面刷新时，先执行这个钩子函数再执行exception.js中获取类目信息的函数
-    // 不在当前页面刷新时，先存入类目信息，点击本页面时才开始渲染
-    if (this.getRun.length === 0) return // 类目信息都还没有分发
-    this.setRunShow()
-    if (this.getAllStep.length === 0) {
+    if (this.getRun.length && this.getAllStep.length === 0) {
+      // 本页不是第一个时
       this.fetchAllStep()
-    } else if (this.getAllStep.length !== 0 && this.getAllData.length === 0) {
-      this.fetchAllData()
-    } else if (this.getAllStep.length !== 0 && this.getAllData.length !== 0) {
-      this.allStep = this.getAllStep
-      this.allData = this.getAllData
     }
   },
   methods: {
     ...mapExceptionActions(['fetchAllStep', 'fetchAllData']),
-    ...mapExceptionMutations(['setInitStateFlag', 'setFreshFlag', 'setRectCurInfo', 'setCurIqrTimes']),
-    setRunShow() {
-      const stateTemp = []
-      for (let i = 0; i < this.getRun.length; i += 1) {
-        stateTemp[this.getRun[i]] = false
-      }
-      for (let i = 0; i < this.userSelectRunFile.length; i += 1) {
-        stateTemp[this.userSelectRunFile[i]] = true
-      }
-      this.excepRunShow = stateTemp
-      if (this.userSelectRunFile.length === 0) { // 没有选择任何run时清空控制面板数据
-        this.setRectCurInfo(['', '', '', '', '', '', ''])
-        this.setCurIqrTimes(['', '', '', '', '', '', ''])
-      }
-    }
+    ...mapExceptionMutations(['setInitStateFlag', 'setRectCurInfo', 'setCurIqrTimes', 'setCurRunTag'])
   }
 }
 </script>
