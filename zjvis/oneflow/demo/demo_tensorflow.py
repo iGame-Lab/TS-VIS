@@ -4,7 +4,7 @@ from oneflow.summary_writer import SummaryWriter
 
 
 def get_data():
-    dir = './MNIST_data'
+    dir = './data/MNIST_data'
     # Import data
     mnist = input_data.read_data_sets(dir, one_hot=True)
     # print data information
@@ -94,7 +94,7 @@ def train():
             # the tag of embedding and embedding_sample must be same.
             writer = SummaryWriter('logs/tf/')
 
-            writer.add_graph(sess.graph, None, model_type='tensorflow')
+            writer.add_graph(sess.graph, model_type='tensorflow')
             writer.add_embedding_sample('output', test_batch[0], sample_type='image')
             writer.add_hparams(tag='mnist_tf', hparam_dict={'batch':50, 'lrate':1e-4}, metric_dict=None)
 
@@ -107,12 +107,12 @@ def train():
 
                     # add scalar, image, histogram, embedding, exception
                     writer.add_scalar('accuracy', train_accuracy,step=i)
-                    writer.add_image('input', batch[0][0].reshape(28,28,1), step=i)
+                    writer.add_images('input', batch[0].reshape(-1,28,28), step=i)
                     writer.add_histogram('W_con1', W_conv1.eval(sess), step=i)
                     writer.add_embedding('output', y_conv.eval(feed_dict={x: test_batch[0], keep_prob: 1.0}),step=i)
 
                     for grad in gradient_variable:
-                        if 'hidden1' in grad.name:
+                        if 'hidden' in grad.name:
                             writer.add_exception(grad.name, grad.eval(sess), step=i)
 
 if __name__ == '__main__':

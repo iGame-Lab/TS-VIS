@@ -70,14 +70,26 @@ class SummaryWriter(object):
             添加图像数据到日志
         Args:
             tag: 图像的标识
-            tensor: 图像数据，'uint8' 或 'float' 类型的数据，大小为(H,W,C), 其中C为1,3,4
+            tensor: 图像数据，'uint8' 或 'float' 类型的数据，大小为(H,W) 或 (H,W,C), 其中C为1,3,4
             step: 可选参数，记录数据的step
         """
 
         self.event_file_writer.add_summary(image(tag, tensor), global_step=step)
 
-    def add_figure(self, tag, figure, step=None, close=True):
-        pass
+    def add_images(self,
+                   tag: str,
+                   tensors: numpy_compatible,
+                   step: Optional[int] = None):
+        """
+            添加多个图像数据到日志
+        Args:
+            tag: 图像的标识, tag_1, tag_2, ... , tag_k
+            tensors: 图像数据，'uint8' 或 'float' 类型的数据，大小为(K,H,W) 或 (K,H,W,C), 其中C为1,3,4
+            step: 可选参数，记录数据的step
+        """
+        assert tensors.ndim in [3,4], 'the shape of image tensors must be (K,H,W) or (K,H,W,C)'
+        for i, tensor in enumerate(tensors):
+            self.event_file_writer.add_summary(image(f'{tag}_i', tensor), global_step=step)
 
     def add_video(self,
                   tag: str,
@@ -149,14 +161,14 @@ class SummaryWriter(object):
 
     def add_graph(self,
                   model,
-                  input_to_model=None,
-                  model_type='pytorch',
-                  verbose=False):
+                  input_to_model: Union[tuple]=None,
+                  model_type: str ='pytorch',
+                  verbose: bool =False):
         """
             添加神经网络的图结构到日志，支持tensorflow，pytorch
         Args:
             model: 神经网络模型, torch.nn.Module 或 tf.Session().graph
-            input_to_model: 一个模型的测试输入
+            input_to_model: (tuple): 一组用于模型测试的输入
             model_type: 模型的类型，‘pytorch’ 或 'tensorflow'
             verbose: pytorch模型是否输出到控制台
         """

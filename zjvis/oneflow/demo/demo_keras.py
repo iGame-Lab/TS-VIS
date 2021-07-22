@@ -44,7 +44,7 @@ class Callback(tf.keras.callbacks.Callback):
                                 hparam_dict={'batch':32, 'lrate':1e-4, 'epochs':1},
                                 metric_dict={'loss': 0.1, 'acc':1})
 
-        # add test sample image for review
+        # add image for each step
         for i,x in enumerate(self.test_xy[0]):
             self.writer.add_image('fashion', x, step=i)
 
@@ -52,32 +52,28 @@ class Callback(tf.keras.callbacks.Callback):
         if batch%10!=0:
             return
 
-        # add histogram, exception at step = batch
-        for w in self.model.weights:
-            weight = backend.get_value(w)
-            self.writer.add_histogram(w.name, weight, batch)
-            if w.name == 'conv2d_1/kernel:0':
-                self.writer.add_exception(w.name, weight, batch)
-
-        # add scalar at step = batch
+        # add scalar,sample
         self.writer.add_scalar('loss', logs['loss'], step = batch)
         self.writer.add_scalar('acc', logs['acc'], step=batch)
 
-        # predict at step = batch
+        # predict testdata for embedding
         x,y = self.test_xy
         sess = backend.get_session()
-        output = self.model.layers[-2].output.eval(session=sess,
-                                                   feed_dict={self.model.input:x})
-
+        output = self.model.layers[-2].output.eval(session=sess, feed_dict={self.model.input:x})
         self.writer.add_embedding('fashion', tensor=output, label=y, step=batch)
 
-        #  gradients at step = batch
+        # add histogram
+        for w in self.model.weights:
+            weight = backend.get_value(w)
+            self.writer.add_histogram(w.name, weight, batch)
+
+        # add gradients to exception
         grads = backend.gradients(self.model.total_loss, self.model.weights)
         for grad in grads:
-            if 'conv2d_1' in grad.name:
+            if 'conv2d' in grad.name:
                 grad_val = grad.eval(session=sess,
-                          feed_dict={self.model.input:x,
-                                     self.model._targets[0]:y.reshape(-1,1)})
+                                     feed_dict={self.model.input:x,
+                                                self.model._targets[0]:y.reshape(-1,1)})
                 self.writer.add_exception('gradients/'+'/'.join(grad.name.split('/')[1:]), tensor=grad_val, step=batch)
 
     def on_epoch_end(self, epoch, logs=None):
