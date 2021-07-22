@@ -56,11 +56,17 @@ class SummaryWriter(object):
                                            global_step=step)
 
     def add_scalars(self,
-                    main_tag: str,
-                    tag_scalar_dict: Dict[str, float],
+                    tag_scalar_dict: Dict[str, Union[float, numpy_compatible]],
                     step: Optional[int] = None):
-        pass
-
+        """
+            添加一组标量数据到日志
+        Args:
+            tag_scalar_dict: 数据的标签 -> 数据的值
+            step: 可选参数，记录数据的step
+        """
+        for tag, val in tag_scalar_dict.items():
+            self.event_file_writer.add_summary(summary=scalar(tag, val),
+                                               global_step=step)
 
     def add_image(self,
                   tag: str,
@@ -89,7 +95,7 @@ class SummaryWriter(object):
         """
         assert tensors.ndim in [3,4], 'the shape of image tensors must be (K,H,W) or (K,H,W,C)'
         for i, tensor in enumerate(tensors):
-            self.event_file_writer.add_summary(image(f'{tag}_i', tensor), global_step=step)
+            self.event_file_writer.add_summary(image(f'{tag}_{i}', tensor), global_step=step)
 
     def add_video(self,
                   tag: str,
@@ -177,6 +183,7 @@ class SummaryWriter(object):
             self.event_file_writer.add_graph(graph_def)
 
         elif model_type == 'pytorch':
+            assert (input_to_model is not None), 'Need to feed an input to model'
             from .pytorch_graph import graph
             self.event_file_writer.add_graph(graph(model, input_to_model, verbose))
         else:
@@ -187,7 +194,7 @@ class SummaryWriter(object):
                       tensor: numpy_compatible,
                       step: Optional[int] = None):
         """
-            添加要监测的异常数据到日志
+            添加监测的异常数据到日志
         Args:
             tag: 待监测的异常数据的标识
             tensor: 待监测的异常数据
