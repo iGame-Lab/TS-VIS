@@ -65,7 +65,7 @@ def load_logs(run_dirs, cache_path):
     # 判断初始化加载是否完成
     finished = set(run_dirs.keys())
     assert len(finished) == len(run_dirs)
-    while len(finished)>0:
+    while len(finished) > 0:
         _signal = comm_queue.get()
         finished.remove(_signal)
         if time.time() - start_time >= 30:
