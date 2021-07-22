@@ -66,7 +66,7 @@ const actions = {
       allStepTemp.push([param.run, param.tag, res.data.data[param.tag]])
     })
     context.commit('setAllStep', allStepTemp)
-    context.dispatch('fetchAllData', { step: 0 })
+    context.dispatch('fetchAllData', { step: allStepTemp[0][2].step[0] })
   },
   async fetchData(context, param) {
     const oneDataTemp = []
