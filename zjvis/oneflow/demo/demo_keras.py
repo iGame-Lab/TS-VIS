@@ -33,6 +33,7 @@ class Callback(tf.keras.callbacks.Callback):
         super(Callback, self).__init__()
         self.writer = SummaryWriter(logdir)
         self.test_xy = test_data
+        self.global_step = 0
 
     def on_train_begin(self, logs=None):
 
@@ -49,23 +50,24 @@ class Callback(tf.keras.callbacks.Callback):
             self.writer.add_image('fashion', x, step=i)
 
     def on_batch_end(self, batch, logs=None):
+        self.global_step += 1
         if batch%10!=0:
             return
 
         # add scalar,sample
-        self.writer.add_scalar('loss', logs['loss'], step = batch)
-        self.writer.add_scalar('acc', logs['acc'], step=batch)
+        self.writer.add_scalar('loss', logs['loss'], step = self.global_step)
+        self.writer.add_scalar('acc', logs['acc'], step = self.global_step)
 
         # predict testdata for embedding
         x,y = self.test_xy
         sess = backend.get_session()
         output = self.model.layers[-2].output.eval(session=sess, feed_dict={self.model.input:x})
-        self.writer.add_embedding('fashion', tensor=output, label=y, step=batch)
+        self.writer.add_embedding('fashion', tensor=output, label=y, step=self.global_step)
 
         # add histogram
         for w in self.model.weights:
             weight = backend.get_value(w)
-            self.writer.add_histogram(w.name, weight, batch)
+            self.writer.add_histogram(w.name, weight, self.global_step)
 
         # add gradients to exception
         grads = backend.gradients(self.model.total_loss, self.model.weights)
@@ -74,10 +76,8 @@ class Callback(tf.keras.callbacks.Callback):
                 grad_val = grad.eval(session=sess,
                                      feed_dict={self.model.input:x,
                                                 self.model._targets[0]:y.reshape(-1,1)})
-                self.writer.add_exception('gradients/'+'/'.join(grad.name.split('/')[1:]), tensor=grad_val, step=batch)
+                self.writer.add_exception('gradients/'+'/'.join(grad.name.split('/')[1:]), tensor=grad_val, step=self.global_step)
 
-    def on_epoch_end(self, epoch, logs=None):
-        pass
 
 def train():
     # load the dataset

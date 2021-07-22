@@ -208,7 +208,7 @@ export default {
         step: this.imagecontent[val].step.toString(),
         run: this.content.run,
         tag: Object.keys(this.content.value)[0],
-        trainJobName: this.getParams.trainJobName
+        // trainJobName: this.getParams.trainJobName
       }
       await http.useGet(port.category.image_raw, params)
         .then(res => {

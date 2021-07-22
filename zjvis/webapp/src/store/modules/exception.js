@@ -66,12 +66,16 @@ const actions = {
       allStepTemp.push([param.run, param.tag, res.data.data[param.tag]])
     })
     context.commit('setAllStep', allStepTemp)
-    context.dispatch('fetchAllData', { step: allStepTemp[0][2].step[0] })
+    context.dispatch('fetchAllData', { step: allStepTemp[0][2].step[0], index: 0 })
   },
   async fetchData(context, param) {
+    const paramTemp = {}
+    paramTemp['run'] = context.state.curRunTag.run
+    paramTemp['tag'] = context.state.curRunTag.tag
+    paramTemp['step'] = param['step']
     const oneDataTemp = []
     let successFlag = true
-    await http.useGet(port.category.exception_data, param).then(res => {
+    await http.useGet(port.category.exception_data, paramTemp).then(res => {
       if (Number(res.data.code) !== 200) {
         successFlag = false
         context.commit('setErrorMessage', param.run + ',' + param.tag + ',' + res.data.msg)
@@ -91,7 +95,7 @@ const actions = {
       oneDataTemp.push(rectDataTemp)
     })
     if (successFlag) { // 默认上一个请求到了，这个也可以请求到，嵌套好像不行
-      await http.useGet(port.category.exception_hist, param).then(res => {
+      await http.useGet(port.category.exception_hist, paramTemp).then(res => {
         if (Number(res.data.code) !== 200) {
           successFlag = false
           context.commit('setErrorMessage', param.run + ',' + param.tag + ',' + res.data.msg)

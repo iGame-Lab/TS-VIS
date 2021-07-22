@@ -29,9 +29,10 @@ def image(name, tensor):
         tensor = np.expand_dims(tensor, -1)
     elif ndim == 3:
         if tensor.shape[2]>4:
-            raise Exception('the channels of image must <= 4, the image will be (LA), (RGB), (RGBA).')
+            raise Exception(f'the expected image type is (LA), (RGB), (RGBA), and the third dimension is less than 4, '
+                            f'but get shape {tensor.shape}')
     else:
-        raise Exception('the shape of image must be (H,W) or (H,W,C).')
+        raise Exception(f'the shape of image must be (H,W) or (H,W,C), but get shape {tensor.shape}' )
 
     height, width, channel = tensor.shape
     image_str = make_image(tensor)

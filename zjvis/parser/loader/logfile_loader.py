@@ -25,15 +25,16 @@ from visparser.event_parser import filter_graph
 
 
 class Trace_Thread(threading.Thread):
-    def __init__(self, runname, filename, cache_path, comm=None, is_init=False, event=None):
+    def __init__(self, runname, filename, cache_path, comm = None, is_init = False, event=None, daemon=True):
         threading.Thread.__init__(self, name=filename.name)
-        self.daemon = True
+        self.daemon = daemon
         self.runname = runname
         self.cache_path = cache_path
         self.filename = filename
         self.comm = comm
         self.is_init = is_init
         self.event = event
+
 
     def run(self):
         print('监听文件 %s' % self.filename)

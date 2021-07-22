@@ -117,7 +117,7 @@ export default {
         step: this.audiocontent[val].step.toString(),
         run: this.content.run,
         tag: Object.keys(this.content.value)[0],
-        trainJobName: this.getParams.trainJobName
+        // trainJobName: this.getParams.trainJobName
       }
       await http.useGet(port.category.audio_raw, params)
         .then(res => {
@@ -145,7 +145,7 @@ export default {
       step: this.audiocontent[0].step.toString(),
       run: this.content.run,
       tag: Object.keys(this.content.value)[0],
-      trainJobName: this.getParams.trainJobName
+      // trainJobName: this.getParams.trainJobName
     }
     await http.useGet(port.category.audio_raw, params)
       .then(res => {
