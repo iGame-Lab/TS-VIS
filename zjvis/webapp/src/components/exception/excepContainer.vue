@@ -86,10 +86,19 @@
       </el-row>
       <div class="colorMatrix">
         <el-row>
-          <el-col :span="19" :offset="1" class="excepRectLegend">
+          <el-col v-show="!canvasScale" :span="19" :offset="1" class="excepRectLegend">
             <div class="excepRectDiv" style="height:100%;">
               <el-scrollbar style="height:100%;">
                 <canvas :id="excepCanvasId">
+                  您的浏览器不支持 HTML5 canvas 标签。
+                </canvas>
+              </el-scrollbar>
+            </div>
+          </el-col>
+          <el-col v-show="canvasScale" :span="19" :offset="1" class="excepRectLegend">
+            <div class="excepRectDiv" style="height:100%;">
+              <el-scrollbar style="height:100%;">
+                <canvas id="excepCanvasIdTemp">
                   您的浏览器不支持 HTML5 canvas 标签。
                 </canvas>
               </el-scrollbar>
@@ -135,7 +144,10 @@ export default {
       boxYScale: '', // 监听Panel选择上下界的操作，需要根据数值计算上下界的线所在的高度
       rectMin: this.oneData[3][1],
       rectMax: this.oneData[3][2],
-      rectScale: 1.0
+      rectScale: 1.0,
+      canvasScale: false,
+      rectMinWidth: 15,
+      rectMinHeight: 15
     }
   },
   computed: {
@@ -158,6 +170,7 @@ export default {
         // eslint-disable-next-line
         this.rectMax = this.myOneData[3][2];
         this.rectScale = 1.0
+        this.canvasScale = false
         this.drawCanvasRect()
         this.drawRectFinished = true
         this.drawExcepLedgend()
@@ -207,6 +220,7 @@ export default {
         if (!getOneStepDataFlag) { // 没有重新获取颜色矩阵，也需要重新绘制，因为之前的path还存在
           // 这里只重新绘制
           this.rectScale = 1.0
+          this.canvasScale = false
           this.drawCanvasRect()
         }
       }
@@ -329,36 +343,48 @@ export default {
     CanvasRectMouseOperator() {
       // 每次放大缩小都要重新渲染，性能太差！
       const excepCanvas = document.getElementById(this.excepCanvasId)
+      const excepCanvasTemp = document.getElementById('excepCanvasIdTemp')
       // 鼠标悬浮计算当前点的行列
       const that = this
       function onMouseMoveFunc(e) {
-        const rectDw = 10 * that.rectScale
-        const rectDh = 10 * that.rectScale
+        const rectDw = that.rectMinWidth * that.rectScale
+        const rectDh = that.rectMinHeight * that.rectScale
         const row = Math.floor(e.layerY / rectDh)
         const col = Math.floor(e.layerX / rectDw)
         that.setRectCurInfo([that.myOneData[0], that.myOneData[1], that.myAllStep[that.curStepIndex], row, col, that.myOneData[3][4][row][col]])
       }
-      excepCanvas.onmousemove = onMouseMoveFunc
       // 鼠标滚轮放大，禁用滑动条的滚轮事件
+      // 只允许缩小，不允许大于1倍
       function onMouseWheelFunc(e) {
         if (e.wheelDelta < 0) { // 缩小
+          if (that.rectScale <= 0.1) return
           that.rectScale *= 0.9
-          that.drawCanvasRect()
-          that.setRectExcepBox()
+          that.canvasScale = true
+          excepCanvasTemp.width = excepCanvas.width * that.rectScale
+          excepCanvasTemp.height = excepCanvas.height * that.rectScale
+          const excepCanvasTemp2d = excepCanvasTemp.getContext('2d')
+          excepCanvasTemp2d.drawImage(excepCanvas, 0, 0, excepCanvas.width, excepCanvas.height, 0, 0, excepCanvasTemp.width, excepCanvasTemp.height)
         } else { // 放大
+          if (that.rectScale >= 1) return // 再大就会黑屏
           that.rectScale *= 1.1
-          that.drawCanvasRect()
-          that.setRectExcepBox()
+          that.canvasScale = true
+          excepCanvasTemp.width = excepCanvas.width * that.rectScale
+          excepCanvasTemp.height = excepCanvas.height * that.rectScale
+          const excepCanvasTemp2d = excepCanvasTemp.getContext('2d')
+          excepCanvasTemp2d.drawImage(excepCanvas, 0, 0, excepCanvas.width, excepCanvas.height, 0, 0, excepCanvasTemp.width, excepCanvasTemp.height)
         }
       }
-      excepCanvas.onmousewheel = onMouseWheelFunc
       // 鼠标点击还原
       function onClickFunc() {
         that.rectScale = 1.0
-        that.drawCanvasRect()
-        that.setRectExcepBox()
+        that.canvasScale = false
       }
+      excepCanvas.onmousemove = onMouseMoveFunc
       excepCanvas.onclick = onClickFunc
+      excepCanvas.onmousewheel = onMouseWheelFunc
+      excepCanvasTemp.onmousemove = onMouseMoveFunc
+      excepCanvasTemp.onclick = onClickFunc
+      excepCanvasTemp.onmousewheel = onMouseWheelFunc
     },
     // 重绘矩阵时，可不可以直接重用各小矩阵，只改变大小和颜色？
     // 画颜色矩阵
@@ -367,8 +393,8 @@ export default {
       const max = this.rectMax
       const n = this.myOneData[3][0][0]
       const m = this.myOneData[3][0][1]
-      const rectDw = 10 * this.rectScale
-      const rectDh = 10 * this.rectScale
+      const rectDw = this.rectMinWidth * this.rectScale
+      const rectDh = this.rectMinHeight * this.rectScale
       const rectWidth = rectDw * m
       const rectHeight = rectDh * n
       const excepCanvas = document.getElementById(this.excepCanvasId)
@@ -529,6 +555,7 @@ export default {
               that.rectMin = curMin
               that.rectMax = curMax
               that.rectScale = 1.0
+              that.canvasScale = false
               that.drawCanvasRect()
               that.setRectExcepBox()
             }),
@@ -553,6 +580,7 @@ export default {
               that.rectMin = curMin
               that.rectMax = curMax
               that.rectScale = 1.0
+              that.canvasScale = false
               that.drawCanvasRect()
               that.setRectExcepBox()
             }),
@@ -967,8 +995,8 @@ export default {
       if (this.curExcepBox.length) {
         const n = this.myOneData[3][0][0]
         // const m = this.myOneData[3][0][1];
-        const rectWidth = 10 * this.rectScale
-        const rectHeight = 10 * this.rectScale
+        const rectWidth = this.rectMinWidth * this.rectScale
+        const rectHeight = this.rectMinHeight * this.rectScale
         const excepCanvas = document.getElementById(this.excepCanvasId)
         const excepCanvas2d = excepCanvas.getContext('2d')
         const curExcepBoxData = this.curExcepBox[1]
