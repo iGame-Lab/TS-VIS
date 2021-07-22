@@ -32,16 +32,15 @@ class LazyLoad:
     def init_load(self, cache_path, is_init=False):
 
         files = [f for f in self.rundir.glob("*") if is_available_flie(f)]
-        thread_pool = {}
+
         # 构建线程间通信的队列
         comm_queue = Queue()
         finished = set()
         for file in files:
-            _thread = Trace_Thread(self.run, file, cache_path, comm_queue, is_init)
+            _thread = Trace_Thread(self.run, file, cache_path, comm_queue, is_init, daemon=False)
             _thread.start()
 
             finished.add(file.name)
-            thread_pool[file.name] = _thread
 
         # 判断是否完成初始化加载
         if is_init:
@@ -54,7 +53,3 @@ class LazyLoad:
             # 通知解析服务主进程，该run文件夹已完成加载
             assert self.comm is not None, f'{self.__name__}.comm must be a Queue in init stage.'
             self.comm.put(self.run)
-
-        # run进程等待文件解析线程
-        for file, t in thread_pool.items():
-            t.join()

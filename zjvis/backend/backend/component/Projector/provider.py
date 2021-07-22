@@ -124,7 +124,7 @@ def get_projector_sample_data(request):
     if sample:
         _io = io.BytesIO()
         if sample['type'] == 'image':
-            _img = Image.fromarray(sample['val'].astype(np.uint8))
+            _img = Image.fromarray((sample['val']*255).astype(np.uint8))
             _img.save(_io, "png")
             _content = _io.getvalue()
             _data = base64.b64encode(_content)
