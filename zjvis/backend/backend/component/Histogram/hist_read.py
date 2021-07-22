@@ -16,7 +16,7 @@
  =============================================================
 """
 import random
-
+import numpy as np
 
 class histogram_read:
     def __init__(self, data=None, samples=None):
@@ -90,7 +90,12 @@ class histogram_read:
             hist_value: Histogram data
         """
         if self.data:
-            _data = self.data
+            steps = len(self.data)
+            if steps > 50:
+                idx = np.linspace(0, steps-1, 50, dtype=np.int)
+                _data = [self.data[i] for i in idx]
+            else:
+                _data = self.data
         else:
             return None
 

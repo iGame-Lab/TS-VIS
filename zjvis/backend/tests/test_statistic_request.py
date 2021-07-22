@@ -7,7 +7,7 @@ from django.test import TestCase
 import json
 import random
 
-class TestScalarRequest(TestCase):
+class TestStatisticRequest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
