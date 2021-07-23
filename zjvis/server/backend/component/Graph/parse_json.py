@@ -60,7 +60,7 @@ class Proxy_json:
         # output_layers = config['output_layers']
         links = defaultdict(list)
         backend = self.data['backend']
-        if backend == 'zjvis':
+        if backend == 'oneflow':
             for layer in layers:
                 tmp_name = layer['name']
                 tmp_op = layer['class_name']
@@ -92,7 +92,7 @@ class Proxy_json:
         g = Graph(name)
         for layer in layers:
             tmp_name = layer['name']
-            if backend == 'zjvis' and isTrue(layers, tmp_name):
+            if backend == 'oneflow' and isTrue(layers, tmp_name):
                 continue
             tmp_op = layer['class_name']
             tmp_node = Node(tmp_name, tmp_op)

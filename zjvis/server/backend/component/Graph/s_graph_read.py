@@ -384,8 +384,3 @@ def get_s_graph_data(s_data):
     res, g = preprocess(s_data)
     return res
 
-
-def get_c_graph_data(c_data):
-    res, g = preprocess(c_data)
-    res = get_data(g)
-    return res
