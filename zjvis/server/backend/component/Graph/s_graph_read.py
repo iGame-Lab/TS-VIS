@@ -16,9 +16,8 @@
  =============================================================
 """
 import json
-from backend.component.Graph.parse_json import Proxy_json
-from backend.component.Graph.graph import Node
-from backend.component.Graph.graph_read import get_data
+from zjvis.server.backend.component.Graph.parse_json import Proxy_json
+from zjvis.server.backend.component.Graph.graph import Node
 
 # Base_RATE = 16
 # nodes保留每个节点的单独信息，以节点全称为key进行索引

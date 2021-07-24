@@ -16,7 +16,7 @@
  =============================================================
 """
 from .utils import *
-from backend.component import *
+from zjvis.server.backend.component import *
 from django.views.decorators.gzip import gzip_page
 
 

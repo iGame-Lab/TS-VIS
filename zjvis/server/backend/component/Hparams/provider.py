@@ -15,14 +15,14 @@
  limitations under the License.
  =============================================================
 """
-from utils.cache_io import CacheIO
+from zjvis.parser.utils.cache_io import CacheIO
 from .hparams_read import hparams_read
-from utils.logfile_utils import path_parser
-from backend.api.utils import get_api_params
+from zjvis.parser.utils.logfile_utils import path_parser
+from zjvis.server.backend.api.utils import get_api_params
 
 
 def hparams_provider(run):
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
 
     file_path1 = path_parser(get_logger().cachedir, run, 'hyperparm', 'hparams')
     _data = CacheIO(file_path1).get_cache()

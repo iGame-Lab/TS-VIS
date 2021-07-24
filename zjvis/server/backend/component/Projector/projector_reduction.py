@@ -15,9 +15,7 @@
  limitations under the License.
  =============================================================
 """
-from sklearn.decomposition import PCA
 import numpy as np
-from tsne import bh_sne
 
 
 class projector_reduction:
@@ -42,6 +40,7 @@ class projector_reduction:
         return data
 
     def Pca(self):
+        from sklearn.decomposition import PCA
         pca = PCA(n_components=self.dimension)  # 确定想要的维度 PCA
         return pca.fit_transform(self.data).tolist()  # 得到处理的结果
 
@@ -51,6 +50,7 @@ class projector_reduction:
         _data = np.array(self.data)
         seed = np.random.RandomState(0)
 
+        from tsne import bh_sne
         perplexity = _data.shape[0] // 4 if _data.shape[0] < 100 else 30
         data = bh_sne(_data, pca_d=True, d=self.dimension, perplexity=perplexity, random_state=seed)
         return data.tolist()

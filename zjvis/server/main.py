@@ -16,8 +16,8 @@
  =============================================================
 """
 import sys
-import manage
-from command_line import get_cmd_line
+from zjvis.server import manage
+from .command_line import get_cmd_line
 
 def run_migrate(args):
     argvs = [
@@ -47,6 +47,7 @@ def run():
     programs = {"runserver": run_main, "migrate": run_migrate, "test": run_test}
     cmd_line = get_cmd_line()
     programs[cmd_line.action](cmd_line.args)
+
 
 if __name__ == "__main__":
     run()

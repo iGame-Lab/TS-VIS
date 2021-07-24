@@ -17,13 +17,13 @@
 """
 import time
 import atexit
-from utils import logfile_utils
-from loader.lazy_load import LazyLoad
+from zjvis.parser.utils import logfile_utils
+from zjvis.parser.loader.lazy_load import LazyLoad
 from multiprocessing import Process, Queue
 from pathlib import Path
 from shutil import rmtree
-from loader.dictionary_watcher import start_run_watcher
-from utils.cache_io import CacheIO
+from zjvis.parser.loader.dictionary_watcher import start_run_watcher
+from zjvis.parser.utils.cache_io import CacheIO
 import threading
 
 class LogParser:
