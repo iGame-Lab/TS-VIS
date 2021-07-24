@@ -1,11 +1,9 @@
 numpy==1.18.1
-absl_py==0.9.0
-watchdog==0.10.2
+watchdog==2.1.3
 tsne_mp==0.1.13
 crc32c==2.2
-tensorboard==2.1.0
 Django==3.0.3
-absl-py==0.9.0
 Pillow==8.3.1
-protobuf==3.15.8
+protobuf==3.17.2
 scikit_learn==0.24.2
+django-cors-headers==3.7.0

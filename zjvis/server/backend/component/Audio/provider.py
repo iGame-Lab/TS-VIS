@@ -15,10 +15,10 @@
  limitations under the License.
  =============================================================
 """
-from utils.cache_io import CacheIO
-from utils.logfile_utils import path_parser
+from zjvis.parser.utils.cache_io import CacheIO
+from zjvis.parser.utils.logfile_utils import path_parser
 from .audio_read import audio_read
-from backend.api.utils import get_api_params
+from zjvis.server.backend.api.utils import get_api_params
 import base64
 
 
@@ -45,7 +45,7 @@ def get_audio_meta_data(request):
     params = ['run', 'tag']
     run, tag = get_api_params(request, params)
 
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'audio', tag)
     data = audio_meta_provider(file_path)
     return {tag: data}
@@ -55,7 +55,7 @@ def get_audio_data(request):
     params = ['run', 'tag', 'step']
     run, tag, step = get_api_params(request, params)
 
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'audio', tag)
     data = base64.b64encode(audio_provider(file_path, step=int(step)))
     res = "data:audio/wav;base64,%s" % data.decode()

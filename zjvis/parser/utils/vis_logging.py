@@ -3,7 +3,7 @@
 # @Author  : MSH
 # @FileName: vis_logging.py
 # @Software: PyCharm
-from command_line import get_cmd_line
+from zjvis.server.command_line import get_cmd_line
 from pathlib import Path
 
 class VisLogging:

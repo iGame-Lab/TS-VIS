@@ -18,10 +18,10 @@
 import time
 import threading
 from pathlib import Path
-from visparser import SummaryReader
-from utils.cache_io import CacheIO
-from utils.logfile_utils import path_parser
-from visparser.event_parser import filter_graph
+from zjvis.parser.visparser import SummaryReader
+from zjvis.parser.utils.cache_io import CacheIO
+from zjvis.parser.utils.logfile_utils import path_parser
+from zjvis.parser.visparser.event_parser import filter_graph
 
 
 class Trace_Thread(threading.Thread):

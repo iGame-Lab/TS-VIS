@@ -15,10 +15,10 @@
  limitations under the License.
  =============================================================
 """
-from utils.cache_io import CacheIO
-from utils.logfile_utils import path_parser
+from zjvis.parser.utils.cache_io import CacheIO
+from zjvis.parser.utils.logfile_utils import path_parser
 from .image_read import image_read
-from backend.api.utils import get_api_params
+from zjvis.server.backend.api.utils import get_api_params
 import base64
 
 
@@ -46,7 +46,7 @@ def get_image_meta_data(request):
     params = ['run', 'tag']
     run, tag = get_api_params(request, params)
 
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'image', tag)
     data = image_meta_provider(file_path)
     return {tag: data}
@@ -56,7 +56,7 @@ def get_image_data(request):
     params = ['run', 'tag', 'step']
     run, tag, step = get_api_params(request, params)
 
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'image', tag)
     data = base64.b64encode(image_provider(file_path, step=int(step)))
     res = "data:image/png;base64,%s" % data.decode()

@@ -12,8 +12,7 @@ pip install -r requirements.txt
 ## 启动服务
 
 ```
-cd ./zjvis/backend
-python ./main.py --logdir=../test
+python -m zjvis.server.main --logdir=/path/to/logdir
 ```
 
 ## 前端请求

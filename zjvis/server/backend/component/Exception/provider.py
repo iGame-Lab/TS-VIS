@@ -15,10 +15,10 @@
  limitations under the License.
  =============================================================
 """
-from utils.cache_io import CacheIO
-from utils.logfile_utils import path_parser
+from zjvis.parser.utils.cache_io import CacheIO
+from zjvis.parser.utils.logfile_utils import path_parser
 from .exception_read import Exception_read
-from backend.api.utils import get_api_params
+from zjvis.server.backend.api.utils import get_api_params
 
 
 def exception_meta_provider(file_path):
@@ -65,7 +65,7 @@ def get_exception_meta_data(request):
     params = ['run', 'tag']
     run, tag = get_api_params(request, params)
 
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'exception', tag)
     data = exception_meta_provider(file_path)
     return {tag: data}
@@ -75,7 +75,7 @@ def get_exception_data(request):
     params = ['run', 'tag', 'step']
     run, tag, step = get_api_params(request, params)
 
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'exception', tag)
     data = exception_provider(file_path, step=int(step))
 
@@ -89,7 +89,7 @@ def get_exception_hist_data(request):
     params = ['run', 'tag', 'step']
     run, tag, step = get_api_params(request, params)
 
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'exception', tag)
     data = exception_hist_provider(file_path, step=int(step))
 
@@ -103,7 +103,7 @@ def get_exception_box_data(request):
     params = ['run', 'tag', 'step', 'up', 'down']
     run, tag, step, up, down = get_api_params(request, params)
 
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
     file_path = path_parser(get_logger().cachedir, run, 'exception', tag)
     data = exception_box_provider(file_path, step=int(step), limit=[float(up), float(down)])
 
