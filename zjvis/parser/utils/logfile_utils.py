@@ -23,14 +23,20 @@ def get_runinfo(logdir):
     """
     给定日志目录，返回有哪些run（文件夹）
     """
+    def check(p):
+        files = list(p.glob('*events*')) + list(p.glob('*.json'))
+        return True if files else False
+
     p = Path(logdir)
     dirs = sorted(f for f in p.rglob('*') if f.is_dir())
+
     res = {}
-    files = [f for f in p.glob('*')]
-    if files:
+    if check(p):
         res['.'] = p.absolute()
+
     for _dir in dirs:
-        res[_dir.name] = _dir.absolute()
+        if check(_dir):
+            res[_dir.name] = _dir.absolute()
     return res
 
 def is_available_flie(filename):

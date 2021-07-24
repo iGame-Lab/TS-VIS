@@ -15,7 +15,6 @@
  limitations under the License.
  =============================================================
 """
-import os
 from watchdog.observers.polling import PollingObserver
 from watchdog.events import *
 from loader.logfile_loader import Trace_Thread
@@ -34,7 +33,7 @@ class Watcher_Handler(FileSystemEventHandler):
             print("创建文件 --> %s" % event.src_path)
             if is_available_flie(event.src_path):
                 runname = self.runname if filename.parent == self.runpath else filename.parts[-2]
-                Trace_Thread(runname,filename,self.cache_path, event=self._event).start()
+                Trace_Thread(runname, filename, self.cache_path, event=self._event).start()
             else:
                 print("非有效日志文件 %s" % filename.name)
         else:

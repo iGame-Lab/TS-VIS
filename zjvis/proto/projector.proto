@@ -1,0 +1,44 @@
+syntax = "proto3";
+package zjvis;
+
+message Tensor {
+  message TensorShape {
+    message Dim {
+      int64 size = 1;
+      string name = 2;
+    }
+    repeated Dim dim = 1;
+  }
+
+  string dtype = 1;
+  TensorShape tensor_shape = 2;
+  bytes tensor_content = 3;
+}
+
+message Projector {
+  oneof content {
+    Embedding  embedding = 1;
+    Exception  exception = 2;
+  }
+
+  message Exception{
+    Tensor value = 1;
+  }
+
+  message Embedding{
+      message Sample{
+        enum SampleType {
+          TYPE_UNSPECIFIED = 0;
+          AUDIO = 1;
+          TEXT = 2;
+          IMAGE = 3;
+        }
+        SampleType type = 2;
+        Tensor X = 3;
+    }
+
+    Sample sample = 1;
+    Tensor value = 2;
+    Tensor label = 3;
+  }
+}

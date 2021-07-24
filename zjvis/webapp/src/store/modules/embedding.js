@@ -94,8 +94,61 @@ const actions = {
   async getSelfCategoryInfo(context, param) {
     context.commit('setSelfCategoryInfo', param)
     if (param[2]['initStateFlag'] === true) {
-      context.dispatch('fetchAllStep')
+      // context.dispatch('fetchAllStep')
+      context.dispatch('fetchOneStep', context.state.categoryInfo.curRuns[0])
     }
+  },
+  async fetchOneStep(context, param) {
+    state.questionInfo.received = false // 当需要请求信息的时候所有的数据已经完备
+    state.receivedQuestionInfo = false
+    state.receivedCurInfo = false // 临时测试
+    const allStepTemp = {'data':[], 'index':0}
+    // console.log('[context.state.categoryInfo]', context.state.categoryInfo)
+    for (let i = 0; i < context.state.categoryInfo.curRuns.length; i++) {
+      const oneRunStep = []
+      if(param == context.state.categoryInfo.curRuns[i]) {
+        for (let j = 0; j < context.state.categoryInfo.curTags[i].length; j++) {
+          const param = { run: context.state.categoryInfo.curRuns[i], tag: context.state.categoryInfo.curTags[i][j] }
+          await http.useGet(port.category.projector, param)
+            .then(res => {
+              if (+res.data.code !== 200) {
+                context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
+                return
+              }
+              const res1 = res.data.data[context.state.categoryInfo.curTags[i][j]]
+              const res2 = res.data.data['shape']
+              const res3 = res.data.data['sample']
+              const res4 = res.data.data['sample_type']
+              oneRunStep.push([res1, res2, res3, res4])
+            })
+        }
+        allStepTemp['data'].push(oneRunStep)
+        allStepTemp['index'] = i
+      } else {
+        const res1 = []
+        const res2 = []
+        const res3 = []
+        const res4 = []
+        oneRunStep.push([res1, res2, res3, res4])
+        allStepTemp['data'].push(oneRunStep)
+      }
+      
+    }
+      let i = allStepTemp['index'];
+      let params = [];
+      params = allStepTemp['data'];
+      for (let j = 0; j < state.categoryInfo.curTags[i].length; j++) {
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]] = {}
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['allSteps'] = params[i][j][0]
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['curMin'] = params[i][j][0][0]
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['curMax'] = params[i][j][0].length - 1
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['shape'] = params[i][j][1][1]
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['sample'] = params[i][j][2]
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['sample_type'] = params[i][j][3]
+      }
+    state.questionInfo.received = true // 当需要请求信息的时候所有的数据已经完备
+    state.receivedQuestionInfo = true
+    state.receivedCurInfo = true // 临时测试
   },
   async fetchAllStep(context) { // 数据链的第一步
     const allStepTemp = []

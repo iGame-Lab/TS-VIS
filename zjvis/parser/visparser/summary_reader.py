@@ -25,12 +25,13 @@ from collections.abc import Iterable
 from visparser.events_reader import EventsFileReader
 from .event_parser import get_parser, get_graph
 
+
 class SummaryReader(Iterable):
     """
     Iterates over events in all the files in the current logdir.
     """
 
-    def __init__(self, fileblock, stop_on_error = False):
+    def __init__(self, fileblock, stop_on_error=False):
         """
         Initalize new summary reader
         :param fileblock: Event file block of Tensorboard
@@ -63,10 +64,10 @@ class SummaryReader(Iterable):
         """
         reader = EventsFileReader(self._fileblock)
         try:
-           yield from (item for item in self._decode_events(reader) if item is not None)
+            yield from (item for item in self._decode_events(reader) if item is not None)
 
         except Exception as e:
             if self._stop_on_error:
                 raise
-            else: # file is read finish and exit
+            else:  # file is read finish and exit
                 pass
