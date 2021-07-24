@@ -5,9 +5,6 @@ import { param2Obj } from '@/utils/utils'
 { questionInfo存储结构
   "run": {
     "tag": {
-      "steps": 0,
-      "minStep": 0,
-      "maxStep": 0,
       "shape": 0,
       "allSteps": [],
       "curMin": 0,
@@ -104,6 +101,9 @@ const actions = {
     state.receivedCurInfo = false // 临时测试
     const allStepTemp = {'data':[], 'index':0}
     // console.log('[context.state.categoryInfo]', context.state.categoryInfo)
+    if(param == undefined) {
+      param = context.state.categoryInfo.curRuns[0];
+    }
     for (let i = 0; i < context.state.categoryInfo.curRuns.length; i++) {
       const oneRunStep = []
       if(param == context.state.categoryInfo.curRuns[i]) {
@@ -137,6 +137,7 @@ const actions = {
       let i = allStepTemp['index'];
       let params = [];
       params = allStepTemp['data'];
+      
       for (let j = 0; j < state.categoryInfo.curTags[i].length; j++) {
         state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]] = {}
         state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['allSteps'] = params[i][j][0]

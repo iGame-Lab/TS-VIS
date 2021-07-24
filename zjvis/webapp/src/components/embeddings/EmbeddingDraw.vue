@@ -933,7 +933,7 @@ export default {
     },
     renderThreeUpdate: function(localData) {
       var vm = this
-      // 开始数据投篮栏
+      // 开始数据投栏
       var myData = {}
       for (let i = 0; i < localData.labelType.length; i++) {
         myData[localData.labelType[i]] = []

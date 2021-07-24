@@ -561,7 +561,7 @@
       <div style="margin-top: 10px;">
         <el-input-number
           v-model="timeSync"
-          :min="30"
+          :min="5"
           :disabled="!syncDataBool"
           class="input-number"
           size="mini"
@@ -872,7 +872,7 @@ export default {
       ],
       syncDataBool: false, // 用来设定timeSync显示是否正常 和 作为开关是否进行同步
       dataSyncVisible: false, // 用来是否显示整个设定数据同步界面
-      timeSync: '30',
+      timeSync: '5',
       operationGuide: false
     }
   },
@@ -980,13 +980,13 @@ export default {
       }
     },
     syncDataBool() {
-      if (this.syncDataBool) {
-        // 开启同步
-        this.timingFeatchCategory([this.timeSync * 1000, this.$route.path])
-      } else {
-        // 关闭同步
-        this.clearSync()
-      }
+      // if (this.syncDataBool) {
+      //   // 开启同步
+      //   this.timingFeatchCategory([this.timeSync * 1000, this.$route.path])
+      // } else {
+      //   // 关闭同步
+      //   this.clearSync()
+      // }
     },
     allCategoryInform() {
       if (!this.leftSilderIcons[0].shaowFlag) {
