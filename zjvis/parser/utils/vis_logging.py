@@ -17,7 +17,7 @@ class VisLogging:
 
     def __init__(self, cmd_line):
         if cmd_line.action != "migrate":
-            self._logging_path = Path(cmd_line.args.logdir)
+            self._logging_path = Path(cmd_line.args.logdir).absolute()
             self._cache_path = self._logging_path.parent / "__viscache__"
 
     @property

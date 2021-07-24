@@ -27,7 +27,7 @@ setup(
         'tsne-mp>=0.1.13',
         'soundfile>=0.10.3',
         'six>=1.16.0',
-        'protobuf>=3.17.2',
+        'protobuf>=3.15.8',
         'pillow>=8.2.0',
         'numpy>=1.16.6',
         'django>=3.2.4',
