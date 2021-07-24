@@ -11,6 +11,9 @@
   text-align: left;
   font-size:11px;
 }
+.spanCenter{
+  text-align: center;
+}
 .scroll1{
   margin-top:7%;
 }
@@ -111,12 +114,8 @@
       <el-card>
         <div class="statisticPanel">
           <div class="infoTitle" @click="scrollToTop(1)">分布图</div>
-          <div class="statisticPanelContent">
-            <div class="distPanel">
-              <div style="text-align:center;">
-                <span>暂无功能</span>
-              </div>
-            </div>
+          <div class="statisticPanelContent spanCenter">
+            <span>暂无功能</span>
           </div>
         </div>
       </el-card>
@@ -125,7 +124,7 @@
       <el-card>
         <div class="info">
           <div class="infoTitle"><i class="el-icon-chat-dot-round dot" />数据信息栏</div>
-          <div v-show="!infoShowFlag" class="infoContent">暂无信息</div>
+          <div v-show="!infoShowFlag" class="statisticPanelContent spanCenter"><span>暂无信息</span></div>
           <div v-show="infoShowFlag" class="infoContent">
             <div>
               <el-row>

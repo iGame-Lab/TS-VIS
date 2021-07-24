@@ -65,9 +65,8 @@
         <!-- 盒线图倍数相关信息 -->
         <div>
           <div class="infoTitle"><i class="el-icon-chat-dot-round dot" />箱线图相关信息：</div>
-          <!-- <div v-show="!boxInfoShowFlag" class="infoContent">暂无信息</div> -->
           <div v-if="getCurRunTag !== null" class="infoContent">
-            <el-row class="item">
+            <el-row class="item excepPanelSelect">
               <el-col :span="colSpan1[0]">标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签&nbsp;:</el-col>
               <el-col :span="colSpan1[1]">
                 <el-select
@@ -85,18 +84,6 @@
               </el-col>
             </el-row>
             <div v-if="boxInfoShowFlag">
-              <!-- <el-row class="item">
-                <el-col :span="colSpan0[0]">run&nbsp;：</el-col>
-                <el-col :span="colSpan0[1]">{{ curBoxInfo.run }}</el-col>
-              </el-row>
-              <el-row class="item">
-                <el-col :span="colSpan0[0]">tag&nbsp;：</el-col>
-                <el-col :span="colSpan0[1]">{{ curBoxInfo.tag }}</el-col>
-              </el-row>
-              <el-row class="item">
-                <el-col :span="colSpan0[0]">step&nbsp;：</el-col>
-                <el-col :span="colSpan0[1]">{{ curBoxInfo.step }}</el-col>
-              </el-row> -->
               <div v-if="!dq0Show">
                 <el-row class="item">
                   <el-col :span="colSpan1[0]">联&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;动&nbsp;：</el-col>
