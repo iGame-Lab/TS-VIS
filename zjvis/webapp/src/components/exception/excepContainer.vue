@@ -260,6 +260,10 @@ export default {
         return true
       }
     })
+    console.log(this.numberChangeToE(0.00001))
+    console.log(this.numberChangeToE(-0.00001))
+    console.log(this.numberChangeToE(10000001))
+    console.log(this.numberChangeToE(-10000000000003))
   },
   methods: {
     ...mapExceptionActions(['fetchOneData', 'fetchExcepBox']),
@@ -274,19 +278,28 @@ export default {
     ]),
     // 科学计数法
     numberChangeToE(d) {
-      if (d > 10000) {
-        const numLen = d.toString().length - 1
-        return `${d / Math.pow(10, numLen)}e+${numLen}`
-      } else if (d < 0.001) {
+      if (Math.abs(d) > 10000) {
+        let numLen = numLen = d.toString().length - 1
+        if (d < 0) {
+          numLen = d.toString().length - 2
+        }
+        return `${(d / Math.pow(10, numLen)).toFixed(2)}e+${numLen}`
+      } else if (Math.abs(d) < 0.001) {
         if (d === 0) return d
         const dString = d.toString()
         let i = 3
+        if (d < 0) {
+          i = 4
+        }
         for (; i < dString.length; i++) {
           if (dString[i] !== '0') {
             break
           }
         }
-        return `${(d * Math.pow(10, i - 1)).toFixed(1)}e-${(i - 1)}`
+        if (d < 0) {
+          i = i - 1
+        }
+        return `${(d * Math.pow(10, i - 1)).toFixed(2)}e-${(i - 1)}`
       }
       return d
     },

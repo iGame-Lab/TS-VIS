@@ -34,6 +34,33 @@ export default {
     this.drawDistri()
   },
   methods: {
+    // 科学计数法
+    numberChangeToE(d) {
+      if (Math.abs(d) > 10000) {
+        let numLen = numLen = d.toString().length - 1
+        if (d < 0) {
+          numLen = d.toString().length - 2
+        }
+        return `${(d / Math.pow(10, numLen)).toFixed(2)}e+${numLen}`
+      } else if (Math.abs(d) < 0.001) {
+        if (d === 0) return d
+        const dString = d.toString()
+        let i = 3
+        if (d < 0) {
+          i = 4
+        }
+        for (; i < dString.length; i++) {
+          if (dString[i] !== '0') {
+            break
+          }
+        }
+        if (d < 0) {
+          i = i - 1
+        }
+        return `${(d * Math.pow(10, i - 1)).toFixed(2)}e-${(i - 1)}`
+      }
+      return d
+    },
     drawDistri: function() {
       const label = this.id
       const data = this.data
@@ -91,13 +118,7 @@ export default {
             .axisBottom()
             .scale(xscale)
             .tickSize(-height)
-            .tickFormat(d => {
-              if (d > 10000) {
-                const numLen = d.toString().length - 1
-                return d / Math.pow(10, numLen) + 'e+' + numLen
-              }
-              return d
-            })
+            .tickFormat(d => this.numberChangeToE(d))
         )
       svg
         .append('g')
