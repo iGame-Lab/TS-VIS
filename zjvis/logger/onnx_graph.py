@@ -1,3 +1,4 @@
+from pathlib import Path
 from zjvis.proto.graph_pb2 import GraphDef
 from zjvis.proto.node_def_pb2 import NodeDef
 from zjvis.proto.versions_pb2 import VersionDef
@@ -6,6 +7,9 @@ from zjvis.proto.tensor_pb2 import TensorShapeProto
 import re
 
 def load_onnx_graph(fname):
+    assert Path(fname).suffix == '.onnx', f'{fname} is not a *.onnx file.'
+    assert Path(fname).exists(), f'{fname} is not exist.'
+
     import onnx
     m = onnx.load(fname)
     g = m.graph
