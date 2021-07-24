@@ -54,8 +54,6 @@ def make_histogram(values, max_bins=None):
     end = int(end) + 1
     del cum_counts
 
-    # TensorBoard only includes the right bin limits. To still have the leftmost limit
-    # included, we include an empty bin left.
     # If start == 0, we need to add an empty one left, otherwise we can just include the bin left to the
     # first nonzero-count bin:
     counts = counts[start - 1:end] if start > 0 else np.concatenate([[0], counts[:end]])
@@ -66,66 +64,3 @@ def make_histogram(values, max_bins=None):
 
     sum_sq = values.dot(values)
     return sum_sq, limits.tolist(), counts.tolist()
-
-def _prepare_video(V):
-    import numpy as np
-    b, t, c, h, w = V.shape
-
-    if V.dtype == np.uint8:
-        V = np.float32(V) / 255.
-
-    def is_power2(num):
-        return num != 0 and ((num & (num - 1)) == 0)
-
-    # pad to nearest power of 2, all at once
-    if not is_power2(V.shape[0]):
-        len_addition = int(2**V.shape[0].bit_length() - V.shape[0])
-        V = np.concatenate(
-            (V, np.zeros(shape=(len_addition, t, c, h, w))), axis=0)
-
-    n_rows = 2**((b.bit_length() - 1) // 2)
-    n_cols = V.shape[0] // n_rows
-
-    V = np.reshape(V, newshape=(n_rows, n_cols, t, c, h, w))
-    V = np.transpose(V, axes=(2, 0, 4, 1, 5, 3))
-    V = np.reshape(V, newshape=(t, n_rows * h, n_cols * w, c))
-
-    return V
-
-def make_video(tensor, fps):
-    try:
-        import moviepy  # noqa: F401
-    except ImportError:
-        print('add_video needs package moviepy')
-        return
-    try:
-        from moviepy import editor as mpy
-    except ImportError:
-        print("moviepy is installed, but can't import moviepy.editor.",
-              "Some packages could be missing [imageio, requests]")
-        return
-    import tempfile
-
-    t, h, w, c = tensor.shape
-
-    # encode sequence of images into gif string
-    clip = mpy.ImageSequenceClip(list(tensor), fps=fps)
-
-    filename = tempfile.NamedTemporaryFile(suffix='.gif', delete=False).name
-
-    # moviepy >= 1.0.0 use logger=None to suppress output.
-    try:
-        clip.write_gif(filename, verbose=False, logger=None)
-    except TypeError:
-        logging.warning('Upgrade to moviepy >= 1.0.0 to supress the progress bar.')
-        clip.write_gif(filename, verbose=False)
-
-    with open(filename, 'rb') as f:
-        tensor_string = f.read()
-
-    try:
-        os.remove(filename)
-    except OSError:
-        logging.warning('The temporary file used by moviepy cannot be deleted.')
-
-    return [h,w,c], tensor_string

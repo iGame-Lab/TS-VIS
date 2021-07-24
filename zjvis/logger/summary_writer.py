@@ -2,7 +2,7 @@ import os
 import numpy as np
 from typing import Union, Optional, Dict, List
 from .writer import EventFileWriter
-from .summary import scalar, image, audio, video, text, histogram, hparams, exception, embedding, embedding_sample
+from .summary import scalar, image, audio, text, histogram, hparams, exception, embedding, embedding_sample
 numpy_compatible = np.ndarray
 try:
     import torch
@@ -97,21 +97,6 @@ class SummaryWriter(object):
         assert tensors.ndim in [3,4], 'the shape of image tensors must be (K,H,W) or (K,H,W,C)'
         for i, tensor in enumerate(tensors):
             self.event_file_writer.add_summary(image(f'{tag}_{i}', tensor), global_step=step)
-
-    def add_video(self,
-                  tag: str,
-                  video_tensor: numpy_compatible,
-                  step: Optional[int] = None,
-                  fps: Optional[Union[int, float]] = 4):
-        """
-            添加视频数据到日志
-        Args:
-            tag: 字符串，视频的标识
-            video_tensor: 数组，视频数据
-            step: 整数，可选参数，记录数据的step
-            fps: 整数，可选参数，视频的帧率， 默认为4
-        """
-        self.event_file_writer.add_summary(video(tag, video_tensor, fps), global_step=step)
 
     def add_audio(self,
                   tag: str,

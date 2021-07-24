@@ -8,7 +8,7 @@ from zjvis.proto.projector_pb2 import Projector
 from zjvis.proto.summary_pb2 import Summary, SummaryMetadata, HistogramProto
 from zjvis.proto.tensor_pb2 import TensorProto, TensorShapeProto
 from zjvis.proto.plugin_hparams_pb2 import HParamsPluginData, SessionStartInfo
-from .utils import make_image,make_histogram, _prepare_video, make_video
+from .utils import make_image,make_histogram
 
 def scalar(name, scalar_value):
     """ 转换标量数据到potobuf格式 """
@@ -95,22 +95,6 @@ def audio(name, audio_data, sample_rate):
                                         audio=audio,
                                         metadata=metadata)])
 
-def video(name, vidio_data, fps=4):
-    """ 转换视频数据到potobuf格式 """
-    tensor = make_np(vidio_data)  # Only 5D tensor is supported, dataformats="NTCHW"
-
-    tensor = _prepare_video(tensor)
-    # If user passes in uint8, then we don't need to rescale by 255
-    if tensor.dtype != np.uint8:
-        tensor = (tensor * 255.0).astype(np.uint8)
-
-    [h,w,c], tensor_string = make_video(tensor, fps)
-    video_str =  Summary.Image(height=h, width=w, colorspace=c, encoded_image_string=tensor_string)
-    metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='videos'))
-    return Summary(value=[Summary.Value(tag=name,
-                                        image=video_str,
-                                        metadata=metadata)])
-
 def set_hparams(k, v):
     if v is None:
         return
@@ -178,10 +162,13 @@ def embedding_sample(name, tensor, sample_type):
 
 def embedding(name, tensor, label):
     """ 转换高维数据到potobuf格式 """
-    tensor = make_np(tensor)
-
     if label is not None:
-        embedding = Projector.Embedding(value = make_tensor(tensor), label = make_tensor(label))
+        assert tensor.shape[0] == label.shape[0], 'the first dimension of tensor and label must be same.'
+        assert label.ndim == 1 or (label.ndim == 2 and label.shape[1] == 1), 'label shape must be [N] or [N,1]'
+
+    tensor = make_np(tensor)
+    if label is not None:
+        embedding = Projector.Embedding(value = make_tensor(tensor), label = make_tensor(label.squeeze()))
     else:
         embedding = Projector.Embedding(value=make_tensor(tensor))
 
