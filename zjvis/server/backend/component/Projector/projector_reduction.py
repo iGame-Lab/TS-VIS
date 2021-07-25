@@ -16,8 +16,8 @@
  =============================================================
 """
 import numpy as np
-
-
+from tsne import bh_sne
+from scipy import linalg as la
 class projector_reduction:
     def __init__(self, data, method, dimension=None):
         self.data = self.data_preprocess(data)
@@ -40,9 +40,17 @@ class projector_reduction:
         return data
 
     def Pca(self):
-        from sklearn.decomposition import PCA
-        pca = PCA(n_components=self.dimension)  # 确定想要的维度 PCA
-        return pca.fit_transform(self.data).tolist()  # 得到处理的结果
+        assert self.dimension <= self.data.shape[1]
+        # do PCA
+        data = self.data
+        data -= data.mean(axis=0)
+
+        # working with covariance + (svd on cov.) is
+        # much faster than svd on data directly.
+        cov = np.dot(data.T, data) / data.shape[0]
+        u, s, v = la.svd(cov, full_matrices=False)
+        u = u[:, 0:self.dimension]
+        return np.dot(data, u).tolist()
 
     def Tsne(self):
         if self.dimension > 3:
@@ -50,9 +58,8 @@ class projector_reduction:
         _data = np.array(self.data)
         seed = np.random.RandomState(0)
 
-        from tsne import bh_sne
-        perplexity = _data.shape[0] // 4 if _data.shape[0] < 100 else 30
-        data = bh_sne(_data, pca_d=True, d=self.dimension, perplexity=perplexity, random_state=seed)
+        perplexity = _data.shape[0] // 4 if _data.shape[0] < 100 else 25
+        data = bh_sne(_data, max_iter=50, pca_d=_data.shape[1], d=self.dimension, perplexity=perplexity, random_state=seed)
         return data.tolist()
 
     def get_data(self):
