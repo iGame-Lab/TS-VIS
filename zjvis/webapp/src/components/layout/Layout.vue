@@ -1309,7 +1309,7 @@ export default {
   border-radius: 3px;
 
   /deep/ .el-select__tags {
-    top: 40%;
+    top: 70%;
     flex-wrap: nowrap;
     overflow: hidden;
   }
