@@ -49,6 +49,9 @@ const actions = {
       }
     }
   },
+  async getIntervalSelfCategoryInfo(context, param) {
+
+  },
   async getData (context, param) {
     // 类目  tags
     // console.log(param, context.state.detailData[param[0]])
