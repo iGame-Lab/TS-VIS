@@ -28,8 +28,7 @@ const state = {
   freshFlag: true, // 上一步刷新的请求全部结束后再进行这一步的请求
   downLoadArray: [], // 下载svg图暂存id
   // 在加载数据和渲染时不允许用户操作控制面板
-  featchDataFinished: false,
-  drawAllSvgFinished: false
+  featchDataFinished: false
 }
 
 const getters = {
@@ -52,8 +51,7 @@ const getters = {
   getHistShow: (state) => state.histShow,
   getDistShow: (state) => state.distShow,
   getDownLoadArray: (state) => state.downLoadArray,
-  getFeatchDataFinished: (state) => state.featchDataFinished,
-  getDrawAllSvgFinished: (state) => state.drawAllSvgFinished
+  getFeatchDataFinished: (state) => state.featchDataFinished
 }
 
 const actions = {
@@ -69,6 +67,8 @@ const actions = {
   },
 
   async featchAllDistData(context) {
+    context.commit('clearDistData')
+    context.commit('setFeatchDataFinished', false)
     for (let k = 0; k < context.state.dataSets.length; k++) {
       for (let i = 0; i < context.state.histTags[k].length; i++) {
         await http.useGet(port.category.distribution,
@@ -80,14 +80,16 @@ const actions = {
             }
             context.commit('storeDistData', [context.state.dataSets[k], context.state.histTags[k][i], res.data.data[context.state.histTags[k][i]], k])
             context.commit('manageDistData')
+            if (k === context.state.dataSets.length - 1 && i === context.state.histTags[k].length - 1) {
+              context.commit('setFeatchDataFinished', true)
+            }
           })
       }
     }
   },
   async featchAllHistData(context) {
-    context.commit('clearData')
-    context.commit('setFeatchDataFinished', false) // 定时刷新时
-    context.commit('setDrawAllSvgFinished', false)
+    context.commit('clearHistData')
+    context.commit('setFeatchDataFinished', false)
     for (let k = 0; k < context.state.dataSets.length; k++) {
       for (let i = 0; i < context.state.histTags[k].length; i++) {
         await http.useGet(port.category.histogram,
@@ -103,11 +105,11 @@ const actions = {
               context.commit('changeShownumber', Math.round(5000.0 / dataLen))
             }
             // 根据上面也可以确定桶个数的最大值
+            context.commit('storeHistData', [context.state.dataSets[k], context.state.histTags[k][i], res.data.data[context.state.histTags[k][i]], k])
+            context.commit('manageHistData', false)
             if (k === context.state.dataSets.length - 1 && i === context.state.histTags[k].length - 1) {
               context.commit('setFeatchDataFinished', true)
             }
-            context.commit('storeHistData', [context.state.dataSets[k], context.state.histTags[k][i], res.data.data[context.state.histTags[k][i]], k])
-            context.commit('manageHistData', false)
           })
       }
     }
@@ -181,11 +183,16 @@ const mutations = {
     state.distData.push([state.oldDistData[k][0], state.oldDistData[k][1], newData, state.oldDistData[k][3], k])
     state.distCheckedArray.push(false)
   },
-  clearData: (state) => {
+  clearHistData: (state) => {
     state.oldHistData = []
     state.histData = []
     state.histCheckedArray = []
     // 同时清空dist数据，因为页面刷新
+    state.oldDistData = []
+    state.distData = []
+    state.distCheckedArray = []
+  },
+  clearDistData: (state) => {
     state.oldDistData = []
     state.distData = []
     state.distCheckedArray = []
@@ -285,9 +292,6 @@ const mutations = {
         state.downLoadArray.splice(i, 1)
       }
     }
-  },
-  setDrawAllSvgFinished(state, param) {
-    state.drawAllSvgFinished = param
   },
   setFeatchDataFinished(state, param) {
     state.featchDataFinished = param

@@ -46,14 +46,15 @@ import { createNamespacedHelpers } from 'vuex'
 import excepContainer from './excepContainer'
 
 const { mapActions: mapExceptionActions, mapGetters: mapExceptionGetters, mapMutations: mapExceptionMutations } = createNamespacedHelpers('exception')
-const { mapState: mapLayoutStates } = createNamespacedHelpers('layout')
+const { mapState: mapLayoutStates, mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
 export default {
   components: {
     excepContainer
   },
   computed: {
     ...mapExceptionGetters(['getRun', 'getTag', 'getAllStep', 'getAllData', 'getInitStateFlag', 'getErrorMessage', 'getExceptionShow']),
-    ...mapLayoutStates(['userSelectRunFile'])
+    ...mapLayoutStates(['userSelectRunFile']),
+    ...mapLayoutGetters(['getTimer'])
   },
   watch: {
     userSelectRunFile(val) {
@@ -75,6 +76,11 @@ export default {
         message: val,
         type: 'error'
       })
+    },
+    getTimer() {
+      this.fetchAllStep()
+      this.setRectCurInfo([])
+      this.setCurIqrTimes(['', '', '', 1.50, 1.50])
     }
   },
   created() {

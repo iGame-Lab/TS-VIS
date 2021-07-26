@@ -197,7 +197,7 @@ export default {
     },
     getRectCurInfo(val) {
       this.curRectInfo = val
-      if (this.curRectInfo[0] === '') {
+      if (this.curRectInfo.length === 0) {
         this.rectInfoShowFlag = false
       } else {
         this.rectInfoShowFlag = true

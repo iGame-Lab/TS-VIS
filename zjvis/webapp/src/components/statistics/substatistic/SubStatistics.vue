@@ -170,7 +170,7 @@ const {
   mapActions: mapStatisticActions,
   mapMutations: mapStatisticMutations
 } = createNamespacedHelpers('statistic')
-const { mapState: mapLayoutStates } = createNamespacedHelpers('layout')
+const { mapState: mapLayoutStates, mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
 export default {
   components: {
     statisticContainer
@@ -201,13 +201,22 @@ export default {
       'getDataSetsState',
       'getStatisticColor',
       'getHistShow',
-      'getDistShow'
+      'getDistShow',
+      'getFeatchDataFinished'
     ]),
     ...mapLayoutStates([
       'userSelectRunFile'
-    ])
+    ]),
+    ...mapLayoutGetters(['getTimer'])
   },
   watch: {
+    getTimer() {
+      if (this.categoryInfo === 'histogram' && this.showFlag) {
+        this.featchAllHistData()
+      } else if (this.categoryInfo === 'distribution' && this.showFlag) {
+        this.featchAllDistData()
+      }
+    },
     getMode(curMode) {
       if (this.categoryInfo === 'histogram') {
         if (curMode === '三维') {

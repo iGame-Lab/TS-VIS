@@ -1,8 +1,9 @@
 const HOSTNAME = window.location.origin + '/'
-const DJANGOHOSTNAME = 'http://localhost:9898/'
+// const DJANGOHOSTNAME = 'http://localhost:8000/'
 // const DJANGOHOSTNAME = process.env.VUE_APP_VISUAL_IMG_API
 // const DJANGOHOSTNAME = 'http://127.0.0.1:8013'
-// const DJANGOHOSTNAME = 'http://192.168.157.111:9898'
+const DJANGOHOSTNAME = 'http://192.168.157.111:9898'
+// const DJANGOHOSTNAME = 'http://127.0.0.1:9898'
 // const DJANGOHOSTNAME = '' // 生成服务器静态页面接口
 const IMGURl = DJANGOHOSTNAME
 // const IMGURl = process.env.VUE_APP_VISUAL_API

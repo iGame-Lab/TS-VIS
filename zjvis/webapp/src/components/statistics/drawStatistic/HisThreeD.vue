@@ -23,7 +23,7 @@ export default {
     }
   },
   computed: {
-    ...mapStatisticGetters(['getShowNumber', 'getFeatchDataFinished'])
+    ...mapStatisticGetters(['getShowNumber'])
   },
   watch: {
     data: function() {
@@ -35,12 +35,9 @@ export default {
   },
   mounted() {
     this.drawOffset()
-    if (this.getFeatchDataFinished) {
-      this.setDrawAllSvgFinished(true)
-    }
   },
   methods: {
-    ...mapStatisticMutations(['setStatisticInfo', 'setDrawAllSvgFinished']),
+    ...mapStatisticMutations(['setStatisticInfo']),
     // 科学计数法
     numberChangeToE(d) {
       if (Math.abs(d) > 10000) {

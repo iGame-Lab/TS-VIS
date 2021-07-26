@@ -6,12 +6,12 @@ const state = {
   tag: [],
   initStateFlag: false,
   allStep: [], // {step, box}
-  allData: [], // {run, tag, rectData, histData}
+  allData: [], // [[run, tag, rectData, histData]]
   exceptionShow: false,
   curRunTag: null,
   curNewData: [], // 记录点击step后获取的新数据
   curNewExcepBox: [],
-  rectCurInfo: {},
+  rectCurInfo: [],
   curIqrTimes: ['', '', '', 1.50, 1.50], // 当前选中的盒线图的一些数据 {run, tag, step, box}
   linkChecked: false,
   excepBoxStatistic: [], // 异常点数据统计
