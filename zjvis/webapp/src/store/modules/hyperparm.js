@@ -42,6 +42,9 @@ const actions = {
       context.dispatch('featchAllData', { run: param[0][0] })
     }
   },
+  async getIntervalSelfCategoryInfo(context, param) {
+
+  },
   async featchAllData(context, param) {
     http.useGet(port.category.hyperparm, param).then(res => {
       if (+res.data.code !== 200) {
