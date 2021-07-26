@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     ...maphyperparmGetters(['getAllData', 'getCategoryInfo', 'getRequestState', 'getErrorMessage']),
-    ...mapLayoutStates(['userSelectRunFile'])
+    ...mapLayoutStates(['userSelectRunFile', 'getTimer'])
   },
   watch: {
     userSelectRunFile(val) {
@@ -55,6 +55,13 @@ export default {
         message: val.split('_')[0],
         type: 'error'
       })
+    },
+    getTimer: function() {
+      if (this.userSelectRunFile) {
+        console.log('timer')
+        const param = { run: this.userSelectRunFile }
+        this.featchAllData(param)
+      }
     }
   },
   mounted() {

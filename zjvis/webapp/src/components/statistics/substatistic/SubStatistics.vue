@@ -150,7 +150,7 @@
               :tag="item[1]"
               :itemp="item[4]"
               :componentName="componentName"
-              :runColor="getStatisticColor[item[3] % 5]"
+              :runColor="getStatisticColor[item[3] % getStatisticColor.length]"
               :divId="idArray[item[4]]"
               :parentComponent="parentComponent"
               checked="false"

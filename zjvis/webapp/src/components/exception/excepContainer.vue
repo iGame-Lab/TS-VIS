@@ -260,10 +260,6 @@ export default {
         return true
       }
     })
-    console.log(this.numberChangeToE(0.00001))
-    console.log(this.numberChangeToE(-0.00001))
-    console.log(this.numberChangeToE(10000001))
-    console.log(this.numberChangeToE(-10000000000003))
   },
   methods: {
     ...mapExceptionActions(['fetchOneData', 'fetchExcepBox']),
