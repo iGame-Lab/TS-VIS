@@ -254,7 +254,8 @@ export default {
       'getMessage',
       'getInitStateFlag',
       'getErrorMessage',
-      'getLineWidth'
+      'getLineWidth',
+      'getIntervalChange'
     ]),
     ...mapLayoutStates([
       'userSelectRunFile'
@@ -279,6 +280,7 @@ export default {
       let index = this.curTags.indexOf(this.curTag);
       if(index < 0 || this.curTag == '')  {
         this.curTag = this.curTags[0]
+        this.setCurInfo(['curStep', 0])
         this.curStep = this.getCurInfo.curStep  
       }
       this.curMethod = this.getCurInfo.curMethod
@@ -352,7 +354,7 @@ export default {
         }, 2000)
       }
     },
-    getTimer: function() {
+    getIntervalChange: function() {
       this.setMessage('')
       if (!this.getReceivedQuestionInfo) {
         // console.log('数据还没有整理好')
