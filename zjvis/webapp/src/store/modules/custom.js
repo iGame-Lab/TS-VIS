@@ -59,6 +59,9 @@ const actions = {
   // eslint-disable-next-line
   async getSelfCategoryInfo(context, param) {
   },
+  async getIntervalSelfCategoryInfo(context, param) {
+
+  },
   // eslint-disable-next-line
   async getData(context, param) {
   },
