@@ -107,6 +107,9 @@ const actions = {
       context.dispatch('fetchOneStep', context.state.categoryInfo.curRuns[0])
     }
   },
+  async getIntervalSelfCategoryInfo(context, param) {
+    
+  },
   async fetchOneStep(context, param) {
     state.questionInfo.received = false // 当需要请求信息的时候所有的数据已经完备
     state.receivedQuestionInfo = false
