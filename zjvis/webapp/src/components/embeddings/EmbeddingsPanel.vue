@@ -266,7 +266,6 @@ export default {
       this.setLineWidth(this.curLineWidth)
     },
     getReceivedCurInfo: function() { // 只触发一次第一次
-      console.log(269)
       if(this.getReceivedCurInfo == false) return
       if (this.userSelectRunFile === '') {
         return
@@ -280,7 +279,7 @@ export default {
       let index = this.curTags.indexOf(this.curTag);
       if(index < 0 || this.curTag == '')  {
         this.curTag = this.curTags[0]
-        this.curStep = this.getCurInfo.curStep
+        this.curStep = this.getCurInfo.curStep  
       }
       this.curMethod = this.getCurInfo.curMethod
       this.curDim = this.getCurInfo.curDim
@@ -289,6 +288,7 @@ export default {
       this.curMapMax = this.getQuestionInfo[this.userSelectRunFile][this.curTag].curMax
       this.curMin = 0
       this.curMapStep = this.getQuestionInfo[this.userSelectRunFile][this.curTag].allSteps[this.curStep]
+      this.setCurInfo(['curMapStep', this.curMapStep])
       const param = {
         run: this.userSelectRunFile,
         tag: this.curTag,
@@ -299,17 +299,14 @@ export default {
       this.fetchDataPower(param)
     },
     curTag: function() {
-      console.log(297)
       this.setCurInfo(['curTag', this.curTag])
       this.fetchData()
     },
     curMethod: function() {
-      console.log(302)
       this.setCurInfo(['curMethod', this.curMethod])
       this.fetchData()
     },
     curDim: function() {
-      console.log(307)
       this.setCurInfo(['curDim', this.curDim])
       this.fetchData()
     },
@@ -318,7 +315,6 @@ export default {
       this.curMapStep = this.getQuestionInfo[this.userSelectRunFile][this.curTag].allSteps[this.curStep]
     },
     curMapStep: function() {
-      console.log(316)
       this.setCurInfo(['curMapStep', this.curMapStep])
       this.fetchData()
     },
@@ -358,7 +354,6 @@ export default {
     },
     getTimer: function() {
       this.setMessage('')
-      console.log("383")
       if (!this.getReceivedQuestionInfo) {
         // console.log('数据还没有整理好')
         return
@@ -366,7 +361,6 @@ export default {
       this.setCurInfo(['received', false]) // 屏蔽别的请求
       this.fetchOneStep(this.userSelectRunFile);
       // console.log(this.getTimer)
-      // console.log("352")
       // if(this.getReceivedCurInfo == false) return
       // if (this.userSelectRunFile === '') {
       //   return
@@ -396,7 +390,6 @@ export default {
     },
     userSelectRunFile: function() {
       this.setMessage('')
-      console.log("383")
       if (!this.getReceivedQuestionInfo) {
         // console.log('数据还没有整理好')
         return

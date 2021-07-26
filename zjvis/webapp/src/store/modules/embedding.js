@@ -1,6 +1,7 @@
 import http from '@/utils/request'
 import port from '@/utils/api'
 import { param2Obj } from '@/utils/utils'
+import layout from './layout'
 /*
 { questionInfo存储结构
   "run": {
@@ -90,6 +91,17 @@ const actions = {
   // 当系统初始化的时候，layout会给embedding 发起动作
   async getSelfCategoryInfo(context, param) {
     context.commit('setSelfCategoryInfo', param)
+    
+    
+    if (param[2]['initStateFlag'] === true) {
+      // context.dispatch('fetchAllStep')
+      context.dispatch('fetchOneStep', context.state.categoryInfo.curRuns[0])
+      
+    }
+  },
+  async getSelfCategoryInfoNotInit(context, param) {
+    context.commit('setSelfCategoryInfo', param)
+    console.log("here")
     if (param[2]['initStateFlag'] === true) {
       // context.dispatch('fetchAllStep')
       context.dispatch('fetchOneStep', context.state.categoryInfo.curRuns[0])
@@ -188,6 +200,7 @@ const actions = {
   },
   async fetchSampleData(context, param) {
     param = param2Obj(param)
+    console.log(layout.state.userSelectRunFile + "1111")
     await http.useGet(port.category.projector_sample, param)
       .then(res => {
         if (+res.data.code !== 200) {
