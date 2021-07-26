@@ -168,6 +168,7 @@ const actions = {
           context.dispatch(
             `${ce}/getIntervalSelfCategoryInfo`,
             [tempRunFile, detailTag],
+            { root: true }
           )
           // if (ce === constants.CATEGORYORDER[categoryOrder[0]] && cate === 'index') {
           //   context.dispatch(
