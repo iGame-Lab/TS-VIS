@@ -87,12 +87,14 @@ export default {
       })
     },
     // 实时监听layout的getTimer
-    getTimer() {
+    getTimer: function() {
       // console.log("media_time")
       if (!this.settotaltag) {
         // console.log('数据还没有整理好')
         return
       }
+      console.log("dataing")
+      this.settotaltag()
     }
   },
   mounted() {

@@ -51,7 +51,8 @@ const actions = {
   },
   async getData (context, param) {
     // 类目  tags
-    if (context.state.detailData[param[0]].length === 0) {
+    // console.log(param, context.state.detailData[param[0]])
+    // if(context.state.detailData[param[0]].length === 0) {
       // console.log(param[1])
       for (let j = 0; j < param[1].length; j++) {
         // console.log(param[1][j])
@@ -73,7 +74,7 @@ const actions = {
           }
         }
       }
-    }
+    // }
   }
 }
 
