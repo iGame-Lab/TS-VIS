@@ -65,7 +65,9 @@ const actions = {
       }
     }
   },
+  async getIntervalSelfCategoryInfo(context, param) {
 
+  },
   async featchAllDistData(context) {
     context.commit('clearDistData')
     context.commit('setFeatchDataFinished', false)
