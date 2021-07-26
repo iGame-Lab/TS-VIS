@@ -7,9 +7,9 @@ the License for the specific language governing permissions and * limitations un
 
 <template>
   <div class="sidebar-logo-container">
-    <router-link class="sidebar-logo-link ellipsis" to="/">
+    <div class="sidebar-logo-link ellipsis">
       <img :src="title" class="sidebar-title" />
-    </router-link>
+    </div>
   </div>
 </template>
 
@@ -60,7 +60,8 @@ export default {
     }
 
     & .sidebar-title {
-      width: 150px;
+      width: 100%;
+      height: 100%;
     }
   }
 }

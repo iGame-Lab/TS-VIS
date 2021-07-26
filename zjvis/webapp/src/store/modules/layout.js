@@ -165,6 +165,10 @@ const actions = {
             }
             categoryToRunFile[ce] = temp
           })
+          context.dispatch(
+            `${ce}/getIntervalSelfCategoryInfo`,
+            [tempRunFile, detailTag],
+          )
           // if (ce === constants.CATEGORYORDER[categoryOrder[0]] && cate === 'index') {
           //   context.dispatch(
           //     `${ce}/getSelfCategoryInfo`,
