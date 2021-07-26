@@ -51,6 +51,9 @@ const actions = {
       context.dispatch('fetchAllStep')
     }
   },
+  async getIntervalSelfCategoryInfo(context, param) {
+
+  },
   async fetchAllStep(context) { // param={run, tag}
     const param = {}
     param['run'] = context.state.curRunTag.run
