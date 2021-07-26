@@ -87,6 +87,9 @@ const actions = {
       context.commit('setfreshnumber')
     }
   },
+  async getIntervalSelfCategoryInfo(context, param) {
+
+  },
   async getData(context, param) {
     if (context.state.detailData[param[0]].length === 0) {
       for (let j = 0; j < param[1].length; j++) {
