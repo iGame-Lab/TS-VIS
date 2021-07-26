@@ -63,6 +63,9 @@ const actions = {
   async getSelfCategoryInfo(context, param) {
     context.commit('setSelgCategoryInfo', param);
   },
+  async getIntervalSelfCategoryInfo(context, param) {
+    context.commit('setSelgCategoryInfo', param);
+  },
   async getFullData(context, param) {
     if (!param.run) {
       return;
