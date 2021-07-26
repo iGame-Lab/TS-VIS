@@ -1336,7 +1336,11 @@ export default {
   /deep/ .el-input__suffix {
     top: 10%;
   }
-
+  
+  /deep/ .el-select__caret{
+    margin: 20% 0 0 0;
+  }
+  
   /deep/ .is-reverse {
     margin: -20% 0 0 0;
   }
