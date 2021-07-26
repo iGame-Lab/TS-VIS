@@ -127,6 +127,75 @@ const actions = {
       context.commit('setRunCategory', constants.CATEGORYORDER[categoryOrder[newIndex]])
     })
   },
+  async featchCategory(context, path) {
+    const splitArray = path.split('/')
+    const cate = splitArray[splitArray.length - 1]
+    await http.useGet(port.manage.initCategory, {}).then((res) => {
+      const dataCategoryInfo = res.data.data
+      let categorys = []
+      const runFile = []
+      const categoryToRunFile = {} // 根据所选类目显示run信息
+      Object.keys(dataCategoryInfo).forEach((val) => {
+        categorys = categorys.concat(
+          Object.keys(dataCategoryInfo[val]).filter((v) => !categorys.includes(v))
+        )
+        runFile.push(val)
+      })
+      const categoryOrder = []
+      categorys.forEach((val) => {
+        categoryOrder.push(constants.CATEGORYORDER.indexOf(val))
+      })
+      categoryOrder.sort()
+      let newIndex = 0
+      if (cate === 'index') {
+        newIndex = 0
+      } else {
+        newIndex = categoryOrder.indexOf(constants.CATEGORYORDER.indexOf(cate))
+      }
+      if (categorys.length !== 0) {
+        categorys.forEach((ce) => {
+          const detailTag = []
+          const tempRunFile = []
+          const temp = []
+          runFile.forEach((res) => {
+            if (dataCategoryInfo[res].hasOwnProperty(ce)) {
+              tempRunFile.push(res)
+              detailTag.push(dataCategoryInfo[res][ce])
+              temp.push(res)
+            }
+            categoryToRunFile[ce] = temp
+          })
+          // if (ce === constants.CATEGORYORDER[categoryOrder[0]] && cate === 'index') {
+          //   context.dispatch(
+          //     `${ce}/getSelfCategoryInfo`,
+          //     [tempRunFile, detailTag, { initStateFlag: true }],
+          //     { root: true }
+          //   )
+          // } else if (ce === cate) {
+          //   context.dispatch(
+          //     `${ce}/getSelfCategoryInfo`,
+          //     [tempRunFile, detailTag, { initStateFlag: true }],
+          //     { root: true }
+          //   )
+          // } else {
+          //   context.dispatch(
+          //     `${ce}/getSelfCategoryInfo`,
+          //     [tempRunFile, detailTag, { initStateFlag: false }],
+          //     { root: true }
+          //   )
+          // }
+        })
+      } else {
+        context.commit(
+          'setErrorMessage',
+          `${'日志文件中尚未发现可展示信息！_'}${new Date().getTime()}`
+        )
+      }
+      context.commit('setRunCategoryDetail', categoryToRunFile)
+      context.commit('setCategory', [categoryOrder, newIndex])
+      context.commit('setRunCategory', constants.CATEGORYORDER[categoryOrder[newIndex]])
+    })
+  },
   async timingFeatchCategory(context, parm) {
     // parm 存储间隔时间
     const splitArray = parm[1].split('/')
@@ -319,10 +388,11 @@ const mutations = {
         download.graph.push('#svg-canvas')
       }
     })
+    // console.log(state.category)
     state.svgDownloadList = download
   },
   setSyncTime: (state) => {
-    // state.timeSyncInterval = !state.timeSyncInterval
+    state.timeSyncInterval = !state.timeSyncInterval
   },
   clearSync: (state) => {
     clearInterval(state.timeSyncInterval)
@@ -361,16 +431,19 @@ const mutations = {
       state.userSelectRunFile = initOption
     }
     state.runFileCategory = detailInfo
+    // console.log(state.runFileCategory)
     state.multipleFlag = temp
   },
   setUserSelectRunFile: (state, value) => {
     state.userSelectRunFile = value
   },
   setRunCategoryDetail: (state, value) => {
+    // console.log(value)
     state.runCategoryDetail = value
   },
   setTimer: (state) => {
     state.timeSyncInterval = !state.timeSyncInterval
+    // console.log(state.timeSyncInterval)
   },
   setErrorMessage: (state, param) => {
     state.errorMessage = param

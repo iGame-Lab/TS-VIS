@@ -937,7 +937,7 @@ export default {
       if (this.syncDataBool) {
         // 开启同步
         this.clearSync()
-        this.timingFeatchCategory([this.timeSync * 1000, this.$route.path])
+        // this.timingFeatchCategory([this.timeSync * 1000, this.$route.path])
       } else {
         // 关闭同步
         this.clearSync()
@@ -954,6 +954,7 @@ export default {
       this.value1 = this.userSelectRunFile
     },
     value1() {
+      // console.log(this.value1)
       this.getStateStore[this.selectedRaw] = this.value1
       this.setUserSelectRunFile(this.value1)
     },
@@ -1000,6 +1001,7 @@ export default {
           clearTimeout(self.timer)
         }
         self.timer = setInterval(function() {
+          self.featchCategory(self.$route.path)
           self.setTimer()
         }, 1000 * self.timeSync)
       } else if (!val && !this.syncDataBool) {
@@ -1057,6 +1059,7 @@ export default {
   },
   methods: {
     ...mapLayoutActions([
+      'featchCategory',
       'initFeatchCategory',
       'timingFeatchCategory',
       'timingFeatchCategoryOnce',
