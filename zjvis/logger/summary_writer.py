@@ -236,17 +236,16 @@ class SummaryWriter(object):
 
     def add_hparams(self,
                     hparam_dict: Dict[str, Union[bool, str, float, int]],
-                    metric_dict: Optional[Dict[str, float]] =None,
+                    metrics: Optional[Union[list, tuple]] =None,
                     tag: Optional[str] = None):
         """
             添加一组数据到日志
         Args:
             hparam_dict: 字典，模型的超参数
-            metric_dict: 字典，可选参数， 模型的度量数据
+            metrics: 列表、元组，可选参数， 需要记录的度量指标，该指标必须在scalar中已定义
             tag: 字符串，该组超参数的标识
         """
-        self.get_writer('hparams').add_summary(summary=hparams(hparam_dict, metric_dict, tag))
-        self.get_writer('hparams').close()
+        self.get_writer('hparams').add_summary(summary=hparams(hparam_dict, metrics, tag))
 
     def close(self):
         """

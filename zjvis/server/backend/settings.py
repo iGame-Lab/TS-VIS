@@ -78,7 +78,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'zjvis.server.backend.urls'
 
 # 跨域增加忽略
 SESSION_COOKIE_SAMESITE = None
@@ -131,7 +131,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'zjvis.server.backend.wsgi.application'
 
 
 # Database

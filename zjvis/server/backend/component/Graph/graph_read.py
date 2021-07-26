@@ -15,8 +15,8 @@
  limitations under the License.
  =============================================================
 """
-from backend.component.Graph.graph import Node
-from backend.component.Graph.graph import Proxy
+from zjvis.server.backend.component.Graph.graph import Node
+from zjvis.server.backend.component.Graph.graph import Proxy
 
 # Base_RATE = 16
 # nodes保留每个节点的单独信息，以节点全称为key进行索引

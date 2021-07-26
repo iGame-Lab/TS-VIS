@@ -139,8 +139,8 @@ def sort_func(x):
 def get_init_data(request):
     if not cache.get('finished'):
         # 从这里import不会在启动的时候加载很多东西
-        from log_parser import LogParser
-        from utils.vis_logging import get_logger
+        from zjvis.parser.log_parser import LogParser
+        from zjvis.parser.utils.vis_logging import get_logger
 
         logdir, cachedir = get_logger().logdir, get_logger().cachedir
         _parser = LogParser(logdir, cachedir)
@@ -150,7 +150,7 @@ def get_init_data(request):
 
 
 def get_category_data(request):
-    from utils.vis_logging import get_logger
+    from zjvis.parser.utils.vis_logging import get_logger
     cache_path = get_logger().cachedir
     res = process_category(cache_path)
     return res

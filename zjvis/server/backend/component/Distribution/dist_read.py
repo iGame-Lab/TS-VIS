@@ -17,7 +17,7 @@
 """
 import numpy as np
 
-from backend.component.Histogram.hist_read import histogram_read
+from zjvis.server.backend.component.Histogram.hist_read import histogram_read
 
 DISTRIBUTION_BPS = (0, 668, 1587, 3085, 5000, 6915, 8413, 9332, 10000)
 

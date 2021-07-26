@@ -19,8 +19,8 @@ from pathlib import Path
 from typing import Union
 from queue import Queue
 
-from loader.logfile_loader import Trace_Thread
-from utils.logfile_utils import is_available_flie
+from zjvis.parser.loader.logfile_loader import Trace_Thread
+from zjvis.parser.utils.logfile_utils import is_available_flie
 
 class LazyLoad:
     def __init__(self, run: str, rundir: Union[str, Path], comm=None):

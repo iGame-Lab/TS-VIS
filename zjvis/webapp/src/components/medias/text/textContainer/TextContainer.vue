@@ -39,8 +39,8 @@
               class="my-label"
             >
               <div class="circle-father"><div class="circle" /></div>
-              <div class="my-text">
-                <p>
+              <div class="my-text" >
+                <p style="white-space: pre-wrap;" v-html="item">
                   {{ item }}
                 </p>
               </div>

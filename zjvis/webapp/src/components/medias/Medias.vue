@@ -47,6 +47,7 @@ const {
   mapMutations: mapCustomMutations
 } = createNamespacedHelpers('custom')
 const { mapGetters: mapMediaGetters, mapMutations: mapMediaMutations, mapActions: mapMediaActions } = createNamespacedHelpers('media')
+const { mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
 export default {
   components: {
     images, audios, texts
@@ -72,7 +73,8 @@ export default {
       'getTotaltag',
       'getFreshInfo',
       'getErrorMessage'
-    ])
+    ]),
+    ...mapLayoutGetters(['getTimer'])
   },
   watch: {
     categoryInfo() {
@@ -83,6 +85,14 @@ export default {
         message: val.split('_')[0],
         type: 'error'
       })
+    },
+    // 实时监听layout的getTimer
+    getTimer() {
+      // console.log("media_time")
+      if (!this.settotaltag) {
+        // console.log('数据还没有整理好')
+        return
+      }
     }
   },
   mounted() {

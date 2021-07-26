@@ -24,17 +24,17 @@ __all__ = [
     "get_exception_data", "get_exception_hist_data", "get_exception_box_data"
            ]
 
-from backend.component.Audio.provider import get_audio_meta_data, \
+from zjvis.server.backend.component.Audio.provider import get_audio_meta_data, \
     get_audio_data
-from backend.component.Distribution.provider import get_distribution_data
-from backend.component.Exception.provider import get_exception_meta_data, \
+from zjvis.server.backend.component.Distribution.provider import get_distribution_data
+from zjvis.server.backend.component.Exception.provider import get_exception_meta_data, \
     get_exception_data, get_exception_hist_data, get_exception_box_data
-from backend.component.Graph.provider import get_graph_data
-from backend.component.Histogram.provider import get_histogram_data
-from backend.component.Hparams.provider import get_hparams_data
-from backend.component.Image.provider import get_image_meta_data,\
+from zjvis.server.backend.component.Graph.provider import get_graph_data
+from zjvis.server.backend.component.Histogram.provider import get_histogram_data
+from zjvis.server.backend.component.Hparams.provider import get_hparams_data
+from zjvis.server.backend.component.Image.provider import get_image_meta_data,\
     get_image_data
-from backend.component.Projector.provider import get_projector_meta_data, \
+from zjvis.server.backend.component.Projector.provider import get_projector_meta_data, \
     get_projector_raw_data, get_projector_sample_data, get_projector_data
-from backend.component.Scalar.provider import get_scalar_data
-from backend.component.Text.provider import get_text_data
+from zjvis.server.backend.component.Scalar.provider import get_scalar_data
+from zjvis.server.backend.component.Text.provider import get_text_data

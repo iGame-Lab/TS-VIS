@@ -109,19 +109,19 @@ def set_hparams(k, v):
     else:
         k.string_value = getattr(v, '__name__', str(v))
 
-def hparams(hparam_dict=None, metric_dict=None, tag=None):
+def hparams(hparam_dict=None, metrics=None, tag=None):
     """ 转换超参数数据到potobuf格式 """
     tag = str(time.time()) if tag is None else tag
     ssi = SessionStartInfo(group_name=tag)
-    if not (hparam_dict or metric_dict):
+    if not (hparam_dict or metrics):
         raise Exception('hparam_dict or metric_dict must be specified.')
 
     if hparam_dict:
         for k, v in hparam_dict.items():
             set_hparams(ssi.hparams[k], v)
-    if metric_dict:
-        for k, v in metric_dict.items():
-            set_hparams(ssi.metrics[k], v)
+    if metrics:
+        for k in metrics:
+            set_hparams(ssi.metrics[k], False)
 
     content = HParamsPluginData(session_start_info=ssi, version=0)
     metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='hparams',

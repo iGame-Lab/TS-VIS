@@ -27,6 +27,7 @@
 import { subScalars } from './subscalar'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters: mapScalarGetters, mapMutations: mapScalarMutations, mapActions: mapScalarActions } = createNamespacedHelpers('scalar')
+const { mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
 export default {
   components: {
     subScalars
@@ -41,7 +42,8 @@ export default {
   computed: {
     ...mapScalarGetters([
       'categoryInfo', 'getTotaltag', 'getErrorMessage', 'getFreshInfo'
-    ])
+    ]),
+    ...mapLayoutGetters(['getTimer'])
   },
   watch: {
     categoryInfo() {
@@ -52,7 +54,15 @@ export default {
         message: val.split('_')[0],
         type: 'error'
       })
-    }
+    },
+    // 实时监听layout的getTimer
+    getTimer: function() {
+      // console.log("scalar_time")
+      if (!this.settotaltag) {
+        // console.log('数据还没有整理好')
+        return
+      }
+    },
   },
   created() {
     if (Object.keys(this.getTotaltag).length !== 0) {

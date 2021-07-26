@@ -1,8 +1,7 @@
 import io
 import numpy as np
 from PIL import Image
-import os
-import logging
+
 
 def make_image(tensor):
     # Do not assume that user passes in values in [0, 255], use data type to detect
@@ -54,8 +53,8 @@ def make_histogram(values, max_bins=None):
     end = int(end) + 1
     del cum_counts
 
-    # If start == 0, we need to add an empty one left, otherwise we can just include the bin left to the
-    # first nonzero-count bin:
+    # If start == 0, we need to add an empty one left, otherwise we can just include
+    # the bin left to the first nonzero-count bin:
     counts = counts[start - 1:end] if start > 0 else np.concatenate([[0], counts[:end]])
     limits = limits[start:end + 1]
 
