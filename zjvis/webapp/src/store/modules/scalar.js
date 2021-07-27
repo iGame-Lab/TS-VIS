@@ -120,10 +120,10 @@ const actions = {
 
 const mutations = {
   setIntervalSelfCategoryInfo: (state, param) => {
-    // // setSelfCategoryInfo
-    // state.categoryInfo = param
-    // // setfreshnumber
-    // state.freshnumber += 1
+    // setSelfCategoryInfo
+    state.categoryInfo = param
+    // setfreshnumber
+    state.freshnumber += 1
 
     state.IntervalChange = !state.IntervalChange
   },
