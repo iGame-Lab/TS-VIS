@@ -163,10 +163,6 @@ const mutations = {
         state.detailData[param[0]].push(param[1])
       }
     }
-    
-
-    
-    
   },
   setClickState: (state, param) => {
     state.clickState = param
