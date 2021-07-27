@@ -201,7 +201,7 @@ export default {
         this.setsubisshow([this.subname, true])
         this.subshow = this.subisshow[this.subname]
       }
-    }
+    },
   },
   created() {
     this.info = this.subname

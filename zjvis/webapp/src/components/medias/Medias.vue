@@ -93,7 +93,7 @@ export default {
         // console.log('数据还没有整理好')
         return
       }
-      console.log("dataing")
+      // console.log("dataing")
       this.settotaltag()
     }
   },
