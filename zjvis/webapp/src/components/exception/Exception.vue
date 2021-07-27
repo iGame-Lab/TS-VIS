@@ -46,15 +46,14 @@ import { createNamespacedHelpers } from 'vuex'
 import excepContainer from './excepContainer'
 
 const { mapActions: mapExceptionActions, mapGetters: mapExceptionGetters, mapMutations: mapExceptionMutations } = createNamespacedHelpers('exception')
-const { mapState: mapLayoutStates, mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
+const { mapState: mapLayoutStates } = createNamespacedHelpers('layout')
 export default {
   components: {
     excepContainer
   },
   computed: {
-    ...mapExceptionGetters(['getRun', 'getTag', 'getAllStep', 'getAllData', 'getInitStateFlag', 'getErrorMessage', 'getExceptionShow']),
-    ...mapLayoutStates(['userSelectRunFile']),
-    ...mapLayoutGetters(['getTimer'])
+    ...mapExceptionGetters(['getRun', 'getTag', 'getAllStep', 'getAllData', 'getInitStateFlag', 'getErrorMessage', 'getExceptionShow', 'getUpdateFlag']),
+    ...mapLayoutStates(['userSelectRunFile'])
   },
   watch: {
     userSelectRunFile(val) {
@@ -67,7 +66,7 @@ export default {
           break
         }
       }
-      const param = { run: val, tag: this.getTag[index][0], index: index }
+      const param = { run: val, tag: this.getTag[index][0], index: index, step: '' }
       this.setCurRunTag(param)
       this.fetchAllStep()
     },
@@ -77,7 +76,7 @@ export default {
         type: 'error'
       })
     },
-    getTimer() {
+    getUpdateFlag() {
       this.fetchAllStep()
       this.setRectCurInfo([])
       this.setCurIqrTimes(['', '', '', 1.50, 1.50])

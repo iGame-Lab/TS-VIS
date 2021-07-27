@@ -20,7 +20,9 @@ const state = {
   upDownValue: [0, 0], // 控制面板不显示倍数，而是直接显示数值
   // 临时存储请求的数据和标志
   oneDataTemp: [],
-  successFlag: false
+  successFlag: false,
+  // 定时刷新
+  updateFlag: false // run和tag是否有变化，如果有变化，判断当前数据是否存在，如果存在就重新请求，否则请求一个新数据
 }
 
 const getters = {
@@ -39,20 +41,22 @@ const getters = {
   getExcepBoxStatistic: (state) => state.excepBoxStatistic,
   getErrorMessage: (state) => state.errorMessage,
   getDq0Show: (state) => state.dq0Show,
-  getUpDownValue: (state) => state.upDownValue
+  getUpDownValue: (state) => state.upDownValue,
+  getUpdateFlag: (state) => state.updateFlag
 }
 
 const actions = {
   async getSelfCategoryInfo(context, param) {
     context.commit('setSelfCategoryInfo', param)
-    const param2 = { run: param[0][0], tag: param[1][0][0], index: 0 }
+    const param2 = { run: param[0][0], tag: param[1][0][0], index: 0, step: '' }
     context.commit('setCurRunTag', param2)
     if (param[2]['initStateFlag']) {
       context.dispatch('fetchAllStep')
     }
   },
   async getIntervalSelfCategoryInfo(context, param) {
-
+    // 不能在这里发起请求，得在vue组件中判断请求，否则不在本页面也会请求新数据
+    context.commit('setIntervalSelfCategoryInfo', param)
   },
   async fetchAllStep(context) { // param={run, tag}
     const param = {}
@@ -69,16 +73,19 @@ const actions = {
       allStepTemp.push([param.run, param.tag, res.data.data[param.tag]])
     })
     context.commit('setAllStep', allStepTemp)
-    context.dispatch('fetchAllData', { step: allStepTemp[0][2].step[0], index: 0 })
+    if (state.curRunTag.step === '' || !allStepTemp[0][2].step.indexOf(state.curRunTag.step)) {
+      await context.commit('setCurStep', allStepTemp[0][2].step[0])
+    }
+    context.dispatch('fetchAllData')
   },
-  async fetchData(context, param) {
-    const paramTemp = {}
-    paramTemp['run'] = context.state.curRunTag.run
-    paramTemp['tag'] = context.state.curRunTag.tag
-    paramTemp['step'] = param['step']
+  async fetchData(context) {
+    const param = {}
+    param['run'] = context.state.curRunTag.run
+    param['tag'] = context.state.curRunTag.tag
+    param['step'] = context.state.curRunTag.step
     const oneDataTemp = []
     let successFlag = true
-    await http.useGet(port.category.exception_data, paramTemp).then(res => {
+    await http.useGet(port.category.exception_data, param).then(res => {
       if (Number(res.data.code) !== 200) {
         successFlag = false
         context.commit('setErrorMessage', param.run + ',' + param.tag + ',' + res.data.msg)
@@ -98,7 +105,7 @@ const actions = {
       oneDataTemp.push(rectDataTemp)
     })
     if (successFlag) { // 默认上一个请求到了，这个也可以请求到，嵌套好像不行
-      await http.useGet(port.category.exception_hist, paramTemp).then(res => {
+      await http.useGet(port.category.exception_hist, param).then(res => {
         if (Number(res.data.code) !== 200) {
           successFlag = false
           context.commit('setErrorMessage', param.run + ',' + param.tag + ',' + res.data.msg)
@@ -107,15 +114,13 @@ const actions = {
         oneDataTemp.push(res.data.data[param.step][0])
       })
     }
-    oneDataTemp.push(param.index)
+    oneDataTemp.push(context.state.curRunTag.index)
     context.commit('setTempData', { 'data': oneDataTemp, 'flag': successFlag })
   },
-  async fetchAllData(context, param) { // 获得初始数据,step均为step[0], param={run, tag, step}
-    param['run'] = context.state.curRunTag.run
-    param['tag'] = context.state.curRunTag.tag
+  async fetchAllData(context) { // 获得初始数据,step均为step[0], param={run, tag, step}
     context.commit('setExceptionShow', false)
     // context.commit('clearAllData')
-    await context.dispatch('fetchData', param)
+    await context.dispatch('fetchData')
     let exceptionShow = true
     if (!context.state.successFlag) {
       context.state.oneDataTemp = []
@@ -126,7 +131,8 @@ const actions = {
   },
   // 双击盒线图调用这个获取一个step的三个数据：直方图、颜色矩阵
   async fetchOneData(context, param) { // {run: param.run, tag: param.tag, step: param.step, index}
-    await context.dispatch('fetchData', param)
+    await context.commit('setCurStep', param.step)
+    await context.dispatch('fetchData')
     if (!context.state.successFlag) {
       context.state.oneDataTemp = []
     }
@@ -171,7 +177,7 @@ const mutations = {
   setOneData: (state, param) => {
     state.curNewData = param
     for (let i = 2; i <= 4; i++) {
-      state.allData[param[5]][i] = param[i]
+      state.allData[0][i] = param[i]
     }
   },
   setExcepBox(state, param) {
@@ -218,6 +224,23 @@ const mutations = {
   setTempData(state, param) {
     state.oneDataTemp = param.data
     state.successFlag = param.flag
+  },
+  setIntervalSelfCategoryInfo(state, param) {
+    state.run = param[0]
+    state.tag = param[1]
+    state.updateFlag = !state.updateFlag // 不管值如何，只监听变化
+    // 如果run、tag发生变化，修改curRun、curTag
+    if (state.curRunTag === null || !state.run.indexOf(state.curRunTag.run)) {
+      state.curRunTag['run'] = state.run[0]
+      state.curRunTag['tag'] = state.tag[0][0]
+      state.curRunTag['index'] = 0
+      state.curRunTag['step'] = ''
+    } else if (!state.tag[state.curRunTag['index']].indexOf(state.curRunTag.tag)) {
+      state.curRunTag['tag'] = state.tag[state.curRunTag['index']][0]
+    }
+  },
+  setCurStep(state, param) {
+    state.curRunTag.step = param
   }
 }
 

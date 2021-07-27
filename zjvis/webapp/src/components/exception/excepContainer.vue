@@ -243,12 +243,17 @@ export default {
     this.drawCanvasRect()
     this.CanvasRectMouseOperator()
     this.drawExcepLedgend()
-    if (this.myAllStep.length < 4) {
+    if (this.myAllStep.length < 5) {
       this.boxRightIndex = this.myAllStep.length - 1
+    }
+    this.curStepIndex = this.myAllStep.indexOf(this.oneData[2])
+    if (this.curStepIndex > 5) {
+      this.boxLeftIndex = this.curStepIndex - 4
+      this.boxRightIndex = this.curStepIndex
     }
     this.drawExcepBox()
     this.drawExcepStepAxis()
-    d3.select(`#${this.excepBoxId}`).select('.boxRect0').style('fill', '#B0B6E6')
+    d3.select(`#${this.excepBoxId}`).select(`.boxRect${this.curStepIndex}`).style('fill', '#B0B6E6')
     // 当鼠标进入颜色矩阵区域禁止滑动条的滚轮操作，不在颜色矩阵区域就允许滑动条的滚轮操作
     d3.select(`#${this.excepCanvasId}`).on('mouseover', () => {
       document.getElementById('excepDisplay').onmousewheel = () => {

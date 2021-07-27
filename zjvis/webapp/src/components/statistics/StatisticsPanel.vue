@@ -217,10 +217,7 @@ export default {
     ...mapStatisticMutations([
       'changeShownumber',
       'changeMode',
-      'setBinNum',
-      'setDataSetsState',
-      'setHistShow',
-      'setDistShow'
+      'setBinNum'
     ]),
     scrollToTop(index) {
       document.getElementsByClassName('statistics-container')[index].scrollIntoView(true)
