@@ -192,6 +192,7 @@ export default {
       temp['run'] = this.getCurRunTag.run
       temp['tag'] = newVal
       temp['index'] = this.getCurRunTag.index
+      temp['step'] = ''
       this.setCurRunTag(temp)
       this.fetchAllStep()
     },

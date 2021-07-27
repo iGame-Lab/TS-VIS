@@ -170,7 +170,7 @@ const {
   mapActions: mapStatisticActions,
   mapMutations: mapStatisticMutations
 } = createNamespacedHelpers('statistic')
-const { mapState: mapLayoutStates, mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
+const { mapState: mapLayoutStates } = createNamespacedHelpers('layout')
 export default {
   components: {
     statisticContainer
@@ -202,19 +202,21 @@ export default {
       'getStatisticColor',
       'getHistShow',
       'getDistShow',
-      'getFeatchDataFinished'
+      'getUpdateFlag',
+      'getFeatchHistDataFinished',
+      'getFeatchDistDataFinished'
     ]),
     ...mapLayoutStates([
       'userSelectRunFile'
-    ]),
-    ...mapLayoutGetters(['getTimer'])
+    ])
   },
   watch: {
-    getTimer() {
-      if (this.categoryInfo === 'histogram' && this.showFlag) {
-        this.featchAllHistData()
-      } else if (this.categoryInfo === 'distribution' && this.showFlag) {
+    getUpdateFlag() {
+      if (this.categoryInfo === 'distribution' && this.getFeatchDistDataFinished && this.showFlag) {
         this.featchAllDistData()
+      }
+      if (this.categoryInfo === 'histogram' && this.getFeatchHistDataFinished && this.showFlag) {
+        this.featchAllHistData()
       }
     },
     getMode(curMode) {
@@ -258,6 +260,7 @@ export default {
       if (this.categoryInfo === 'histogram') {
         this.showFlag = val
         if (val) {
+          this.setHistData()
           document.getElementsByClassName('statistics-container')[0].scrollIntoView(true)
         }
       }
@@ -275,17 +278,20 @@ export default {
   created() {
     if (this.categoryInfo === 'histogram') {
       this.categoryName = '直方图'
-      this.showFlag = true
-      this.setHistShow(true) // 初始默认
-      this.setHistData()
+      this.showFlag = this.getHistShow
+      if (this.showFlag) {
+        this.setHistData()
+      }
     } else {
       this.categoryName = '分布图'
-      this.showFlag = false
-      this.setDistShow(false)
+      this.showFlag = this.getDistShow
+      if (this.showFlag) {
+        this.setDistData()
+      }
     }
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll, true) // 监听滑动条
+    // window.addEventListener('scroll', this.handleScroll, true) // 监听滑动条
     this.setDatasetsShow()
   },
   methods: {
@@ -295,7 +301,9 @@ export default {
       'setDataSetsState',
       'setInitStateFlag',
       'setHistShow',
-      'setDistShow'
+      'setDistShow',
+      'clearHistData',
+      'clearDistData'
     ]),
     showContent() {
       if (this.categoryInfo === 'histogram') {
@@ -340,16 +348,16 @@ export default {
       }
       this.setRunData()
     },
-    handleScroll(e) { // 页面滑动过程中修改histDist标志，高亮右侧控制面板
-      if (document.getElementsByClassName('statistics-container')[1] !== undefined) {
-        const curDistHeight = document.getElementsByClassName('statistics-container')[1].getBoundingClientRect().top
-        if (curDistHeight < window.innerHeight * 0.7) {
-          this.setDistShow(true)
-        } else if (curDistHeight > window.innerHeight) {
-          this.setHistShow(true)
-        }
-      }
-    },
+    // handleScroll(e) { // 页面滑动过程中修改histDist标志，高亮右侧控制面板
+    //   if (document.getElementsByClassName('statistics-container')[1] !== undefined) {
+    //     const curDistHeight = document.getElementsByClassName('statistics-container')[1].getBoundingClientRect().top
+    //     if (curDistHeight < window.innerHeight * 0.7) {
+    //       this.setDistShow(true)
+    //     } else if (curDistHeight > window.innerHeight) {
+    //       this.setHistShow(true)
+    //     }
+    //   }
+    // },
     setDatasetsShow() {
       const stateTemp = []
       for (let i = 0; i < this.getDataSets.length; i++) {
@@ -376,6 +384,7 @@ export default {
         runDataTemp[count].push(this.allData[i])
       }
       this.runData = runDataTemp
+      this.setDatasetsShow()
     }
   }
 }
