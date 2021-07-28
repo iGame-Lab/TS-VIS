@@ -1,9 +1,13 @@
 import os
+import sys
+import subprocess
 import shutil
 from setuptools import setup, find_packages
 
 # 移除构建的build文件夹
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))
+VERSION = "0.1"
+preparing_PyPI_package = 'sdist' in sys.argv or 'bdist_wheel' in sys.argv
 
 def clean():
     for name in ['build', 'dist', 'zjvis.egg-info']:
@@ -12,12 +16,29 @@ def clean():
             print('INFO del dir ', path)
             shutil.rmtree(path)
 
+def get_git_version():
+    _git_vetsion = ""
+    if os.path.exists('.git'):
+        sha = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii').strip()
+        _git_vetsion = sha
+    return _git_vetsion
 
-clean()
+def write_version():
+    _git = get_git_version()
+    with open("zjvis/__init__.py", "r") as f:
+        _file = f.readlines()[0: -2]
+    with open("zjvis/__init__.py", "w") as f:
+        _file.append(f"__version__ = '{VERSION}'\n")
+        _file.append(f"__git_version__ = '{_git}'\n")
+        f.writelines(_file)
+
+
+write_version()
 setup(
     name='zjvis',
-    version='0.1',
+    version=VERSION,
     author='hdu',
+    author_email='',
     # url='',
     # license = '',
     description="Visualize the training process of the neural network",
@@ -37,4 +58,5 @@ setup(
         'crc32c>=2.2'
     ],
 )
-clean()
+if not preparing_PyPI_package:
+    clean()
