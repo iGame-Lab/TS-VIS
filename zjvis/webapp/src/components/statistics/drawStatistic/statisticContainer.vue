@@ -183,7 +183,7 @@ export default {
       this.setDownLoadArray([this.rightTopShow, idTemp])
       this.setDownloadSvgClass['statistic'] = this.getDownLoadArray
     },
-    setRangeNumber: function() {
+    setRangeNumber() {
       if (this.componentName !== 'overlook') {
         let newNumber = this.getShowNumber
         if (!this.parentComponent) newNumber = this.getStatisticShowNumber

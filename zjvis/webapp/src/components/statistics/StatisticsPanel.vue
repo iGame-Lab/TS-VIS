@@ -183,7 +183,7 @@ export default {
       'getStatisticInfo',
       'getHistShow',
       'getDistShow',
-      'getFeatchDataFinished'
+      'getFeatchHistDataFinished'
     ])
   },
   // 控制面板和左侧内容绑定
@@ -223,7 +223,7 @@ export default {
       document.getElementsByClassName('statistics-container')[index].scrollIntoView(true)
     },
     myChangeShownumber(showNumber) {
-      if (!this.getFeatchDataFinished) { // 没有绘制完，不允许操作控制面板，并还原数据
+      if (!this.getFeatchHistDataFinished) { // 没有绘制完，不允许操作控制面板，并还原数据
         this.$message({
           message: '统计分析页面还在渲染中，勿操作控制面板',
           type: 'warning'
@@ -234,7 +234,7 @@ export default {
       }
     },
     myChangeMode(mode) {
-      if (!this.getFeatchDataFinished) {
+      if (!this.getFeatchHistDataFinished) {
         this.$message({
           message: '统计分析页面还在渲染中，勿操作控制面板',
           type: 'warning'
@@ -245,7 +245,7 @@ export default {
       }
     },
     mySetBinNum(binNumber) {
-      if (!this.getFeatchDataFinished) {
+      if (!this.getFeatchHistDataFinished) {
         this.$message({
           message: '统计分析页面还在渲染中，勿操作控制面板',
           type: 'warning'

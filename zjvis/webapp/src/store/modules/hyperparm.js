@@ -16,7 +16,8 @@ const state = {
   hypEmpty: false,
   errorMessage: '',
   mainParams: [], // 数值型数据
-  axisParams: [] // 数值型非0数据
+  axisParams: [], // 数值型非0数据
+  IntervalChange: false
 }
 
 const getters = {
@@ -32,7 +33,8 @@ const getters = {
   getHypEmpty: (state) => state.hypEmpty,
   getErrorMessage: (state) => state.errorMessage,
   getMainParams: (state) => state.mainParams,
-  getAxisParms: (state) => state.axisParams
+  getAxisParms: (state) => state.axisParams,
+  getIntervalChange:(state)=>state.IntervalChange
 }
 
 const actions = {
@@ -43,7 +45,7 @@ const actions = {
     }
   },
   async getIntervalSelfCategoryInfo(context, param) {
-
+      context.commit("setIntervalSelfCategoryInfo", param)
   },
   async featchAllData(context, param) {
     http.useGet(port.category.hyperparm, param).then(res => {
@@ -60,6 +62,9 @@ const actions = {
 }
 
 const mutations = {
+  setIntervalSelfCategoryInfo:(state, param)=>{
+    state.IntervalChange = !state.IntervalChange
+  },
   setSelfCategoryInfo: (state, param) => {
     state.categoryInfo = param
   },
