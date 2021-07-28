@@ -96,6 +96,7 @@ export default {
       }
       console.log("dataing")
       this.settotaltag()
+      this.totaltag = this.getTotaltag
     }
   },
   mounted() {

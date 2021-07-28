@@ -156,7 +156,7 @@ import { createNamespacedHelpers } from 'vuex'
 import { ScalarContainer } from '../scalarcontainer'
 
 const { mapGetters: mapScalarGetters, mapActions: mapScalarActions, mapMutations: mapScalarMutations } = createNamespacedHelpers('scalar')
-const { mapState: mapLayoutStates } = createNamespacedHelpers('layout')
+const { mapGetters: mapLayoutGetters,mapState: mapLayoutStates } = createNamespacedHelpers('layout')
 export default {
   components: {
     ScalarContainer
@@ -181,6 +181,9 @@ export default {
     ]),
     ...mapLayoutStates([
       'userSelectRunFile'
+    ]),
+    ...mapLayoutGetters([
+      'getTimer'
     ])
   },
   watch: {
@@ -202,6 +205,10 @@ export default {
         this.subshow = this.subisshow[this.subname]
       }
     },
+    getTimer: function () {
+      // console.log("here", this.detailData[this.subname])
+      this.data = this.detailData[this.subname]
+    }
   },
   created() {
     this.info = this.subname
@@ -253,6 +260,7 @@ export default {
         this.setFreshInfo([this.subname, this.showFlag[this.subname]])
       }
     }
+    
   }
 }
 </script>
