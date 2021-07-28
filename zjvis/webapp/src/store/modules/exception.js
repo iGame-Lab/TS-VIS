@@ -73,7 +73,7 @@ const actions = {
       allStepTemp.push([param.run, param.tag, res.data.data[param.tag]])
     })
     context.commit('setAllStep', allStepTemp)
-    if (state.curRunTag.step === '' || !allStepTemp[0][2].step.indexOf(state.curRunTag.step)) {
+    if (state.curRunTag.step === '' || allStepTemp[0][2].step.indexOf(state.curRunTag.step) === -1) {
       await context.commit('setCurStep', allStepTemp[0][2].step[0])
     }
     context.dispatch('fetchAllData')
@@ -230,12 +230,12 @@ const mutations = {
     state.tag = param[1]
     state.updateFlag = !state.updateFlag // 不管值如何，只监听变化
     // 如果run、tag发生变化，修改curRun、curTag
-    if (state.curRunTag === null || !state.run.indexOf(state.curRunTag.run)) {
+    if (state.curRunTag === null || state.run.indexOf(state.curRunTag.run) === -1) {
       state.curRunTag['run'] = state.run[0]
       state.curRunTag['tag'] = state.tag[0][0]
       state.curRunTag['index'] = 0
       state.curRunTag['step'] = ''
-    } else if (!state.tag[state.curRunTag['index']].indexOf(state.curRunTag.tag)) {
+    } else if (state.tag[state.curRunTag['index']].indexOf(state.curRunTag.tag) === -1) {
       state.curRunTag['tag'] = state.tag[state.curRunTag['index']][0]
     }
   },

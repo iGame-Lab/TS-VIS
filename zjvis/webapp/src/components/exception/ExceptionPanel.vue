@@ -231,7 +231,7 @@ export default {
   mounted() {
     this.curTag = this.getCurRunTag ? this.getCurRunTag.tag : ''
     this.dq0Show = this.getDq0Show
-    this.setRectCurInfo(['', '', '', '', '', '', ''])
+    this.setRectCurInfo([])
   },
   methods: {
     ...mapExceptionMutations(['setCurIqrTimes', 'setLinkChecked', 'setRectCurInfo', 'setCurRunTag']),

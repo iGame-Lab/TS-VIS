@@ -466,19 +466,6 @@ export default {
           }
         }
       }
-      // for (let i = 0; i < n; i += 1) {
-      //   const rectH = i * rectDh
-      //   for (let j = 0; j < m; j += 1) {
-      //     const t = colorMatrixData[i][j]
-      //     if (t >= min && t <= max) {
-      //       const index = Math.floor((t - min) / minvalue)
-      //       excepCanvas2d.fillStyle = colorMap[index]
-      //     } else {
-      //       excepCanvas2d.fillStyle = '#eeeeee'
-      //     }
-      //     excepCanvas2d.fillRect(j * rectDw, rectH, rectDw, rectDh)
-      //   }
-      // }
       // 画白色边界
       let lineY = 0
       for (let i = 0; i < n; i += 1) {
@@ -498,6 +485,7 @@ export default {
         excepCanvas2d.stroke()
         lineX += rectDw
       }
+      this.setRectCurInfo([])
     },
     // 画颜色矩阵的legend
     drawExcepLedgend() {
