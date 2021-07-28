@@ -3,9 +3,7 @@ __pycache__/
 db.sqlite3
 *.pyc
 .idea/
-__cache__/
 discard
-*.rdb
 frontend/
 
 # cache files

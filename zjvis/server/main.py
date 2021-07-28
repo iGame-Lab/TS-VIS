@@ -40,11 +40,22 @@ def run_main(args):
         "runserver",
         "0.0.0.0:" + args.port,
         "--noreload",
+        "--insecure"
     ]
     manage.main(argvs)
 
+def print_version(*args, **kwargs):
+    import zjvis
+    sys.stdout.write(f"Version: {zjvis.__version__}\n")
+    sys.stdout.write(f"Commit: {zjvis.__git_version__}\n")
+
 def run():
-    programs = {"runserver": run_main, "migrate": run_migrate, "test": run_test}
+    programs = {
+        "runserver": run_main,
+        "migrate": run_migrate,
+        "test": run_test,
+        "version": print_version
+    }
     cmd_line = get_cmd_line()
     programs[cmd_line.action](cmd_line.args)
 

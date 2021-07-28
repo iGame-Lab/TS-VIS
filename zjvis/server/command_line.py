@@ -23,6 +23,8 @@ class CommandLine:
                             help='Specify visual log directory', required=False)
         parser.add_argument('--port', type=str, default=DEFAULT_PORT,
                             help='Specify HTTP server port.', required=False)
+        parser.add_argument('--version', '-v', action="store_true",
+                            help='Print version of zjvis and exit.')
 
         parser_rs = subparsers.add_parser('runserver', help='Start local Zjvis server')
         parser_rs.add_argument('--logdir', type=str,
@@ -44,15 +46,18 @@ class CommandLine:
 
         if len(sys.argv) < 2:
             parser.error("A logdir must be specified. "
-                         "For example `zjvis --logdir mylogdir`."
+                         "For example `zjvis --logdir mylogdir`.\n"
                          "Run `zjvis --help` for details.")
 
         args = parser.parse_args()
 
-        if getattr(args, "action", None) is None:
-            _action = "runserver"
+        if getattr(args, "version", None) is True:
+            _action = "version"
         else:
-            _action = args.action
+            if getattr(args, "action", None) is None:
+                _action = "runserver"
+            else:
+                _action = args.action
 
         self.action = _action
         self.args = args
