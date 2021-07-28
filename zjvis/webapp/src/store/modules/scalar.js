@@ -125,7 +125,7 @@ const mutations = {
     // setfreshnumber
     state.freshnumber += 1
 
-    state.IntervalChange = !state.IntervalChange
+    // state.IntervalChange = !state.IntervalChange
   },
   setinitshowrun: (state, param) => {
     state.initshowrun = param
@@ -142,6 +142,8 @@ const mutations = {
     // param[1]为对象，param[1]['run']存储训练模型名称，param[1]['value']存储对应param[0]的标量数据类型
     let keys = [] // keys存储标量数据类型及模型名称，如loss-log
 
+    // console.log('param[1]', param[1]);
+
     for(let k in param[1]['value']) {
       keys.push(k + '-' + param[1]['run'])
       // console.log('keys', keys);
@@ -149,20 +151,24 @@ const mutations = {
   
     let keys2 = [] // keys2存储第一次加载数据的存储标量数据类型及模型名称，用于和keys比较，判断替换下一次请求的数据
     let index = [] // 一个tag下多个模型编号
+    console.log('state.detailData[param[0]]',state.detailData[param[0]]);
     for(let key in state.detailData[param[0]] ) {
         for(let kk in state.detailData[param[0]][key]['value']) {
           keys2.push(kk + '-' + state.detailData[param[0]][key]['run'])
           index.push(key)
         }
     }
-  
+
     for(let i=0; i < keys.length; i++) {
       if(keys2.indexOf(keys[i]) != -1) {
-        state.detailData[param[0]][index[i]]['value'] = param[1]['value']
+        // state.detailData[param[0]][index[i]]['value'] = param[1]['value']
+        state.detailData[param[0]][index[keys2.indexOf(keys[i])]]['value'] = param[1]['value']
       }else{
         state.detailData[param[0]].push(param[1])
       }
     }
+
+    // console.log('state.detailData', state.detailData);
   },
   setClickState: (state, param) => {
     state.clickState = param
