@@ -14,8 +14,9 @@
  * =============================================================
  */
 
-// dubhe-web\src\utils\VisualUtils\api.js
-// import port from '@/utils/VisualUtils/api';
+ import http from '@/utils/request'
+ import port from '@/utils/api'
+ import { param2Obj } from '@/utils/utils'
 
 const state = {
   categoryInfo: '',
@@ -68,6 +69,33 @@ const actions = {
   // eslint-disable-next-line
   async dynamicGetData(context) {
   },
+  async getAudioDataInterval (context, param) {
+    await http.useGet( param[1]['content']['port'], param[1]['content']['parameter']).then(res => {
+      if (+res.data.code !== 200) {
+        context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
+        return
+      }
+      context.commit('setAudioDataInterval', [param[0], param[1], res.data.data])
+    })
+  },
+  async getImageDataInterval (context, param) {
+    await http.useGet( param[1]['content']['port'], param[1]['content']['parameter']).then(res => {
+      if (+res.data.code !== 200) {
+        context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
+        return
+      }
+      context.commit('setImageDataInterval', [param[0], param[1], res.data.data])
+    })
+  },
+  async getTextDataInterval (context, param) {
+    await http.useGet( param[1]['content']['port'], param[1]['content']['parameter']).then(res => {
+      if (+res.data.code !== 200) {
+        context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
+        return
+      }
+      context.commit('setTextDataInterval', [param[0], param[1], res.data.data])
+    })
+  }
 };
 
 const mutations = {
@@ -82,6 +110,18 @@ const mutations = {
   },
   setClickState: (state, param) => {
     state.clickState = param;
+  },
+  setAudioDataInterval: (state, param) => {
+    param[1]['content']['value'] = param[2]
+    state.audio[param[0]] = param[1]
+  },
+  setImageDataInterval: (state, param) => {
+    param[1]['content']['value'] = param[2]
+    state.image[param[0]] = param[1]
+  },
+  setTextDataInterval: (state, param) => {
+    param[1]['content']['value'] = param[2]
+    state.text[param[0]] = param[1]
   },
   setAudioData: (state, param) => {
     const paramStringIndex = `${param.content.run}/${Object.keys(param.content.value)[0]}`;
@@ -103,6 +143,7 @@ const mutations = {
         content: param.content,
       });
     }
+    console.log('state.audio', state.audio, 'state.audioData', state.audioData, JSON.parse(JSON.stringify(state.audio)))
   },
   setTextData: (state, param) => {
     const paramStringIndex = `${param.content.run}/${Object.keys(param.content.value)[0]}`;
@@ -113,6 +154,7 @@ const mutations = {
         state.text.splice(i, 1);
         if (param.copyToData) {
           state.textData = JSON.parse(JSON.stringify(state.text));
+          console.log(state.textData)
         }
         break;
       }
@@ -190,6 +232,7 @@ const mutations = {
         state.scalar = {};
         break;
       case 'media':
+        console.log('state.image', state.image, 'state.audio', state.audio, 'state.text', state.text)
         state.imageData = JSON.parse(JSON.stringify(state.image));
         state.audioData = JSON.parse(JSON.stringify(state.audio));
         state.textData = JSON.parse(JSON.stringify(state.text));
