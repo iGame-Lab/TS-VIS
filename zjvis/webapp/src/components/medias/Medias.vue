@@ -72,7 +72,8 @@ export default {
       'categoryInfo',
       'getTotaltag',
       'getFreshInfo',
-      'getErrorMessage'
+      'getErrorMessage',
+      'getIntervalChange'
     ]),
     ...mapLayoutGetters(['getTimer'])
   },
@@ -87,7 +88,7 @@ export default {
       })
     },
     // 实时监听layout的getTimer
-    getTimer: function() {
+    getIntervalChange: function() {
       // console.log("media_time")
       if (!this.settotaltag) {
         // console.log('数据还没有整理好')
