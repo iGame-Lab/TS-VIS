@@ -31,7 +31,7 @@ export default {
     HyperPara
   },
   computed: {
-    ...maphyperparmGetters(['getAllData', 'getCategoryInfo', 'getRequestState', 'getErrorMessage','getIntervalChange']),
+    ...maphyperparmGetters(['getAllData', 'getCategoryInfo', 'getRequestState', 'getErrorMessage', 'getIntervalChange']),
     ...mapLayoutStates(['userSelectRunFile']),
     ...mapLayoutGetters(['getTimer'])
   },
@@ -66,7 +66,7 @@ export default {
   },
   mounted() {
     if (this.userSelectRunFile) {
-      const param = { run: this.userSelectRunFile}
+      const param = { run: this.userSelectRunFile }
       this.featchAllData(param)
     }
   },

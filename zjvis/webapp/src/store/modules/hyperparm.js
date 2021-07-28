@@ -34,7 +34,7 @@ const getters = {
   getErrorMessage: (state) => state.errorMessage,
   getMainParams: (state) => state.mainParams,
   getAxisParms: (state) => state.axisParams,
-  getIntervalChange:(state)=>state.IntervalChange
+  getIntervalChange: (state) => state.IntervalChange
 }
 
 const actions = {
@@ -45,7 +45,7 @@ const actions = {
     }
   },
   async getIntervalSelfCategoryInfo(context, param) {
-      context.commit("setIntervalSelfCategoryInfo", param)
+    context.commit('setIntervalSelfCategoryInfo', param)
   },
   async featchAllData(context, param) {
     http.useGet(port.category.hyperparm, param).then(res => {
@@ -62,7 +62,7 @@ const actions = {
 }
 
 const mutations = {
-  setIntervalSelfCategoryInfo:(state, param)=>{
+  setIntervalSelfCategoryInfo: (state, param) => {
     state.IntervalChange = !state.IntervalChange
   },
   setSelfCategoryInfo: (state, param) => {
