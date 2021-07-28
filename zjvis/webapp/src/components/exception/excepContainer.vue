@@ -288,6 +288,7 @@ export default {
       } else if (Math.abs(d) < 0.001) {
         if (d === 0) return d
         const dString = d.toString()
+        if (dString.indexOf('e') !== -1) return d
         let i = 3
         if (d < 0) {
           i = 4
@@ -379,6 +380,7 @@ export default {
         const rectDh = that.rectMinHeight * that.rectScale
         const row = Math.floor(e.layerY / rectDh)
         const col = Math.floor(e.layerX / rectDw)
+        if (row < 0 || col < 0) return
         that.setRectCurInfo([that.myOneData[0], that.myOneData[1], that.myAllStep[that.curStepIndex], row, col, that.myOneData[3][4][row][col]])
       }
       // 鼠标滚轮放大，禁用滑动条的滚轮事件

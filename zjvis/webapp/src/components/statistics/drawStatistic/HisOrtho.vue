@@ -53,6 +53,7 @@ export default {
       } else if (Math.abs(d) < 0.001) {
         if (d === 0) return d
         const dString = d.toString()
+        if (dString.indexOf('e') !== -1) return d
         let i = 3
         if (d < 0) {
           i = 4
