@@ -29,7 +29,7 @@ class Exception_read:
         lo, hi = 0, len(self.data)
         idx = -1
         while lo < hi:
-            mid = (lo + hi) // 2
+            mid = (lo + hi) >> 1
             if self.data[mid]["step"] == self.step:
                 idx = mid
                 break

@@ -32,8 +32,9 @@ def hparams_provider(run):
     scalar_data = {}
     for tag in metrics:
         file_path1 = path_parser(get_logger().cachedir, run, 'scalar', tag)
-        scalar = CacheIO(file_path1).get_cache()[-1]
-        scalar_data[tag] = scalar['value']
+        if file_path1.exists():
+            scalar = CacheIO(file_path1).get_cache()[-1]
+            scalar_data[tag] = scalar['value']
 
     return hparams_read(_data, scalar_data).get_data()
 
