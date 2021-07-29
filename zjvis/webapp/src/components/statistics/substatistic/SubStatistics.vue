@@ -230,7 +230,7 @@ export default {
     },
     getBinNum(newBinNum) {
       if (this.categoryInfo === 'histogram') {
-        this.manageHistData(true)
+        this.manageHistData({ index: 0, length: this.getHistData.length })
       }
     },
     getHistData(data) {
