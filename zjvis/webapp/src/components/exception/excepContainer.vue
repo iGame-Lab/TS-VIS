@@ -157,10 +157,20 @@ export default {
       'getCurIqrTimes',
       'getLinkChecked',
       'getDq0Show',
-      'getUpDownValue'
+      'getUpDownValue',
+      'getUpdateHistMatrixDataFlag'
     ])
   },
   watch: {
+    oneAllStep(val) {
+      if (!this.getUpdateHistMatrixDataFlag) { // 如果只更新了step数据
+        this.myAllStep = val[2].step
+        this.myBoxPercent = val[2].box
+        this.drawExcepBox()
+        this.drawExcepStepAxis()
+        d3.select(`#${this.excepBoxId}`).select(`.boxRect${this.curStepIndex}`).style('fill', '#B0B6E6')
+      }
+    },
     getCurNewData(val) {
       if (this.myOneData[0] === val[0] && this.myOneData[1] === val[1]) {
         this.myOneData = val

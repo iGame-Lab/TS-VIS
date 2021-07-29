@@ -194,6 +194,7 @@ export default {
       temp['index'] = this.getCurRunTag.index
       temp['step'] = ''
       this.setCurRunTag(temp)
+      this.setUpdateHistMatrixDataFlag(true)
       this.fetchAllStep()
     },
     getRectCurInfo(val) {
@@ -234,7 +235,7 @@ export default {
     this.setRectCurInfo([])
   },
   methods: {
-    ...mapExceptionMutations(['setCurIqrTimes', 'setLinkChecked', 'setRectCurInfo', 'setCurRunTag']),
+    ...mapExceptionMutations(['setCurIqrTimes', 'setLinkChecked', 'setRectCurInfo', 'setCurRunTag', 'setUpdateHistMatrixDataFlag']),
     ...mapExceptionActions(['fetchAllStep']),
     mySetCurIqrTimes() {
       this.setCurIqrTimes([this.curBoxInfo.run, this.curBoxInfo.tag, this.curBoxInfo.step, this.curBoxInfo.upTimes, this.curBoxInfo.downTimes])
