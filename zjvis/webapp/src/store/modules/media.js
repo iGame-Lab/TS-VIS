@@ -54,7 +54,7 @@ const actions = {
     }
   },
   async getIntervalSelfCategoryInfo(context, param) {
-    console.log("param", param)
+    // console.log("param", param)
     let initDetailData = {}
     // 根据自己的类目增加相应的判断
     for (let i = 0; i < param[1].length; i++) {
@@ -63,7 +63,7 @@ const actions = {
         initDetailData[value] = []
       })
     }
-    console.log('initDetailData',  initDetailData)
+    // console.log('initDetailData',  initDetailData)
     context.commit('setSelfCategoryInfo', param)
     context.commit('setIntervalDetailDataInfo', initDetailData)
   },
@@ -86,7 +86,8 @@ const actions = {
                   context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
                   return
                 }
-                context.commit('setDetailData', [param[0], { 'run': context.state.categoryInfo[0][i], 'value': res.data.data }])
+                context.commit('setDetailData', [param[0], { 'run': context.state.categoryInfo[0][i], 'value': res.data.data, 
+                'port': port.category[param[0]], 'parameter':  parameter}])
               })
             }
           }

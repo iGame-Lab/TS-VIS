@@ -3,8 +3,8 @@
  * @version: 1.0
  * @Author: xds
  * @Date: 2020-04-24 15:23:44
- * @LastEditors: xds
- * @LastEditTime: 2020-05-04 21:12:44
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-29 00:15:45
  -->
  <style lang="less" scoped>
    .chart{
@@ -69,7 +69,7 @@ import * as d3 from 'd3'
 import { createNamespacedHelpers } from 'vuex'
 const { mapMutations: mapScalarMutations, mapGetters: mapScalarGetters } = createNamespacedHelpers('scalar')
 const { mapMutations: mapCustomMutations } = createNamespacedHelpers('custom')
-
+const { mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
 export default {
 
   props: {
@@ -101,12 +101,15 @@ export default {
   computed: {
     ...mapScalarGetters([
       'smoothvalue', 'yaxis', 'mergeditem', 'checkedorder', 'freshnumber', 'grade'
+    ]),
+    ...mapLayoutGetters([
+      'setDownloadSvgClass', 'getTimer'
     ])
   },
   watch: {
     freshnumber: function(val) {
       if (this.mergetype === '') {
-        d3.select('#svg' + this.classname).remove()
+        // d3.select('#svg' + this.classname).remove()
         this.SvgDraw()
       }
     },
@@ -200,6 +203,47 @@ export default {
         d3.select('#svg' + this.classname).remove()
         this.SvgDraw()
       }
+    },
+    getTimer: function() {
+      if (this.grade[this.classname] === 'main') {
+        if (Object.keys(this.mergeditem[this.classname]).length === 1) {
+          this.mergetype = 'single'
+          this.mergeddata = [].concat(this.mergeditem[this.classname][Object.keys(this.mergeditem[this.classname])[0]])
+          this.legendnumber = this.mergeddata.length
+          this.MergeSvgDraw()
+        } else if (Object.keys(this.mergeditem[this.classname]).length === 2) {
+          this.mergetype = 'double'
+          this.mergeddata0 = [].concat(this.mergeditem[this.classname][Object.keys(this.mergeditem[this.classname])[0]])
+          this.mergeddata1 = [].concat(this.mergeditem[this.classname][Object.keys(this.mergeditem[this.classname])[1]])
+          this.legendnumber = this.mergeddata0.length + this.mergeddata1.length
+          this.yname0[0] = Object.keys(this.mergeditem[this.classname])[0]
+          this.yname0[1] = 'log(' + this.yname0[0] + ')'
+          this.yname1[0] = Object.keys(this.mergeditem[this.classname])[1]
+          this.yname1[1] = 'log(' + this.yname1[0] + ')'
+          this.DYMergeSvgDraw()
+        }
+      } else {
+        if (Object.keys(this.chartdata).length === 2) {
+          this.data = this.chartdata.value[Object.keys(this.chartdata.value)[0]]
+          this.yname[0] = this.ytext
+          this.yname[1] = 'log(' + this.ytext + ')'
+        } else if (Object.keys(this.chartdata).length === 4) {
+          this.mergetype = 'single'
+          this.legendnumber = this.chartdata.legendnumber
+          this.mergeddata = this.chartdata.value
+        } else if (Object.keys(this.chartdata).length === 5) {
+          this.mergetype = 'double'
+          this.legendnumber = this.chartdata.legendnumber
+          this.mergeddata0 = this.chartdata.value0
+          this.mergeddata1 = this.chartdata.value1
+          const arr0 = this.mergeddata0[0].tag.split('/')
+          const arr1 = this.mergeddata1[0].tag.split('/')
+          this.yname0[0] = arr0[arr0.length - 1]
+          this.yname0[1] = 'log(' + this.yname0[0] + ')'
+          this.yname1[0] = arr1[arr1.length - 1]
+          this.yname1[1] = 'log(' + this.yname1[0] + ')'
+        }
+      }
     }
   },
   created() {
@@ -280,6 +324,13 @@ export default {
         }
       }
       const smoothdata = [].concat(JSON.parse(JSON.stringify(data)))
+      
+      if (smoothdata.length === 0) {
+        return
+      } else {
+        d3.select('#svg' + this.classname).remove()
+      }
+      
       let last = smoothdata[0].value
       for (let i = 1; i < smoothdata.length; i++) {
         smoothdata[i].value = last * smooth + (1 - smooth) * smoothdata[i].value

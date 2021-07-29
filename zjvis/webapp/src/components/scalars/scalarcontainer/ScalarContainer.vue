@@ -3,8 +3,8 @@
  * @version: 1.0
  * @Author: xds
  * @Date: 2020-04-24 15:23:44
- * @LastEditors: xds
- * @LastEditTime: 2020-05-20 11:53:07
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-29 00:18:45
  -->
  <style lang="less" scoped>
   .scalarcontainer{
@@ -130,13 +130,48 @@ export default {
       'getScalar'
     ]),
     ...mapLayoutGetters([
-      'setDownloadSvgClass'
+      'setDownloadSvgClass', 'getTimer'
     ])
   },
   watch: {
     mergestep: function(val) {
       if (val === this.checkedorder.length && val !== 0 && this.mergedorder[this.classname] === this.mergednumber && this.grade[this.classname] === 'main') {
         this.setdatainit()
+      }
+    },
+    getTimer: function() {
+      // console.log('here---', this.content, this.chartdata.value, Object.keys(this.content.value)[0]);
+      let content = this.content.value[Object.keys(this.content.value)[0]]
+      this.chartdata.run = this.content.run
+      this.chartdata.value[Object.keys(this.content.value)[0]] = []
+      if (content.length > 1000) {
+        const n = Math.ceil(content.length / 1000)
+        for (let i = 0; i < content.length; i = i + n) {
+          this.chartdata.value[Object.keys(this.content.value)[0]].push(content[i])
+        }
+      } else {
+        this.chartdata.value = this.content.value
+      }
+      this.id = this.chartdata.run + ' ' + Object.keys(this.chartdata.value)[0]
+      this.info = this.id
+      if (this.info.length > 20) {
+        this.info = this.info.slice(0, 17) + '...'
+      }
+      const arr = Object.keys(this.chartdata.value)[0].split('/')
+      this.ytext = arr[arr.length - 1]
+      this.classname = this.chartdata.run.replace(/\//g, '').replace(/\./g, '') + Object.keys(this.chartdata.value)[0].replace(/\//g, '').replace(/\./g, '')
+      this.thisitem.run = this.chartdata.run
+      this.thisitem.tag = Object.keys(this.chartdata.value)[0]
+      this.thisitem.value = this.chartdata.value[Object.keys(this.chartdata.value)[0]]
+      if (!(this.classname in this.checked)) {
+        this.setchecked([this.classname, false])
+      }
+      this.chartchecked = this.checked[this.classname]
+      if (!(this.classname in this.grade)) {
+        this.setgrade([this.classname, 'general'])
+      }
+      if (!(this.classname in this.mergedorder)) {
+        this.setmergedorder([this.classname, 1000])
       }
     },
     startmerged: function(val) {
@@ -175,7 +210,7 @@ export default {
     }
   },
   created() {
-    const content = this.content.value[Object.keys(this.content.value)[0]]
+    let content = this.content.value[Object.keys(this.content.value)[0]]
     this.chartdata.run = this.content.run
     this.chartdata.value[Object.keys(this.content.value)[0]] = []
     if (content.length > 1000) {
@@ -212,6 +247,7 @@ export default {
     this.chartgrade = this.grade[this.classname]
   },
   methods: {
+    
     ...mapScalarMutations([
       'setcheckeditem',
       'deletecheckeditem',

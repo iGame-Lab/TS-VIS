@@ -25,6 +25,9 @@ class SummaryWriter(object):
             filename_suffix: 字符串，event文件的后缀
         """
         self.log_dir = log_dir
+        self._max_queue = max_queue
+        self._flush_secs = flush_secs
+        self._filename_suffix = filename_suffix
         self.event_file_writer = EventFileWriter(log_dir, max_queue, flush_secs, filename_suffix=filename_suffix)
         self._file_writer = {'event':self.event_file_writer}
 
@@ -38,7 +41,10 @@ class SummaryWriter(object):
             返回name对应的event文件写入器
         """
         if name not in self._file_writer:
-            self._file_writer[name] = EventFileWriter(self.log_dir, name = name)
+            self._file_writer[name] = EventFileWriter(self.log_dir, name = name,
+                                                      max_queue_size=self._max_queue,
+                                                      flush_secs=self._flush_secs,
+                                                      filename_suffix=self._filename_suffix)
 
         return self._file_writer[name]
 

@@ -232,7 +232,37 @@
           step: 整数，可选参数，记录数据的step
       """
   ```
+  <br>
+  **ps**:可视化高维数据提供了两种方式：
 
+  （a）使用**同一组测试数据**在不同step生成高维嵌入数据。用户通过add_embedding_sample添加测试的样本数据，在可视化过程中可通过点击样本点查看原始样本。
+    ```python
+        model = MinistNet()
+        test_x, test_y = dataset()
+        
+        writer.add_embedding_sample(tag='test', tensor=test_x, sample_type='iamge')   
+        
+        for step in range(steps):
+            # 1.train stage
+            model.train()
+                 .....
+            
+            # 2.eval stage
+            model.eval()
+            out = model.forward(test_x)
+            writer.add_embedding(tag='test', tensor=out, label=test_y, step=step)
+    ```
+    
+  （b）使用**不同的数据**在不同的step生成高维嵌入数据。 此时每个step的样本数据并不相同，不再支持查看降维后每个样本点对应的样本数据。用户无需通过add_embedding_sample添加样本数据，否则查看的样本点数据将出现不一致等问题。
+    ```python
+        model = MinistNet()
+        train_x, train_y = dataset()
+        for step in range(steps):
+            # 1.train stage
+            model.train()
+            out = model.forward(train_x)
+            writer.add_embedding(tag='train', tensor=out, label=train_y, step=step)
+    ```
 - 异常检测数据
 
   可视化各网络层的权重，偏置，梯度，输出的异常情况。主要以直方图，箱线图，颜色映射矩阵等方式进行展示

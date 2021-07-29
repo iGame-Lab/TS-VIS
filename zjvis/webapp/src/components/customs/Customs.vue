@@ -280,10 +280,13 @@ import ImageContainer from '@/components/medias/image/imagecontainer/ImageContai
 import TextContainer from '@/components/medias/text/textContainer/TextContainer.vue';
 import AudioContainer from '@/components/medias/audio/audioContainer/AudioContainer.vue';
 import ScalarContainer from '@/components/scalars/scalarcontainer/ScalarCustom.vue';
+
+
 import { createNamespacedHelpers } from 'vuex';
-const { mapMutations: mapCustomMutations, mapGetters: mapCustomGetters } = createNamespacedHelpers(
+const { mapActions: mapCustomActions, mapMutations: mapCustomMutations, mapGetters: mapCustomGetters } = createNamespacedHelpers(
   'custom'
 );
+const { mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
 
 export default {
   components: {
@@ -324,6 +327,8 @@ export default {
     };
   },
   computed: {
+
+    ...mapLayoutGetters(['getTimer']),
     ...mapCustomGetters([
       'getAudioData',
       'getTextData',
@@ -331,13 +336,26 @@ export default {
       'getImageData',
       'getStatisticData',
       'getScalarData',
-    ]),
+    ])
+    
   },
   beforeRouteLeave(to, from, next) {
     this.setRouter(7);
     next();
   },
   watch: {
+    getTimer: function() {
+      console.log('getTimer')
+      for(let i=0; i<this.audioData.length; i++) {
+        this.getAudioDataInterval([i, this.audioData[i]])
+      }
+      for(let i=0; i<this.imageData.length; i++) {
+        this.getImageDataInterval([i, this.imageData[i]])
+      }
+      for(let i=0; i<this.textData.length; i++) {
+        this.getTextDataInterval([i, this.textData[i]])
+      }
+    },
     getAudioData() {
       this.audioData = this.getAudioData;
       if (this.audioData.length === 0) {
@@ -446,9 +464,10 @@ export default {
   },
   methods: {
     ...mapCustomMutations(['setTextData', 'setRouter']),
+    ...mapCustomActions(['getAudioDataInterval', 'getImageDataInterval', 'getTextDataInterval']),
     showContent(title) {
       this[title].showFlag = (this[title].showFlag + 1) % 2;
-    },
+    }
   },
 };
 </script>

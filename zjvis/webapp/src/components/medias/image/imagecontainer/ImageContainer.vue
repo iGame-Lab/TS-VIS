@@ -200,9 +200,12 @@ export default {
   },
   computed: {
     ...mapCustomGetters(['getImage']),
-    ...mapLayoutGetters(['getParams'])
+    ...mapLayoutGetters(['getParams', 'getTimer'])
   },
   watch: {
+    getTimer: function() {
+      this.imagecontent = this.content.value[Object.keys(this.content.value)[0]]
+    },
     async scrollvalue(val) {
       const params = {
         step: this.imagecontent[val].step.toString(),
