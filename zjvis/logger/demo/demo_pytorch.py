@@ -56,7 +56,7 @@ def train(epochs=10):
                               hparam_dict={'lrate': lrate,
                                            'batchSize': batchSize,
                                            'epoch':epochs},
-                              metric_dict={'loss':0.1})
+                              metrics=['loss'])
 
     train_accs = []
     train_loss = []

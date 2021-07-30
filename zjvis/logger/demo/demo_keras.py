@@ -43,7 +43,7 @@ class Callback(tf.keras.callbacks.Callback):
         self.writer.add_embedding_sample('fashion', tensor=self.test_xy[0], sample_type ='image')
         self.writer.add_hparams(tag='mnist_tf_v2',
                                 hparam_dict={'batch':32, 'lrate':1e-4, 'epochs':1},
-                                metric_dict={'loss': 0.1, 'acc':1})
+                                metrics=['loss'])
 
         # add image for each step
         for i,x in enumerate(self.test_xy[0]):
