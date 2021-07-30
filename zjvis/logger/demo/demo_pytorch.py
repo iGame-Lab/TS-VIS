@@ -32,7 +32,7 @@ def train(epochs=10):
                                     transforms.Normalize(mean=[0.5], std=[0.5])])
 
     # create dataset and loader
-    train_dataset = datasets.MNIST(root='./data/MNIST', train=True, transform = transform, download=False)
+    train_dataset = datasets.MNIST(root='./data/MNIST', train=True, transform = transform, download=True)
     train_loader = DataLoader(train_dataset, batch_size=batchSize, shuffle=True,num_workers=4)
 
     # get test samples for embedding
@@ -56,7 +56,7 @@ def train(epochs=10):
                               hparam_dict={'lrate': lrate,
                                            'batchSize': batchSize,
                                            'epoch':epochs},
-                              metric_dict={'loss':0.1})
+                              metrics=['loss'])
 
     train_accs = []
     train_loss = []

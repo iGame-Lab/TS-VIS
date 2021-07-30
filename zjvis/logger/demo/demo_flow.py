@@ -60,10 +60,10 @@ if __name__ == "__main__":
     summaryWriter = SummaryWriter('../zjvis/logs/test/')
 
     # add onnx and hparams
-    summaryWriter.add_onnx_graph('./logs/flow/model.onnx')
+    # summaryWriter.add_onnx_graph('./logs/flow/model.onnx')
     summaryWriter.add_hparams(tag='letnet',
                               hparam_dict={'batchSize':BATCH_SIZE, 'lrate':0.1},
-                              metric_dict={'loss':0.0})
+                              metrics=['loss'])
 
     summaryWriter.add_embedding_sample(tag='output', tensor=test_images[0].transpose(0, 2, 3, 1), sample_type='image')
 
