@@ -1,18 +1,12 @@
-/** Copyright 2020 Tianshu AI Platform. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================
- */
+/** Copyright 2020 Tianshu AI Platform. All Rights Reserved. * * Licensed under
+the Apache License, Version 2.0 (the "License"); * you may not use this file
+except in compliance with the License. * You may obtain a copy of the License at
+* * http://www.apache.org/licenses/LICENSE-2.0 * * Unless required by applicable
+law or agreed to in writing, software * distributed under the License is
+distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. * See the License for the specific language governing
+permissions and * limitations under the License. *
+============================================================= */
 
 <style lang="less" scoped>
 .temp {
@@ -96,7 +90,7 @@
 }
 
 .noneData {
-  display: 'none';
+  display: "none";
 }
 
 .line1 {
@@ -214,7 +208,9 @@
                 <ImageContainer
                   v-for="item in imageData"
                   ref="ImageContainer"
-                  :key="item.content.run + '/' + Object.keys(item.content.value)[0]"
+                  :key="
+                    item.content.run + '/' + Object.keys(item.content.value)[0]
+                  "
                   :content="item.content"
                 />
               </el-row>
@@ -229,7 +225,9 @@
                 <TextContainer
                   v-for="item in textData"
                   ref="TextContainer"
-                  :key="item.content.run + '/' + Object.keys(item.content.value)[0]"
+                  :key="
+                    item.content.run + '/' + Object.keys(item.content.value)[0]
+                  "
                   :content="item.content"
                 />
               </el-row>
@@ -275,17 +273,18 @@
   </div>
 </template>
 <script>
-import statisticContainer from '@/components/statistics/drawStatistic/statisticContainer.vue';
-import ImageContainer from '@/components/medias/image/imagecontainer/ImageContainer.vue';
-import TextContainer from '@/components/medias/text/textContainer/TextContainer.vue';
-import AudioContainer from '@/components/medias/audio/audioContainer/AudioContainer.vue';
-import ScalarContainer from '@/components/scalars/scalarcontainer/ScalarCustom.vue';
+import statisticContainer from '@/components/statistics/drawStatistic/statisticContainer.vue'
+import ImageContainer from '@/components/medias/image/imagecontainer/ImageContainer.vue'
+import TextContainer from '@/components/medias/text/textContainer/TextContainer.vue'
+import AudioContainer from '@/components/medias/audio/audioContainer/AudioContainer.vue'
+import ScalarContainer from '@/components/scalars/scalarcontainer/ScalarCustom.vue'
 
-
-import { createNamespacedHelpers } from 'vuex';
-const { mapActions: mapCustomActions, mapMutations: mapCustomMutations, mapGetters: mapCustomGetters } = createNamespacedHelpers(
-  'custom'
-);
+import { createNamespacedHelpers } from 'vuex'
+const {
+  mapActions: mapCustomActions,
+  mapMutations: mapCustomMutations,
+  mapGetters: mapCustomGetters
+} = createNamespacedHelpers('custom')
 const { mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
 
 export default {
@@ -294,7 +293,7 @@ export default {
     ImageContainer,
     TextContainer,
     AudioContainer,
-    ScalarContainer,
+    ScalarContainer
   },
   data() {
     return {
@@ -304,30 +303,29 @@ export default {
       textChecked: [],
       hasScalar: {
         hasData: 0,
-        showFlag: 0,
+        showFlag: 0
       },
       hasAudio: {
         hasData: 0,
-        showFlag: 0,
+        showFlag: 0
       },
       hasImage: {
         hasData: 0,
-        showFlag: 0,
+        showFlag: 0
       },
       hasText: {
         hasData: 0,
-        showFlag: 0,
+        showFlag: 0
       },
       scalarData: {},
       audioData: [],
       imageData: [],
       textData: [],
       statisticData: [],
-      hasData: false,
-    };
+      hasData: false
+    }
   },
   computed: {
-
     ...mapLayoutGetters(['getTimer']),
     ...mapCustomGetters([
       'getAudioData',
@@ -335,44 +333,51 @@ export default {
       'getTextChecked',
       'getImageData',
       'getStatisticData',
-      'getScalarData',
+      'getScalarData'
     ])
-    
   },
   beforeRouteLeave(to, from, next) {
-    this.setRouter(7);
-    next();
+    this.setRouter(7)
+    next()
   },
   watch: {
     getTimer: function() {
-      console.log('getTimer')
-      for(let i=0; i<this.audioData.length; i++) {
+      for (let i = 0; i < this.audioData.length; i++) {
         this.getAudioDataInterval([i, this.audioData[i]])
       }
-      for(let i=0; i<this.imageData.length; i++) {
+      for (let i = 0; i < this.imageData.length; i++) {
         this.getImageDataInterval([i, this.imageData[i]])
       }
-      for(let i=0; i<this.textData.length; i++) {
+      for (let i = 0; i < this.textData.length; i++) {
         this.getTextDataInterval([i, this.textData[i]])
+      }
+      for (let i = 0; i < this.statisticData.length; i++) {
+        this.getStatisticDataInterval([i, this.statisticData[i]])
       }
     },
     getAudioData() {
-      this.audioData = this.getAudioData;
+      this.audioData = this.getAudioData
       if (this.audioData.length === 0) {
-        this.hasAudio.hasData = 0;
-        this.hasAudio.showFlag = 0;
+        this.hasAudio.hasData = 0
+        this.hasAudio.showFlag = 0
       }
-      if (this.audioData.length || this.textData.length || this.imageData.length || this.statisticData.length || Object.keys(this.scalarData).length) {
+      if (
+        this.audioData.length ||
+        this.textData.length ||
+        this.imageData.length ||
+        this.statisticData.length ||
+        Object.keys(this.scalarData).length
+      ) {
         this.hasData = true
       } else {
         this.hasData = false
       }
     },
     getTextData() {
-      this.textData = this.getTextData;
+      this.textData = this.getTextData
       if (this.textData.length === 0) {
-        this.hasText.hasData = 0;
-        this.hasText.showFlag = 0;
+        this.hasText.hasData = 0
+        this.hasText.showFlag = 0
       }
       if (
         this.audioData.length ||
@@ -381,17 +386,17 @@ export default {
         this.statisticData.length ||
         Object.keys(this.scalarData).length
       ) {
-        this.hasData = true;
+        this.hasData = true
       } else {
-        this.hasData = false;
+        this.hasData = false
       }
     },
     getImageData() {
       if (this.imageData.length === 0) {
-        this.hasImage.hasData = 0;
-        this.hasImage.showFlag = 0;
+        this.hasImage.hasData = 0
+        this.hasImage.showFlag = 0
       }
-      this.imageData = this.getImageData;
+      this.imageData = this.getImageData
       if (
         this.audioData.length ||
         this.textData.length ||
@@ -399,13 +404,13 @@ export default {
         this.statisticData.length ||
         Object.keys(this.scalarData).length
       ) {
-        this.hasData = true;
+        this.hasData = true
       } else {
-        this.hasData = false;
+        this.hasData = false
       }
     },
     getScalarData(val) {
-      this.scalarData = val;
+      this.scalarData = val
       if (
         this.audioData.length ||
         this.textData.length ||
@@ -413,13 +418,13 @@ export default {
         this.statisticData.length ||
         Object.keys(this.scalarData).length
       ) {
-        this.hasData = true;
+        this.hasData = true
       } else {
-        this.hasData = false;
+        this.hasData = false
       }
     },
     getStatisticData(val) {
-      this.statisticData = val;
+      this.statisticData = val
       if (
         this.audioData.length ||
         this.textData.length ||
@@ -427,18 +432,18 @@ export default {
         this.statisticData.length ||
         Object.keys(this.scalarData).length
       ) {
-        this.hasData = true;
+        this.hasData = true
       } else {
-        this.hasData = false;
+        this.hasData = false
       }
-    },
+    }
   },
   created() {
-    this.audioData = this.getAudioData;
-    this.textData = this.getTextData;
-    this.imageData = this.getImageData;
-    this.scalarData = this.getScalarData;
-    this.statisticData = this.getStatisticData;
+    this.audioData = this.getAudioData
+    this.textData = this.getTextData
+    this.imageData = this.getImageData
+    this.scalarData = this.getScalarData
+    this.statisticData = this.getStatisticData
     if (
       this.audioData.length ||
       this.textData.length ||
@@ -446,28 +451,33 @@ export default {
       this.statisticData.length ||
       Object.keys(this.scalarData).length
     ) {
-      this.hasData = true;
+      this.hasData = true
     } else {
-      this.hasData = false;
+      this.hasData = false
     }
   },
   mounted() {
     if (this.audioData.length) {
-      this.hasAudio.hasData = 1;
+      this.hasAudio.hasData = 1
     }
     if (this.imageData.length) {
-      this.hasImage.hasData = 1;
+      this.hasImage.hasData = 1
     }
     if (this.textData.length) {
-      this.hasText.hasData = 1;
+      this.hasText.hasData = 1
     }
   },
   methods: {
     ...mapCustomMutations(['setTextData', 'setRouter']),
-    ...mapCustomActions(['getAudioDataInterval', 'getImageDataInterval', 'getTextDataInterval']),
+    ...mapCustomActions([
+      'getAudioDataInterval',
+      'getImageDataInterval',
+      'getTextDataInterval',
+      'getStatisticDataInterval'
+    ]),
     showContent(title) {
-      this[title].showFlag = (this[title].showFlag + 1) % 2;
+      this[title].showFlag = (this[title].showFlag + 1) % 2
     }
-  },
-};
+  }
+}
 </script>
