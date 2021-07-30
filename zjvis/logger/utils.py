@@ -2,6 +2,16 @@ import io
 import numpy as np
 from PIL import Image
 
+def check_image(tensor):
+    ndim = tensor.ndim
+    if ndim == 2:
+        pass
+    elif ndim == 3:
+        if tensor.shape[2]>4:
+            raise Exception(f'the expected image type is (LA), (RGB), (RGBA), and the third dimension is less than 4, '
+                            f'but get shape {tensor.shape}')
+    else:
+        raise Exception(f'the shape of image must be (H,W) or (H,W,C), but get shape {tensor.shape}' )
 
 def make_image(tensor):
     # Do not assume that user passes in values in [0, 255], use data type to detect
@@ -63,3 +73,20 @@ def make_histogram(values, max_bins=None):
 
     sum_sq = values.dot(values)
     return sum_sq, limits.tolist(), counts.tolist()
+
+def make_audio(tensor, sample_rate=44100):
+    import soundfile
+    if abs(tensor).max() > 1:
+        print('warning: audio amplitude out of range, auto clipped.')
+        tensor = tensor.clip(-1, 1)
+    if tensor.ndim == 1:  # old API, which expects single channel audio
+        tensor = np.expand_dims(tensor, axis=1)
+
+    assert (tensor.ndim == 2), 'Input tensor should be 2 dimensional.'
+    length_frames, num_channels = tensor.shape
+    assert num_channels == 1 or num_channels == 2, 'The second dimension should be 1 or 2.'
+
+    with io.BytesIO() as fio:
+        soundfile.write(fio, tensor, samplerate=sample_rate, format='wav')
+        audio_string = fio.getvalue()
+    return length_frames, num_channels, audio_string

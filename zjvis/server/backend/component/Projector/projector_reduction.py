@@ -20,23 +20,17 @@ from tsne import bh_sne
 from scipy import linalg as la
 class projector_reduction:
     def __init__(self, data, method, dimension=None):
-        self.data = self.data_preprocess(data)
         self.method = method
-        if dimension is None:
-            self.dimension = 2
-        else:
-            self.dimension = dimension
+        self.dimension = 2 if dimension is None else dimension
+        self.data = self.data_preprocess(data)
 
     def data_preprocess(self, data):
         data = np.array(data)
-        _ndim = data.ndim
-        if _ndim == 2:
-            pass
-        elif _ndim > 3:
-            data = data.reshape(data.shape[0], -1)
-        else:
-            raise ValueError('The processed data dimension should be >=2, '
-                             'but the dimension given is {}'.format(_ndim))
+        data = data.reshape(data.shape[0], -1)
+        if data.shape[1] == 2 and self.dimension==3:
+            pad = np.zeros(shape=(data.shape[0], 1), dtype=data.dtype)
+            data = np.hstack((data, pad))
+
         return data
 
     def Pca(self):

@@ -8,7 +8,7 @@ from zjvis.proto.projector_pb2 import Projector
 from zjvis.proto.summary_pb2 import Summary, SummaryMetadata, HistogramProto
 from zjvis.proto.tensor_pb2 import TensorProto, TensorShapeProto
 from zjvis.proto.plugin_hparams_pb2 import HParamsPluginData, SessionStartInfo
-from .utils import make_image,make_histogram
+from .utils import make_image, make_histogram, check_image, make_audio
 
 def scalar(name, scalar_value):
     """ 转换标量数据到potobuf格式 """
@@ -23,16 +23,10 @@ def scalar(name, scalar_value):
 def image(name, tensor):
     """ 转换图像数据到potobuf格式 """
     tensor = make_np(tensor)
-    ndim = tensor.ndim
+    check_image(tensor)
 
-    if ndim == 2:
+    if tensor.ndim == 2:
         tensor = np.expand_dims(tensor, -1)
-    elif ndim == 3:
-        if tensor.shape[2]>4:
-            raise Exception(f'the expected image type is (LA), (RGB), (RGBA), and the third dimension is less than 4, '
-                            f'but get shape {tensor.shape}')
-    else:
-        raise Exception(f'the shape of image must be (H,W) or (H,W,C), but get shape {tensor.shape}' )
 
     height, width, channel = tensor.shape
     image_str = make_image(tensor)
@@ -69,22 +63,8 @@ def histogram(name, tensor, max_bins):
 
 def audio(name, audio_data, sample_rate):
     """ 转换音频数据到potobuf格式 """
-    import soundfile
     tensor = make_np(audio_data)
-    if abs(tensor).max() > 1:
-        print('warning: audio amplitude out of range, auto clipped.')
-        tensor = tensor.clip(-1, 1)
-    if tensor.ndim == 1:  # old API, which expects single channel audio
-        tensor = np.expand_dims(tensor, axis=1)
-
-    assert (tensor.ndim == 2), 'Input tensor should be 2 dimensional.'
-    length_frames, num_channels = tensor.shape
-    assert num_channels == 1 or num_channels == 2, 'The second dimension should be 1 or 2.'
-
-    with io.BytesIO() as fio:
-        soundfile.write(fio, tensor, samplerate=sample_rate, format='wav')
-        audio_string = fio.getvalue()
-
+    length_frames, num_channels, audio_string = make_audio(tensor, sample_rate)
     audio = Summary.Audio(sample_rate=sample_rate,
                           num_channels=num_channels,
                           length_frames=length_frames,
@@ -141,7 +121,17 @@ def make_tensor(tensor):
 
 def embedding_sample(name, tensor, sample_type):
     """ 转换高维数据的样本到potobuf格式 """
-    tensor = make_np(tensor)
+    if sample_type == 'text':
+        tensor = np.array(tensor)
+    elif sample_type == 'image':
+        tensor = make_np(tensor)
+        assert tensor.ndim in [3, 4], f'the shape of image tensors must be (K,H,W) or (K,H,W,C), ' \
+                                      f'but get shape {tensor.shape}'
+        check_image(tensor[0])
+    elif sample_type == 'audio':
+        tensor = np.array([make_audio(t)[-1] for t in make_np(tensor)])
+    else:
+        raise TypeError('the type of label_img must be one of text, audio, image')
 
     Sample = Projector.Embedding.Sample
     types = {
@@ -149,8 +139,6 @@ def embedding_sample(name, tensor, sample_type):
         'audio': Sample.SampleType.AUDIO,
         'image': Sample.SampleType.IMAGE
     }
-    if sample_type not in types:
-        raise TypeError('the type of label_img must be one of text, audio, image')
 
     sample = Sample(type = types[sample_type], X = make_tensor(tensor))
     projector = Projector(embedding=Projector.Embedding(sample = sample))
@@ -167,6 +155,9 @@ def embedding(name, tensor, label):
         assert label.ndim == 1 or (label.ndim == 2 and label.shape[1] == 1), 'label shape must be [N] or [N,1]'
 
     tensor = make_np(tensor)
+    assert tensor.ndim>=2 and \
+           np.prod(tensor.shape[1:])>=2 , 'tensor shape must be (N, *), and * >= 2.'
+
     if label is not None:
         embedding = Projector.Embedding(value = make_tensor(tensor), label = make_tensor(label.squeeze()))
     else:

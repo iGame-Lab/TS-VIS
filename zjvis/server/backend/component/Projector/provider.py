@@ -131,7 +131,8 @@ def get_projector_sample_data(request):
             res = "data:image/png;base64,%s" % _data.decode()
         elif sample['type'] == 'audio':
             _content = sample['val']
-            res = "data:audio/wav;base64,%s"
+            _data = base64.b64encode(_content)
+            res = "data:audio/wav;base64,%s" % _data.decode()
         elif sample['type'] == 'text':
             _content = sample['val']
             res = _content
