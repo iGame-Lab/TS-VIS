@@ -23,7 +23,9 @@ const state = {
   successFlag: false,
   // 定时刷新
   updateFlag: false, // run和tag是否有变化，如果有变化，判断当前数据是否存在，如果存在就重新请求，否则请求一个新数据
-  updateHistMatrixDataFlag: true // 如果run、tag或step有变化，需要重新请求颜色矩阵和直方图的数据
+  // 如果run、tag、step变化，值为'run...', 'tag...', 'setp...', 否则就为'none'
+  updateHistMatrixDataFlag: 'run', // 如果run、tag或step有变化，需要重新请求颜色矩阵和直方图的数据，run/tag变化，用fetchAllData请求；step变化就用fetchOneData请求
+  fetchAllStepNotify: true
 }
 
 const getters = {
@@ -44,7 +46,8 @@ const getters = {
   getDq0Show: (state) => state.dq0Show,
   getUpDownValue: (state) => state.upDownValue,
   getUpdateFlag: (state) => state.updateFlag,
-  getUpdateHistMatrixDataFlag: (state) => state.updateHistMatrixDataFlag
+  getUpdateHistMatrixDataFlag: (state) => state.updateHistMatrixDataFlag,
+  getFetchAllStepNotify: (state) => state.fetchAllStepNotify
 }
 
 const actions = {
@@ -75,14 +78,14 @@ const actions = {
       }
       allStepTemp.push([param.run, param.tag, res.data.data[param.tag]])
     })
-    context.commit('setAllStep', allStepTemp)
-    if (state.curRunTag.step === '' || allStepTemp[0][2].step.indexOf(state.curRunTag.step) === -1) {
+    if (context.state.curRunTag.step === '' || allStepTemp[0][2].step.indexOf(context.state.curRunTag.step) === -1) {
       await context.commit('setCurStep', allStepTemp[0][2].step[0])
-      await context.commit('setUpdateHistMatrixDataFlag', true)
+      if (context.state.updateHistMatrixDataFlag === 'none') {
+        await context.commit('setUpdateHistMatrixDataFlag', 'step' + new Date().getTime())
+      }
     }
-    if (context.state.updateHistMatrixDataFlag) {
-      context.dispatch('fetchAllData')
-    }
+    context.commit('setAllStep', allStepTemp)
+    context.commit('setFetchAllStepNotify')
   },
   async fetchData(context) {
     const param = {
@@ -124,7 +127,7 @@ const actions = {
     oneDataTemp.push(context.state.curRunTag.index)
     context.commit('setTempData', { 'data': oneDataTemp, 'flag': successFlag })
   },
-  async fetchAllData(context) { // 获得初始数据,step均为step[0], param={run, tag, step}
+  async fetchAllData(context) { // 获得初始数据,step均为step[0], param={run, tag, step}，run、tag发生变化
     context.commit('setExceptionShow', false)
     // context.commit('clearAllData')
     await context.dispatch('fetchData')
@@ -137,7 +140,7 @@ const actions = {
     context.commit('setExceptionShow', exceptionShow)
   },
   // 双击盒线图调用这个获取一个step的三个数据：直方图、颜色矩阵
-  async fetchOneData(context, param) { // {run: param.run, tag: param.tag, step: param.step, index}
+  async fetchOneData(context, param) { // {run: param.run, tag: param.tag, step: param.step, index}，step发生变化
     await context.commit('setCurStep', param.step)
     await context.dispatch('fetchData')
     if (!context.state.successFlag) {
@@ -239,12 +242,12 @@ const mutations = {
     // 如果run、tag发生变化，修改curRun、curTag
     if (state.curRunTag === null || state.run.indexOf(state.curRunTag.run) === -1) {
       state.curRunTag = { run: state.run[0], tag: state.tag[0], index: 0, step: '' }
-      state.updateHistMatrixDataFlag = true
+      state.updateHistMatrixDataFlag = 'run' + state.run[0]
     } else if (state.tag[state.curRunTag['index']].indexOf(state.curRunTag.tag) === -1) {
       state.curRunTag['tag'] = state.tag[state.curRunTag['index']][0]
-      state.updateHistMatrixDataFlag = true
+      state.updateHistMatrixDataFlag = 'tag' + state.curRunTag['tag']
     } else {
-      state.updateHistMatrixDataFlag = false
+      state.updateHistMatrixDataFlag = 'none'
     }
   },
   setCurStep(state, param) {
@@ -252,6 +255,9 @@ const mutations = {
   },
   setUpdateHistMatrixDataFlag(state, param) {
     state.updateHistMatrixDataFlag = param
+  },
+  setFetchAllStepNotify(state) {
+    state.fetchAllStepNotify = !state.fetchAllStepNotify
   }
 }
 
