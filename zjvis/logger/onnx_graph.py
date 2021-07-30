@@ -26,6 +26,13 @@ def parser_input_output(node, name, op, input):
                    op=op,
                    input=input,
                    attr=attr)
+
+def parse_weight_bias(node):
+    shape = str(node.dims).encode(encoding='utf_8')
+    return NodeDef(name=node.name.encode(encoding='utf_8'),
+                   op=node.name.encode(encoding='utf_8'),
+                   attr={'shape':AttrValue(s=shape)})
+
 def str2dict(s):
     attr = {}
     for kv in re.split('#|\n',s):
@@ -37,7 +44,7 @@ def str2dict(s):
 
 def parse(graph):
     nodes = []
-    node_ident = {}
+    node_ident = {} # use output replace the current node's name.
 
     # parser input node
     for node in graph.input:
@@ -45,19 +52,26 @@ def parse(graph):
                                          op='Variable', input=[]))
         node_ident[node.name] = node.name
 
+    # parser train weights, bias
+    for node in graph.initializer:
+        nodes.append(parse_weight_bias(node))
+        node_ident[node.name] = node.name
+
+    for node in graph.node:
+        node_ident[node.output[0]] = node.name
+
     # parser graph node (layer, conv, relu, pooling, ...)
     for node in graph.node:
         attr = []
         for s in node.attribute:
             attr.append('='.join([str(f[1]) for f in s.ListFields()]))
 
+        inputs = [node_ident[name] if name in node_ident else name for name in node.input ]
         attr = str2dict('#'.join(attr))
         nodes.append(NodeDef(name = node.name.encode(encoding='utf_8'),
                              op = node.op_type,
-                             input = [node_ident[name] for name in node.input],
+                             input = inputs,
                              attr = attr)) #{'parameters': AttrValue(s=attr.encode(encoding='utf_8'))}
-
-        node_ident[node.output[0]] = node.name
 
     # parser output
     for i, node in enumerate(graph.output, 1):
