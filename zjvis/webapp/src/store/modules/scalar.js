@@ -151,7 +151,7 @@ const mutations = {
   
     let keys2 = [] // keys2存储第一次加载数据的存储标量数据类型及模型名称，用于和keys比较，判断替换下一次请求的数据
     let index = [] // 一个tag下多个模型编号
-    console.log('state.detailData[param[0]]',state.detailData[param[0]]);
+    // console.log('state.detailData[param[0]]',state.detailData[param[0]]);
     for(let key in state.detailData[param[0]] ) {
         for(let kk in state.detailData[param[0]][key]['value']) {
           keys2.push(kk + '-' + state.detailData[param[0]][key]['run'])

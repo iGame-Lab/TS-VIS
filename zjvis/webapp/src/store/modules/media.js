@@ -30,7 +30,7 @@ const getters = {
 
 const actions = {
   async getSelfCategoryInfo (context, param) {
-    console.log("param", param)
+    // console.log("param", param)
     let initDetailData = {}
     // 根据自己的类目增加相应的判断
     for (let i = 0; i < param[1].length; i++) {
@@ -38,7 +38,7 @@ const actions = {
         initDetailData[value] = []
       })
     }
-    console.log('initDetailData',  initDetailData)
+    // console.log('initDetailData',  initDetailData)
     context.commit('setSelfCategoryInfo', param)
     context.commit('setInitDetailDataInfo', initDetailData)
     if (param[2]['initStateFlag']) {
@@ -59,7 +59,7 @@ const actions = {
     // 根据自己的类目增加相应的判断
     for (let i = 0; i < param[1].length; i++) {
       Object.keys(param[1][i]).forEach(value => {
-        console.log('value', value)
+        // console.log('value', value)
         initDetailData[value] = []
       })
     }

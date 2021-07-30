@@ -153,6 +153,7 @@ const mutations = {
     let scalarRunTag = param[0] + ' ' + param[1]
     state.scalarData[scalarRunTag]['value'] = param[2]
     state.scalar[scalarRunTag] = param[2]
+    // console.log("scalarData",scalarData)
   },
   setAudioDataInterval: (state, param) => {
     param[1]['content']['value'] = param[2]
