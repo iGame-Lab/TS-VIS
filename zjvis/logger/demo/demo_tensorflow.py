@@ -95,7 +95,7 @@ def train():
             writer = SummaryWriter('logs/tf/')
 
             writer.add_graph(sess.graph, model_type='tensorflow')
-            writer.add_embedding_sample('output', test_batch[0], sample_type='image')
+            writer.add_embedding_sample('output', test_batch[0].reshape(-1,28,28), sample_type='image')
             writer.add_hparams(tag='mnist_tf', hparam_dict={'batch':50, 'lrate':1e-4}, metrics=None)
 
             for i in range(500):
@@ -109,11 +109,14 @@ def train():
                     writer.add_scalar('accuracy', train_accuracy,step=i)
                     writer.add_images('input', batch[0].reshape(-1,28,28), step=i)
                     writer.add_histogram('W_con1', W_conv1.eval(sess), step=i)
-                    writer.add_embedding('output', y_conv.eval(feed_dict={x: test_batch[0], keep_prob: 1.0}),step=i)
+                    writer.add_embedding('output', y_conv.eval(
+                        feed_dict={x: test_batch[0], keep_prob: 1.0}
+                    ), test_batch[1].argmax(-1), step=i)
 
                     for grad in gradient_variable:
                         if 'hidden' in grad.name:
                             writer.add_exception(grad.name, grad.eval(sess), step=i)
+
 
 if __name__ == '__main__':
     train()
