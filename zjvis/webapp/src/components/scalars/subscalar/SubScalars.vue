@@ -206,7 +206,6 @@ export default {
       }
     },
     getTimer: function () {
-      // console.log("here", this.detailData[this.subname])
       this.data = this.detailData[this.subname]
     }
   },

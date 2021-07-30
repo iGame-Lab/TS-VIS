@@ -69,8 +69,17 @@ const actions = {
   // eslint-disable-next-line
   async dynamicGetData(context) {
   },
-  async getAudioDataInterval(context, param) {
-    await http.useGet(param[1]['content']['port'], param[1]['content']['parameter']).then(res => {
+  async getScalarDataInterval (context, param) {
+    await http.useGet( port.category.scalar, param).then(res => {
+      if (+res.data.code !== 200) {
+        context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
+        return
+      }
+      context.commit('setScalarDataInterval', [param['run'], param['tag'], res.data.data])
+    })
+  },
+  async getAudioDataInterval (context, param) {
+    await http.useGet( param[1]['content']['port'], param[1]['content']['parameter']).then(res => {
       if (+res.data.code !== 200) {
         context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
         return
@@ -139,6 +148,11 @@ const mutations = {
   },
   setClickState: (state, param) => {
     state.clickState = param
+  },
+  setScalarDataInterval: (state, param) => {
+    let scalarRunTag = param[0] + ' ' + param[1]
+    state.scalarData[scalarRunTag]['value'] = param[2]
+    state.scalar[scalarRunTag] = param[2]
   },
   setAudioDataInterval: (state, param) => {
     param[1]['content']['value'] = param[2]

@@ -285,7 +285,9 @@ const {
   mapMutations: mapCustomMutations,
   mapGetters: mapCustomGetters
 } = createNamespacedHelpers('custom')
-const { mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
+const { 
+  mapGetters: mapLayoutGetters 
+} = createNamespacedHelpers('layout')
 
 export default {
   components: {
@@ -342,6 +344,11 @@ export default {
   },
   watch: {
     getTimer: function() {
+      for(let i=0; i<Object.keys(this.scalarData).length; i++){
+        let run = Object.keys(this.scalarData)[i].split(' ')[0]
+        let tag = Object.keys(this.scalarData)[i].split(' ')[1]
+        this.getScalarDataInterval({'run':run, 'tag':tag })
+      }
       for (let i = 0; i < this.audioData.length; i++) {
         this.getAudioDataInterval([i, this.audioData[i]])
       }
@@ -468,11 +475,15 @@ export default {
     }
   },
   methods: {
-    ...mapCustomMutations(['setTextData', 'setRouter']),
+    ...mapCustomMutations([
+      'setTextData', 
+      'setRouter'
+      ]),
     ...mapCustomActions([
-      'getAudioDataInterval',
-      'getImageDataInterval',
-      'getTextDataInterval',
+      'getAudioDataInterval', 
+      'getImageDataInterval', 
+      'getTextDataInterval', 
+      'getScalarDataInterval',
       'getStatisticDataInterval'
     ]),
     showContent(title) {
