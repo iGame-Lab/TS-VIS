@@ -8,7 +8,9 @@
   <a><img src="https://img.shields.io/badge/pypi-v0.2-blue.svg"></img></a>
 </p>
 
-Zjvis是杭州电子大学与之江实验室联合开发的深度学习可视化Python包。
+Zjvis是杭州电子大学与之江实验室联合开发的深度学习可视化Python包，支持目前主流深度学习框架的可视化。
+
+**[文档](https://feyily.github.io/zjvis-document/)**
 
 ![](docs/images/demo.gif)
 
@@ -74,4 +76,20 @@ zjvis采用前后端分离的架构，所以从源码安装需要分别编译前
   ```
   python setup.py install
   ```
+
+### 运行
+
+安装完成之后，可以通过下面的命令查看当前安装版本号，若安装成功，则会输出版本信息到控制台
+
+```
+zjvis -v
+```
+
+若zjvis已正确安装，则可以通过运行可视化后端
+
+```
+zjvis --logdir path/to/logdir/
+```
+
+默认情况下，可视化服务会启动在`http://127.0.0.1:9898`，打开浏览器访问即可查看可视化内容
 
