@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 # 移除构建的build文件夹
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))
-VERSION = "0.2"
+VERSION = "0.4.1"
 preparing_PyPI_package = 'sdist' in sys.argv or 'bdist_wheel' in sys.argv
 
 def clean():
