@@ -23,7 +23,7 @@ export default {
     }
   },
   computed: {
-    ...mapStatisticGetters(['getShowNumber', 'getFeatchDataFinished'])
+    ...mapStatisticGetters(['getShowNumber'])
   },
   watch: {
     data: function() {
@@ -35,12 +35,37 @@ export default {
   },
   mounted() {
     this.drawOffset()
-    if (this.getFeatchDataFinished) {
-      this.setDrawAllSvgFinished(true)
-    }
   },
   methods: {
-    ...mapStatisticMutations(['setStatisticInfo', 'setDrawAllSvgFinished']),
+    ...mapStatisticMutations(['setStatisticInfo']),
+    // 科学计数法
+    numberChangeToE(d) {
+      if (Math.abs(d) > 10000) {
+        let numLen = numLen = d.toString().length - 1
+        if (d < 0) {
+          numLen = d.toString().length - 2
+        }
+        return `${(d / Math.pow(10, numLen)).toFixed(2)}e+${numLen}`
+      } else if (Math.abs(d) < 0.001) {
+        if (d === 0) return d
+        const dString = d.toString()
+        if (dString.indexOf('e') !== -1) return d
+        let i = 3
+        if (d < 0) {
+          i = 4
+        }
+        for (; i < dString.length; i++) {
+          if (dString[i] !== '0') {
+            break
+          }
+        }
+        if (d < 0) {
+          i = i - 1
+        }
+        return `${(d * Math.pow(10, i - 1)).toFixed(2)}e-${(i - 1)}`
+      }
+      return d
+    },
     // 显示比率
     drawOffset: function() {
       const label = this.id
@@ -113,23 +138,7 @@ export default {
         )
         .call(d3.axisRight()
           .scale(stepscale)
-          .tickFormat(d => {
-            if (d > 10000) {
-              const numLen = d.toString().length - 1
-              return d / Math.pow(10, numLen) + 'e+' + numLen
-            } else if (d < 0.001) {
-              if (d === 0) return d
-              const dString = d.toString()
-              let i = 3
-              for (; i < dString.length; i++) {
-                if (dString[i] !== '0') {
-                  break
-                }
-              }
-              return (d * Math.pow(10, i - 1)).toFixed(1) + 'e-' + (i - 1)
-            }
-            return d
-          })
+          .tickFormat(d => this.numberChangeToE(d))
         )
       const yscale = d3
         .scaleLinear()

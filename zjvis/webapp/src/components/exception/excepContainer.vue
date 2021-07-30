@@ -157,10 +157,20 @@ export default {
       'getCurIqrTimes',
       'getLinkChecked',
       'getDq0Show',
-      'getUpDownValue'
+      'getUpDownValue',
+      'getUpdateHistMatrixDataFlag'
     ])
   },
   watch: {
+    oneAllStep(val) {
+      if (!this.getUpdateHistMatrixDataFlag) { // 如果只更新了step数据
+        this.myAllStep = val[2].step
+        this.myBoxPercent = val[2].box
+        this.drawExcepBox()
+        this.drawExcepStepAxis()
+        d3.select(`#${this.excepBoxId}`).select(`.boxRect${this.curStepIndex}`).style('fill', '#B0B6E6')
+      }
+    },
     getCurNewData(val) {
       if (this.myOneData[0] === val[0] && this.myOneData[1] === val[1]) {
         this.myOneData = val
@@ -243,12 +253,17 @@ export default {
     this.drawCanvasRect()
     this.CanvasRectMouseOperator()
     this.drawExcepLedgend()
-    if (this.myAllStep.length < 4) {
+    if (this.myAllStep.length < 5) {
       this.boxRightIndex = this.myAllStep.length - 1
+    }
+    this.curStepIndex = this.myAllStep.indexOf(this.oneData[2])
+    if (this.curStepIndex > 5) {
+      this.boxLeftIndex = this.curStepIndex - 4
+      this.boxRightIndex = this.curStepIndex
     }
     this.drawExcepBox()
     this.drawExcepStepAxis()
-    d3.select(`#${this.excepBoxId}`).select('.boxRect0').style('fill', '#B0B6E6')
+    d3.select(`#${this.excepBoxId}`).select(`.boxRect${this.curStepIndex}`).style('fill', '#B0B6E6')
     // 当鼠标进入颜色矩阵区域禁止滑动条的滚轮操作，不在颜色矩阵区域就允许滑动条的滚轮操作
     d3.select(`#${this.excepCanvasId}`).on('mouseover', () => {
       document.getElementById('excepDisplay').onmousewheel = () => {
@@ -274,19 +289,29 @@ export default {
     ]),
     // 科学计数法
     numberChangeToE(d) {
-      if (d > 10000) {
-        const numLen = d.toString().length - 1
-        return `${d / Math.pow(10, numLen)}e+${numLen}`
-      } else if (d < 0.001) {
+      if (Math.abs(d) > 10000) {
+        let numLen = numLen = d.toString().length - 1
+        if (d < 0) {
+          numLen = d.toString().length - 2
+        }
+        return `${(d / Math.pow(10, numLen)).toFixed(2)}e+${numLen}`
+      } else if (Math.abs(d) < 0.001) {
         if (d === 0) return d
         const dString = d.toString()
+        if (dString.indexOf('e') !== -1) return d
         let i = 3
+        if (d < 0) {
+          i = 4
+        }
         for (; i < dString.length; i++) {
           if (dString[i] !== '0') {
             break
           }
         }
-        return `${(d * Math.pow(10, i - 1)).toFixed(1)}e-${(i - 1)}`
+        if (d < 0) {
+          i = i - 1
+        }
+        return `${(d * Math.pow(10, i - 1)).toFixed(2)}e-${(i - 1)}`
       }
       return d
     },
@@ -365,6 +390,7 @@ export default {
         const rectDh = that.rectMinHeight * that.rectScale
         const row = Math.floor(e.layerY / rectDh)
         const col = Math.floor(e.layerX / rectDw)
+        if (row < 0 || col < 0) return
         that.setRectCurInfo([that.myOneData[0], that.myOneData[1], that.myAllStep[that.curStepIndex], row, col, that.myOneData[3][4][row][col]])
       }
       // 鼠标滚轮放大，禁用滑动条的滚轮事件
@@ -452,19 +478,6 @@ export default {
           }
         }
       }
-      // for (let i = 0; i < n; i += 1) {
-      //   const rectH = i * rectDh
-      //   for (let j = 0; j < m; j += 1) {
-      //     const t = colorMatrixData[i][j]
-      //     if (t >= min && t <= max) {
-      //       const index = Math.floor((t - min) / minvalue)
-      //       excepCanvas2d.fillStyle = colorMap[index]
-      //     } else {
-      //       excepCanvas2d.fillStyle = '#eeeeee'
-      //     }
-      //     excepCanvas2d.fillRect(j * rectDw, rectH, rectDw, rectDh)
-      //   }
-      // }
       // 画白色边界
       let lineY = 0
       for (let i = 0; i < n; i += 1) {
@@ -484,6 +497,7 @@ export default {
         excepCanvas2d.stroke()
         lineX += rectDw
       }
+      this.setRectCurInfo([])
     },
     // 画颜色矩阵的legend
     drawExcepLedgend() {

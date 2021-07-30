@@ -1,8 +1,8 @@
 import struct
 import numpy as np
 import json
-from oneflow.proto.plugin_hparams_pb2 import HParamsPluginData
-from oneflow.proto.graph_pb2 import GraphDef
+from zjvis.proto.plugin_hparams_pb2 import HParamsPluginData
+from zjvis.proto.graph_pb2 import GraphDef
 
 def get_parser(value, step, wall_time):
     """

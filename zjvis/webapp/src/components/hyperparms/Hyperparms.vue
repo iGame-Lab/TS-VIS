@@ -25,14 +25,15 @@
 import HyperPara from './HyperPara'
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions: maphyperparmActions, mapGetters: maphyperparmGetters, mapMutations: maphyperparmMutations } = createNamespacedHelpers('hyperparm')
-const { mapState: mapLayoutStates } = createNamespacedHelpers('layout')
+const { mapState: mapLayoutStates, mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
 export default {
   components: {
     HyperPara
   },
   computed: {
-    ...maphyperparmGetters(['getAllData', 'getCategoryInfo', 'getRequestState', 'getErrorMessage']),
-    ...mapLayoutStates(['userSelectRunFile'])
+    ...maphyperparmGetters(['getAllData', 'getCategoryInfo', 'getRequestState', 'getErrorMessage', 'getIntervalChange']),
+    ...mapLayoutStates(['userSelectRunFile']),
+    ...mapLayoutGetters(['getTimer'])
   },
   watch: {
     userSelectRunFile(val) {
@@ -55,6 +56,12 @@ export default {
         message: val.split('_')[0],
         type: 'error'
       })
+    },
+    getIntervalChange: function() {
+      if (this.userSelectRunFile) {
+        const param = { run: this.userSelectRunFile }
+        this.featchAllData(param)
+      }
     }
   },
   mounted() {

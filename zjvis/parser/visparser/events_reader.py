@@ -24,7 +24,7 @@
 
 import io
 from typing import Iterable
-from oneflow.proto.event_pb2 import Event
+from zjvis.proto.event_pb2 import Event
 from crc32c import crc32c
 import struct
 

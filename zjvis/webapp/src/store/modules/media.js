@@ -13,7 +13,8 @@ const state = {
   errorMessage: '',
   showFlag: {
     firstTime: true
-  }
+  },
+  IntervalChange: false
 }
 
 const getters = {
@@ -23,11 +24,13 @@ const getters = {
   getTotaltag: (state) => state.totaltag,
   getFreshInfo: (state) => state.freshInfo,
   getErrorMessage: (state) => state.errorMessage,
-  getShowFlag: (state) => state.showFlag
+  getShowFlag: (state) => state.showFlag,
+  getIntervalChange: (state) => state.IntervalChange
 }
 
 const actions = {
   async getSelfCategoryInfo (context, param) {
+    console.log("param", param)
     let initDetailData = {}
     // 根据自己的类目增加相应的判断
     for (let i = 0; i < param[1].length; i++) {
@@ -35,6 +38,7 @@ const actions = {
         initDetailData[value] = []
       })
     }
+    console.log('initDetailData',  initDetailData)
     context.commit('setSelfCategoryInfo', param)
     context.commit('setInitDetailDataInfo', initDetailData)
     if (param[2]['initStateFlag']) {
@@ -49,9 +53,24 @@ const actions = {
       }
     }
   },
+  async getIntervalSelfCategoryInfo(context, param) {
+    // console.log("param", param)
+    let initDetailData = {}
+    // 根据自己的类目增加相应的判断
+    for (let i = 0; i < param[1].length; i++) {
+      Object.keys(param[1][i]).forEach(value => {
+        console.log('value', value)
+        initDetailData[value] = []
+      })
+    }
+    // console.log('initDetailData',  initDetailData)
+    context.commit('setSelfCategoryInfo', param)
+    context.commit('setIntervalDetailDataInfo', initDetailData)
+  },
   async getData (context, param) {
     // 类目  tags
-    if (context.state.detailData[param[0]].length === 0) {
+    // console.log(param, context.state.detailData[param[0]])
+    // if(context.state.detailData[param[0]].length === 0) {
       // console.log(param[1])
       for (let j = 0; j < param[1].length; j++) {
         // console.log(param[1][j])
@@ -67,13 +86,14 @@ const actions = {
                   context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
                   return
                 }
-                context.commit('setDetailData', [param[0], { 'run': context.state.categoryInfo[0][i], 'value': res.data.data }])
+                context.commit('setDetailData', [param[0], { 'run': context.state.categoryInfo[0][i], 'value': res.data.data, 
+                'port': port.category[param[0]], 'parameter':  parameter}])
               })
             }
           }
         }
       }
-    }
+    // }
   }
 }
 
@@ -88,8 +108,43 @@ const mutations = {
   setInitDetailDataInfo: (state, param) => {
     state.detailData = param
   },
+  setIntervalDetailDataInfo: (state, param) => {
+    Object.keys(param).forEach(value => {
+      if(Object.keys(state.detailData).indexOf(value)==-1) {
+        state.detailData[value] = []
+      }
+    })
+    // state.IntervalChange = !state.IntervalChange 母鸡为什么这个不更新也会去请求新数据
+  },
   setDetailData: (state, param) => {
-    state.detailData[param[0]].push(param[1])
+    // state.detailData[param[0]].push(param[1]) 
+
+    // param分为两部分
+    // param[0]为string，存储大tag标签，例如loss，mean，conv1等
+    // param[1]为对象，param[1]['run']存储训练模型名称，param[1]['value']存储对应param[0]的标量数据类型
+    let keys = [] // keys存储标量数据类型及模型名称，如loss-log
+
+    for(let k in param[1]['value']) {
+      keys.push(k + '-' + param[1]['run'])
+    }
+  
+    let keys2 = [] // keys2存储第一次加载数据的存储标量数据类型及模型名称，用于和keys比较，判断替换下一次请求的数据
+    let index = [] // 一个tag下多个模型编号
+    for(let key in state.detailData[param[0]] ) {
+        for(let kk in state.detailData[param[0]][key]['value']) {
+          keys2.push(kk + '-' + state.detailData[param[0]][key]['run'])
+          index.push(key)
+        }
+    }
+    // console.log("index", index, "kyes2", keys2, 'keys',keys, 'state.detailData[param[0]]', state.detailData[param[0]], param[0])
+    for(let i=0; i < keys.length; i++) {
+      if(keys2.indexOf(keys[i]) != -1) {
+        state.detailData[param[0]][index[keys2.indexOf(keys[i])]]['value'] = param[1]['value']
+      }else{
+        state.detailData[param[0]].push(param[1])
+      }
+    }
+
   },
   setClickState: (state, param) => {
     state.clickState = param

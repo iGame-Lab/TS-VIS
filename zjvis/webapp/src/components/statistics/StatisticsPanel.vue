@@ -11,6 +11,9 @@
   text-align: left;
   font-size:11px;
 }
+.spanCenter{
+  text-align: center;
+}
 .scroll1{
   margin-top:7%;
 }
@@ -111,12 +114,8 @@
       <el-card>
         <div class="statisticPanel">
           <div class="infoTitle" @click="scrollToTop(1)">分布图</div>
-          <div class="statisticPanelContent">
-            <div class="distPanel">
-              <div style="text-align:center;">
-                <span>暂无功能</span>
-              </div>
-            </div>
+          <div class="statisticPanelContent spanCenter">
+            <span>暂无功能</span>
           </div>
         </div>
       </el-card>
@@ -125,7 +124,7 @@
       <el-card>
         <div class="info">
           <div class="infoTitle"><i class="el-icon-chat-dot-round dot" />数据信息栏</div>
-          <div v-show="!infoShowFlag" class="infoContent">暂无信息</div>
+          <div v-show="!infoShowFlag" class="statisticPanelContent spanCenter"><span>暂无信息</span></div>
           <div v-show="infoShowFlag" class="infoContent">
             <div>
               <el-row>
@@ -184,7 +183,7 @@ export default {
       'getStatisticInfo',
       'getHistShow',
       'getDistShow',
-      'getDrawAllSvgFinished'
+      'getFeatchHistDataFinished'
     ])
   },
   // 控制面板和左侧内容绑定
@@ -218,16 +217,13 @@ export default {
     ...mapStatisticMutations([
       'changeShownumber',
       'changeMode',
-      'setBinNum',
-      'setDataSetsState',
-      'setHistShow',
-      'setDistShow'
+      'setBinNum'
     ]),
     scrollToTop(index) {
       document.getElementsByClassName('statistics-container')[index].scrollIntoView(true)
     },
     myChangeShownumber(showNumber) {
-      if (!this.getDrawAllSvgFinished) { // 没有绘制完，不允许操作控制面板，并还原数据
+      if (!this.getFeatchHistDataFinished) { // 没有绘制完，不允许操作控制面板，并还原数据
         this.$message({
           message: '统计分析页面还在渲染中，勿操作控制面板',
           type: 'warning'
@@ -238,7 +234,7 @@ export default {
       }
     },
     myChangeMode(mode) {
-      if (!this.getDrawAllSvgFinished) {
+      if (!this.getFeatchHistDataFinished) {
         this.$message({
           message: '统计分析页面还在渲染中，勿操作控制面板',
           type: 'warning'
@@ -249,7 +245,7 @@ export default {
       }
     },
     mySetBinNum(binNumber) {
-      if (!this.getDrawAllSvgFinished) {
+      if (!this.getFeatchHistDataFinished) {
         this.$message({
           message: '统计分析页面还在渲染中，勿操作控制面板',
           type: 'warning'
@@ -261,7 +257,7 @@ export default {
     }
   }
 }
-</script>>
+</script>
 <style>
 .rangeNumber .el-slider__bar{
   background-color: #625eb3;

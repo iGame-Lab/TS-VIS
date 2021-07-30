@@ -4,8 +4,8 @@
  * @version: 1.0
  * @Author: xds
  * @Date: 2020-05-02 07:10:51
- * @LastEditors: xds
- * @LastEditTime: 2020-05-04 21:16:22
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-29 10:46:40
  */
 import http from '@/utils/request'
 import port from '@/utils/api'
@@ -36,7 +36,8 @@ const state = {
   checked: {},
   mergedorder: {},
   showFlag: {},
-  subisshow: {}
+  subisshow: {},
+  IntervalChange: false // 监听定时刷新功能
 }
 
 const getters = {
@@ -64,7 +65,8 @@ const getters = {
   checked: (state) => state.checked,
   mergedorder: (state) => state.mergedorder,
   showFlag: (state) => state.showFlag,
-  subisshow: (state) => state.subisshow
+  subisshow: (state) => state.subisshow,
+  getIntervalChange: (state) => state.IntervalChange
 }
 
 const actions = {
@@ -87,8 +89,11 @@ const actions = {
       context.commit('setfreshnumber')
     }
   },
+  async getIntervalSelfCategoryInfo(context, param) {
+    context.commit('setIntervalSelfCategoryInfo', param)
+  },
   async getData(context, param) {
-    if (context.state.detailData[param[0]].length === 0) {
+    //if (context.state.detailData[param[0]].length === 0) {
       for (let j = 0; j < param[1].length; j++) {
         for (let i = 0; i < context.state.categoryInfo[0].length; i++) {
           if (Object.keys(context.state.categoryInfo[1][i]).indexOf(param[0]) > -1) {
@@ -102,17 +107,26 @@ const actions = {
                   context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
                   return
                 }
-                context.commit('setDetailData', [param[0], { 'run': context.state.categoryInfo[0][i], 'value': res.data.data }])
+                
+                context.commit('setDetailData', [param[0], { 'run': context.state.categoryInfo[0][i], 'value': res.data.data}])
               })
             }
           }
         }
       }
-    }
+    //}
   }
 }
 
 const mutations = {
+  setIntervalSelfCategoryInfo: (state, param) => {
+    // setSelfCategoryInfo
+    state.categoryInfo = param
+    // setfreshnumber
+    state.freshnumber += 1
+
+    // state.IntervalChange = !state.IntervalChange
+  },
   setinitshowrun: (state, param) => {
     state.initshowrun = param
   },
@@ -123,7 +137,38 @@ const mutations = {
     state.detailData = param
   },
   setDetailData: (state, param) => {
-    state.detailData[param[0]].push(param[1])
+    // param分为两部分
+    // param[0]为string，存储大tag标签，例如loss，mean，conv1等
+    // param[1]为对象，param[1]['run']存储训练模型名称，param[1]['value']存储对应param[0]的标量数据类型
+    let keys = [] // keys存储标量数据类型及模型名称，如loss-log
+
+    // console.log('param[1]', param[1]);
+
+    for(let k in param[1]['value']) {
+      keys.push(k + '-' + param[1]['run'])
+      // console.log('keys', keys);
+    }
+  
+    let keys2 = [] // keys2存储第一次加载数据的存储标量数据类型及模型名称，用于和keys比较，判断替换下一次请求的数据
+    let index = [] // 一个tag下多个模型编号
+    console.log('state.detailData[param[0]]',state.detailData[param[0]]);
+    for(let key in state.detailData[param[0]] ) {
+        for(let kk in state.detailData[param[0]][key]['value']) {
+          keys2.push(kk + '-' + state.detailData[param[0]][key]['run'])
+          index.push(key)
+        }
+    }
+
+    for(let i=0; i < keys.length; i++) {
+      if(keys2.indexOf(keys[i]) != -1) {
+        // state.detailData[param[0]][index[i]]['value'] = param[1]['value']
+        state.detailData[param[0]][index[keys2.indexOf(keys[i])]]['value'] = param[1]['value']
+      }else{
+        state.detailData[param[0]].push(param[1])
+      }
+    }
+
+    // console.log('state.detailData', state.detailData);
   },
   setClickState: (state, param) => {
     state.clickState = param

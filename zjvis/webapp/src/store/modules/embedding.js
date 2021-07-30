@@ -1,13 +1,11 @@
 import http from '@/utils/request'
 import port from '@/utils/api'
 import { param2Obj } from '@/utils/utils'
+import layout from './layout'
 /*
 { questionInfo存储结构
   "run": {
     "tag": {
-      "steps": 0,
-      "minStep": 0,
-      "maxStep": 0,
       "shape": 0,
       "allSteps": [],
       "curMin": 0,
@@ -68,7 +66,8 @@ const state = {
   message: '', // 放在info中的信息
   initStateFlag: false,
   errorMessage: '',
-  lineWidth: 0.4
+  lineWidth: 0.4,
+  IntervalChange: false
 }
 
 const getters = {
@@ -86,16 +85,66 @@ const getters = {
   getMessage: (state) => state.message,
   getInitStateFlag: (state) => state.initStateFlag,
   getErrorMessage: (state) => state.errorMessage,
-  getLineWidth: (state) => state.lineWidth
+  getLineWidth: (state) => state.lineWidth,
+  getIntervalChange: (state) => state.IntervalChange
 }
 
 const actions = {
   // 当系统初始化的时候，layout会给embedding 发起动作
   async getSelfCategoryInfo(context, param) {
     context.commit('setSelfCategoryInfo', param)
+    
+    
     if (param[2]['initStateFlag'] === true) {
-      context.dispatch('fetchAllStep')
+      // context.dispatch('fetchAllStep')
+      context.dispatch('fetchOneStep', context.state.categoryInfo.curRuns[0])
+      
     }
+  },
+  async getIntervalSelfCategoryInfo(context, param) {
+    context.commit('setIntervalSelfCategoryInfo', param)
+    //context.dispatch('fetchOneStep', context.state.categoryInfo.curRuns[0])
+  },
+  async fetchOneStep(context, param) {
+    state.questionInfo.received = false // 当需要请求信息的时候所有的数据已经完备
+    state.receivedQuestionInfo = false
+    state.receivedCurInfo = false // 临时测试
+    const allStepTemp = {'data':[], 'index':0}
+    if(param == undefined) {
+      param = context.state.categoryInfo.curRuns[0];
+    }
+    for (let i = 0; i < context.state.categoryInfo.curRuns.length; i++) {
+      const oneRunStep = []
+      if(param == context.state.categoryInfo.curRuns[i]) {
+        for (let j = 0; j < context.state.categoryInfo.curTags[i].length; j++) {
+          const param = { run: context.state.categoryInfo.curRuns[i], tag: context.state.categoryInfo.curTags[i][j] }
+          await http.useGet(port.category.projector, param)
+            .then(res => {
+              if (+res.data.code !== 200) {
+                context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
+                return
+              }
+              const res1 = res.data.data[context.state.categoryInfo.curTags[i][j]]
+              const res2 = res.data.data['shape']
+              const res3 = res.data.data['sample']
+              const res4 = res.data.data['sample_type']
+              oneRunStep.push([res1, res2, res3, res4])
+            })
+        }
+        allStepTemp['data'].push(oneRunStep)
+        allStepTemp['index'] = i
+      } else {
+        const res1 = []
+        const res2 = []
+        const res3 = []
+        const res4 = []
+        oneRunStep.push([res1, res2, res3, res4])
+        allStepTemp['data'].push(oneRunStep)
+      }
+      
+    }
+    context.commit('setOneStep', allStepTemp)
+     
   },
   async fetchAllStep(context) { // 数据链的第一步
     const allStepTemp = []
@@ -146,6 +195,17 @@ const actions = {
 }
 
 const mutations = {
+  setIntervalSelfCategoryInfo: (state, param) => {
+    state.categoryInfo.curRuns = param[0].slice(0)
+    state.categoryInfo.curTags = param[1].slice(0) // 实现深度拷贝[][]
+    state.IntervalChange = !state.IntervalChange
+    // for (let i = 0; i < state.categoryInfo.curRuns.length; i++) {
+    //   state.questionInfo[state.categoryInfo.curRuns[i]] = {}
+    //   for (let j = 0; j < state.categoryInfo.curTags[i].length; j++) {
+    //     state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]] = {}
+    //   }
+    // }
+  },
   setSelfCategoryInfo: (state, param) => { // 处理分类
     state.categoryInfo.curRuns = param[0].slice(0)
     state.categoryInfo.curTags = param[1].slice(0) // 实现深度拷贝[][]
@@ -164,6 +224,25 @@ const mutations = {
     state.categoryInfo.received = true // 类目信息完备
     state.receivedCategoryInfo = true
     state.initStateFlag = param[2]['initStateFlag']
+  },
+  setOneStep: (state, param) => {
+      let i = param['index'];
+      let params = [];
+      params = param['data'];
+      for (let j = 0; j < state.categoryInfo.curTags[i].length; j++) {
+        state.questionInfo[state.categoryInfo.curRuns[i]] = {}
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]] = {}
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['allSteps'] = params[i][j][0].slice(0)
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['curMin'] = params[i][j][0][0]
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['curMax'] = params[i][j][0].length - 1
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['shape'] = params[i][j][1][1]
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['sample'] = params[i][j][2]
+        state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]]['sample_type'] = params[i][j][3]
+      }
+    state.questionInfo.received = true // 当需要请求信息的时候所有的数据已经完备
+    state.receivedQuestionInfo = true
+    state.receivedCurInfo = true // 临时测试
+    
   },
   setAllStep: (state, param) => {
     for (let i = 0; i < state.categoryInfo.curRuns.length; i++) {

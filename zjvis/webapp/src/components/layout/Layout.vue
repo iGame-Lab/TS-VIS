@@ -16,16 +16,16 @@
 
 <template>
   <div class="layout-root layout-same-style" style="width: 100%;">
-    <el-dialog 
-      title="图片保存选项" 
+    <el-dialog
       :visible.sync="dialogFormVisible"
+      title="图片保存选项"
       class="layout-svg-save-dialog"
     >
       <el-form :model="form">
-        <el-form-item label="图片名称" :label-width="formLabelWidth">
+        <el-form-item :label-width="formLabelWidth" label="图片名称">
           <el-input v-model="form.input" placeholder="请输入名称" clearable />
         </el-form-item>
-        <el-form-item label="图片格式" :label-width="formLabelWidth">
+        <el-form-item :label-width="formLabelWidth" label="图片格式">
           <el-select v-model="form.type" placeholder="请选择保存图片格式">
             <el-option label="png" value="png" />
             <el-option label="eps" value="eps" />
@@ -39,8 +39,8 @@
       </div>
     </el-dialog>
     <el-dialog
-      title="全力加载中,请稍等..."
       :visible.sync="initWaitVisible"
+      title="全力加载中,请稍等..."
       class="layout-svg-save-dialog"
     >
       <i class="el-icon-loading" />
@@ -63,18 +63,18 @@
         </p>
         <p>
           <span
-            >3.单击节点会将节点具体信息显示在菜单栏，同时，与该节点相连的其他节点以及边都会标红</span
+          >3.单击节点会将节点具体信息显示在菜单栏，同时，与该节点相连的其他节点以及边都会标红</span
           >
         </p>
         <p>
           <span>4.双击节点可以实现节点的展开与缩回</span>
-        </p>        
+        </p>
         <p>
           <span>5.右键节点可以对节点进行边的隐藏、显示以及删除操作</span>
         </p>
         <p>
           <span
-            >6.当通过右键删除节点时，节点会被放置在右侧的隐藏栏中。双击隐藏栏内的节点可以实现节点的放回</span
+          >6.当通过右键删除节点时，节点会被放置在右侧的隐藏栏中。双击隐藏栏内的节点可以实现节点的放回</span
           >
         </p>
         <h3>
@@ -98,7 +98,7 @@
           <span>3.</span>
           <strong> <span>布局</span></strong>
           <span
-            >按钮用于实现针对符合批量筛选条件以及单独隐藏节点的删除与重新布局，该操作会让剩余节点在当前新条件下重新绘制，会改变图的结构</span
+          >按钮用于实现针对符合批量筛选条件以及单独隐藏节点的删除与重新布局，该操作会让剩余节点在当前新条件下重新绘制，会改变图的结构</span
           >
         </p>
         <p>
@@ -122,7 +122,7 @@
           <span>2.</span>
           <strong> <span>布局</span></strong>
           <span
-            >按钮用于实现针对单独隐藏节点的删除与重新布局，该操作会让剩余节点在当前新条件下重新绘制，会改变图的结构</span
+          >按钮用于实现针对单独隐藏节点的删除与重新布局，该操作会让剩余节点在当前新条件下重新绘制，会改变图的结构</span
           >
         </p>
         <h4>
@@ -135,7 +135,7 @@
           <span>按钮实现对信息的折叠与展开</span>
         </p>
         <p>&nbsp;</p>
-        <hr />
+        <hr >
         <p>&nbsp;</p>
         <h2>
           <a name="标量数据" class="md-header-anchor" />
@@ -160,7 +160,7 @@
           </li>
           <li>
             <span
-              >右上角矩形框可为用户定制所用，选中后再按定制按钮就可以把数据迁移上用户定制上；也可为合并多个图表时所用</span
+            >右上角矩形框可为用户定制所用，选中后再按定制按钮就可以把数据迁移上用户定制上；也可为合并多个图表时所用</span
             >
           </li>
           <li>
@@ -176,12 +176,12 @@
         </p>
         <p>
           <span
-            >Y-axis：调整y轴数据显示方式，共两种，一种是linear（原始数据），一种是log-linear（取对数后的数据）</span
+          >Y-axis：调整y轴数据显示方式，共两种，一种是linear（原始数据），一种是log-linear（取对数后的数据）</span
           >
         </p>
         <p>
           <span
-            >合并按钮：将勾选中的图表进行合并，合并限制：至多可勾选两种tag的图表，至多可勾选6幅图表</span
+          >合并按钮：将勾选中的图表进行合并，合并限制：至多可勾选两种tag的图表，至多可勾选6幅图表</span
           >
         </p>
         <p>
@@ -195,7 +195,7 @@
           <span>暂无数据</span>
         </p>
         <p>&nbsp;</p>
-        <hr />
+        <hr >
         <p>&nbsp;</p>
         <h2>
           <a name="媒体数据" class="md-header-anchor" />
@@ -256,7 +256,7 @@
             <p>&nbsp;</p>
           </li>
         </ol>
-        <hr />
+        <hr >
         <p>&nbsp;</p>
         <h2>
           <a name="统计分析" class="md-header-anchor" />
@@ -325,7 +325,7 @@
           <span>显示直方图选中的原始数据</span>
         </p>
         <p>&nbsp;</p>
-        <hr />
+        <hr >
         <p>&nbsp;</p>
         <h2>
           <a name="降维分析" class="md-header-anchor" />
@@ -401,7 +401,7 @@
             <p>&nbsp;</p>
           </li>
         </ol>
-        <hr />
+        <hr >
         <p>&nbsp;</p>
         <h2>
           <a name="超参数" class="md-header-anchor" />
@@ -464,7 +464,7 @@
           <span>显示选中数据的原始信息。</span>
         </p>
         <p>&nbsp;</p>
-        <hr />
+        <hr >
         <p>&nbsp;</p>
         <h2>
           <a name="异常检测" class="md-header-anchor" />
@@ -477,19 +477,19 @@
         <p>
           <span>由直方图、颜色矩阵和盒须图三部分组成</span>
           <span
-            >直方图：数据的统计信息，区间不均匀分布，坐标轴上的红色标记对应盒须图异常点的上下边界</span
+          >直方图：数据的统计信息，区间不均匀分布，坐标轴上的红色标记对应盒须图异常点的上下边界</span
           >
           <span
-            >颜色矩阵：用矩形表示数值点，根据数值大小为矩形赋予一个颜色值，颜色矩阵可以通过滚轮放大缩小查看；</span
+          >颜色矩阵：用矩形表示数值点，根据数值大小为矩形赋予一个颜色值，颜色矩阵可以通过滚轮放大缩小查看；</span
           >
           <span />
           <span
-            >颜色条上下三角形可拖动，只查看一定范围内的数值分布，数值大小超出上下三角形数值的矩形颜色变灰</span
+          >颜色条上下三角形可拖动，只查看一定范围内的数值分布，数值大小超出上下三角形数值的矩形颜色变灰</span
           >
           <span>盒须图：拖动下方坐标轴上的刷子可查看相应范围内的盒须图，</span>
           <span />
           <span
-            >点击某个盒须图，请求异常点数据，在盒须图中用红色圆圈标记出来，并把颜色矩阵中对应的矩形的边界高亮</span
+          >点击某个盒须图，请求异常点数据，在盒须图中用红色圆圈标记出来，并把颜色矩阵中对应的矩形的边界高亮</span
           >
           <span />
           <span>异常值的上下边界也可拖拽，停止拖拽时会重新获取新范围外的异常点数据</span>
@@ -518,7 +518,7 @@
           <span>暂无数据</span>
         </p>
         <p>&nbsp;</p>
-        <hr />
+        <hr >
         <p>&nbsp;</p>
         <h2>
           <a name="用户定制" class="md-header-anchor" />
@@ -551,8 +551,8 @@
       </div>
     </el-dialog>
     <el-dialog
-      title="设定数据同步间隔"
       :visible.sync="dataSyncVisible"
+      title="设定数据同步间隔"
       class="layout-svg-save-dialog"
     >
       <div>
@@ -561,17 +561,17 @@
       <div style="margin-top: 10px;">
         <el-input-number
           v-model="timeSync"
+          :min="5"
+          :disabled="!syncDataBool"
           class="input-number"
           size="mini"
-          :min="30"
-          :disabled="!syncDataBool"
         />秒
       </div>
     </el-dialog>
     <div
       ref="left"
-      class="layout-sidebar layout-same-style"
       :style="{ height: leftStyle.height, width: leftStyle.width }"
+      class="layout-sidebar layout-same-style"
     >
       <logo :collapse="false" />
       <div :class="['layout-sidebar-category-container']">
@@ -596,11 +596,11 @@
               "
             >
               <router-link
-                tag="li"
                 :to="item.routerName"
                 :class="[
                   item.id == selected || (i == initId && initFlag) ? 'category-selected' : '',
                 ]"
+                tag="li"
                 @click.native="change(item)"
               >
                 <i :class="['iconfont', item.icon]" :style="{ fontSize: 16 + 'px' }" />
@@ -611,7 +611,7 @@
                       ? { fontSize: 16 + 'px', color: 'rgb(46, 79, 222)' }
                       : { fontSize: 16 + 'px' }
                   "
-                  >{{ item.name }}</span
+                >{{ item.name }}</span
                 >
               </router-link>
             </div>
@@ -623,8 +623,8 @@
         <p
           v-for="item in leftSilderIcons"
           v-show="item.shaowFlag"
-          :key="item.id"
           ref="item.ref"
+          :key="item.id"
           :style="{ position: 'absolute', marginLeft: item.margin }"
           @click="isHide(item)"
         >
@@ -633,8 +633,8 @@
       </div>
     </div>
     <div
-      class="layout-header-content layout-same-style"
       :style="{ height: rightStyle.height, width: rightStyle.width }"
+      class="layout-header-content layout-same-style"
     >
       <div class="layout-header layout-same-style">
         <div :class="['same-div']" style="width: 400px;">
@@ -653,13 +653,13 @@
               v-if="update"
               v-model="value1"
               :class="['run-selest']"
-              size="mini"
               :multiple="multipleFlag === 2 ? false : isMultiple"
               :disabled="multipleFlag === 2 ? true : false"
+              :clearable="multipleFlag === 2 ? false : isMultiple"
+              size="mini"
               placeholder="RUN"
               collapse-tags
               filterable
-              :clearable="multipleFlag === 2 ? false : isMultiple"
               @focus="getOptions()"
             >
               <el-option
@@ -722,33 +722,33 @@
   </div>
 </template>
 <script>
-import * as d3 from 'd3';
-import { createNamespacedHelpers } from 'vuex';
-import download from '@/utils/download';
-import constants from '@/utils/constants';
-
+import * as d3 from 'd3'
+import { createNamespacedHelpers } from 'vuex'
+import download from '@/utils/download'
+import constants from '@/utils/constants'
 
 // import { param2Obj } from '@/utils'
-import Logo from '@/components/layout/Logo';
+import Logo from '@/components/layout/Logo'
 const {
   mapMutations: mapLayoutMutations,
   mapActions: mapLayoutActions,
   mapGetters: mapLayoutGetters,
-  mapState: mapLayoutState,
-} = createNamespacedHelpers('layout');
-const { mapMutations: mapCustomMutations } = createNamespacedHelpers('custom');
+  mapState: mapLayoutState
+} = createNamespacedHelpers('layout')
+const { mapMutations: mapCustomMutations } = createNamespacedHelpers('custom')
 
 export default {
   components: {
-    Logo,
+    Logo
   },
   data() {
     return {
+      timer: null,
       downloadList: [],
       downloadState: ['graph', 'scalar', 'statistic'],
       init: 1,
       screenWidth: '0px',
-      titleSrc: 
+      titleSrc:
       'data:image/png;base64,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',
       selected: -1,
       selectedRaw: '',
@@ -767,17 +767,17 @@ export default {
       actegoryClickStyle: {
         divTop: '',
         divAim: '',
-        divBottom: '',
+        divBottom: ''
       },
       form: {
         name: '',
         type: 'png',
-        input: '下载',
+        input: '下载'
       },
       rightRetract: {
         setBackLeft: '0',
         width: '290px',
-        retractFlage: false,
+        retractFlage: false
       },
       todoName: '',
       logoSourse: 'static/img/left_logo.png',
@@ -786,15 +786,15 @@ export default {
       leftStyle: {
         width: '180px',
         height: '100%',
-        categoryFlage: false,
+        categoryFlage: false
       },
       rightStyle: {
         width: 'calc(100% - 180px)',
-        height: '100%',
+        height: '100%'
       },
       contentsStyle: {
         leftWidth: 'calc(100% - 290px)',
-        rightShowFlag: true,
+        rightShowFlag: true
       },
       options: '',
       value1: [],
@@ -804,22 +804,22 @@ export default {
           chName: '定制',
           raw: 'custom',
           name: 'icon-ziyuan104',
-          size: '16px',
+          size: '16px'
         },
         {
           value: 1,
           chName: '下载',
           raw: 'download',
           name: 'icon-xiazai3',
-          size: '16px',
+          size: '16px'
         },
         {
           value: 2,
           chName: '全屏',
           raw: 'fullScreen',
           name: 'icon-ziyuan111',
-          size: '16px',
-        },
+          size: '16px'
+        }
       ],
       sync: false,
       leftSilderIcons: [
@@ -829,7 +829,7 @@ export default {
           ref: 'left',
           shaowFlag: true,
           size: '25px',
-          margin: '90px',
+          margin: '90px'
         },
         {
           value: 1,
@@ -837,8 +837,8 @@ export default {
           ref: 'right',
           shaowFlag: false,
           size: '25px',
-          margin: '10px',
-        },
+          margin: '10px'
+        }
       ],
       rightSilderIcons: [
         {
@@ -846,35 +846,35 @@ export default {
           name: 'icon-zhegeyidinghang',
           ref: 'right',
           shaowFlag: true,
-          size: '25px',
+          size: '25px'
         },
         {
           value: 3,
           name: 'icon-zuohua',
           ref: 'left',
           shaowFlag: false,
-          size: '25px',
-        },
+          size: '25px'
+        }
       ],
       settingHelp: [
         {
           id: 0,
           name: 'icon-ziyuan107',
           ref: 'setting',
-          size: '19px',
+          size: '19px'
         },
         {
           id: 1,
           name: 'icon-ziyuan105',
           ref: 'help',
-          size: '19px',
-        },
+          size: '19px'
+        }
       ],
       syncDataBool: false, // 用来设定timeSync显示是否正常 和 作为开关是否进行同步
       dataSyncVisible: false, // 用来是否显示整个设定数据同步界面
-      timeSync: '30',
-      operationGuide: false,
-    };
+      timeSync: '5',
+      operationGuide: false
+    }
   },
   computed: {
     ...mapLayoutGetters([
@@ -885,7 +885,7 @@ export default {
       'initWaitingMessage',
       'getErrorMessage',
       'setDownloadSvgClass',
-      'getStateStore',
+      'getStateStore'
     ]),
     ...mapLayoutState([
       'userSelectRunFile',
@@ -893,106 +893,124 @@ export default {
       'svgDownloadList',
       'initSidebarId',
       'categoryIndex',
-      'stateStore',
-    ]),
+      'stateStore'
+    ])
   },
   watch: {
     getErrorMessage(val) {
       this.$message({
         message: val.split('_')[0],
-        type: 'error',
-      });
+        type: 'error'
+      })
     },
     selectedRaw(val) {
       if (val === 'media') {
-        this.rightSilder(this.rightSilderIcons[0]);
+        this.rightSilder(this.rightSilderIcons[0])
       } else if (val === 'graph') {
-        this.rightSilder(this.rightSilderIcons[1]);
+        this.rightSilder(this.rightSilderIcons[1])
       } else if (this.screenWidth < 1000) {
-        this.rightSilder(this.rightSilderIcons[0]);
+        this.rightSilder(this.rightSilderIcons[0])
       } else if (this.screenWidth >= 1000) {
-        this.rightSilder(this.rightSilderIcons[1]);
+        this.rightSilder(this.rightSilderIcons[1])
       }
     },
     screenWidth(val) {
       if (val < 1000) {
-        this.isHide(this.leftSilderIcons[0]);
+        this.isHide(this.leftSilderIcons[0])
         if (this.selectedRaw !== 'graph') {
-          this.rightSilder(this.rightSilderIcons[0]);
+          this.rightSilder(this.rightSilderIcons[0])
         }
       }
     },
     $route() {
-      const path = this.$route.path.split('/');
-      const name = path[path.length - 1];
-      const id = this.categoryIndex.indexOf(constants.CATEGORYORDER.indexOf(name));
-      const item = this.allCategoryInform[id];
-      this.initFlag = false;
-      this.selected = item.id;
-      this.init = 1;
-      this.selectedRaw = item.rawName;
-      this.setRunCategory(item.rawName);
-      this.todoName = item.rawName;
+      const path = this.$route.path.split('/')
+      const name = path[path.length - 1]
+      const id = this.categoryIndex.indexOf(constants.CATEGORYORDER.indexOf(name))
+      const item = this.allCategoryInform[id]
+      this.initFlag = false
+      this.selected = item.id
+      this.init = 1
+      this.selectedRaw = item.rawName
+      this.setRunCategory(item.rawName)
+      this.todoName = item.rawName
       // 同步更新
       if (this.syncDataBool) {
         // 开启同步
-        this.clearSync();
-        this.timingFeatchCategory([this.timeSync * 1000, this.$route.path]);
+        this.clearSync()
+        // this.timingFeatchCategory([this.timeSync * 1000, this.$route.path])
       } else {
         // 关闭同步
-        this.clearSync();
+        this.clearSync()
       }
     },
     initShowPanelInfo() {
       if (this.$route.path === '/index') {
-        this.$router.push({ path: this.initShowPanelInfo.routerName });
+        this.$router.push({ path: this.initShowPanelInfo.routerName })
       }
-      this.initId = this.initSidebarId;
+      this.initId = this.initSidebarId
     },
     userSelectRunFile() {
-      this.$forceUpdate();
-      this.value1 = this.userSelectRunFile;
+      this.$forceUpdate()
+      this.value1 = this.userSelectRunFile
     },
     value1() {
-      this.getStateStore[this.selectedRaw] = this.value1;
-      this.setUserSelectRunFile(this.value1);
+      // console.log(this.value1)
+      this.getStateStore[this.selectedRaw] = this.value1
+      this.setUserSelectRunFile(this.value1)
     },
     inputValue() {},
     multipleFlag() {
-      this.isMultiple = this.multipleFlag;
+      this.isMultiple = this.multipleFlag
     },
     isMultiple() {
-      this.update = false;
+      this.update = false
       setTimeout(() => {
-        this.update = true;
-      });
+        this.update = true
+      })
     },
     initWaitingMessage() {
-      this.initWaitVisible = false;
+      this.initWaitVisible = false
       if (this.initWaitingMessage === 'error') {
         this.$alert('对不起您没有权限', '警告', {
           confirmButtonText: '确定',
-          type: 'error',
-        });
+          type: 'error'
+        })
       } else {
-        this.initFeatchCategory(this.$route.path);
-        this.fontSize();
+        this.initFeatchCategory(this.$route.path)
+        this.fontSize()
       }
     },
     syncDataBool() {
-      if (this.syncDataBool) {
-        // 开启同步
-        this.timingFeatchCategory([this.timeSync * 1000, this.$route.path]);
-      } else {
-        // 关闭同步
-        this.clearSync();
-      }
+      // if (this.syncDataBool) {
+      //   // 开启同步
+      //   this.timingFeatchCategory([this.timeSync * 1000, this.$route.path])
+      // } else {
+      //   // 关闭同步
+      //   this.clearSync()
+      // }
     },
     allCategoryInform() {
       if (!this.leftSilderIcons[0].shaowFlag) {
-        this.isHide(this.leftSilderIcons[0]);
+        this.isHide(this.leftSilderIcons[0])
       }
     },
+    dataSyncVisible(val) {
+      var self = this
+      if (!val && this.syncDataBool) {
+        if (self.timer) {
+          clearTimeout(self.timer)
+        }
+        self.timer = setInterval(function() {
+          self.featchCategory(self.$route.path)
+          self.setTimer()
+        }, 1000 * self.timeSync)
+      } else if (!val && !this.syncDataBool) {
+        if (self.timer) {
+          clearTimeout(self.timer)
+        }
+        self.timer = null
+      }
+    }
   },
   created() {
     // const params = param2Obj(window.location.href)
@@ -1018,33 +1036,34 @@ export default {
     const params = {
       trainJobName: 'test'
     }
-    this.setParams(params);
-    this.initWaitingPage({});
+    this.setParams(params)
+    this.initWaitingPage({})
   },
   mounted() {
-    const h = 
-      window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-    const hReal = h * 0.905 * 0.075 * 0.5;
-    this.actegoryClickStyle.divTop = `0 0 ${hReal / 2}px 0`;
-    this.actegoryClickStyle.divAim = `${hReal}px 0 0 ${hReal}px`;
-    this.actegoryClickStyle.divBottom = `0 ${hReal / 2}px 0 0`;
-    const that = this;
+    const h =
+      window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+    const hReal = h * 0.905 * 0.075 * 0.5
+    this.actegoryClickStyle.divTop = `0 0 ${hReal / 2}px 0`
+    this.actegoryClickStyle.divAim = `${hReal}px 0 0 ${hReal}px`
+    this.actegoryClickStyle.divBottom = `0 ${hReal / 2}px 0 0`
+    const that = this
     window.onresize = () => {
       return (() => {
-        window.screenWidth = document.body.clientWidth;
-        that.screenWidth = window.screenWidth;
-      })();
-    };
-    that.screenWidth = document.body.clientWidth;
-    const secondIndex = 2;
-    this.selectedRaw = this.$route.path.split('/')[secondIndex];
+        window.screenWidth = document.body.clientWidth
+        that.screenWidth = window.screenWidth
+      })()
+    }
+    that.screenWidth = document.body.clientWidth
+    const secondIndex = 2
+    this.selectedRaw = this.$route.path.split('/')[secondIndex]
   },
   methods: {
     ...mapLayoutActions([
+      'featchCategory',
       'initFeatchCategory',
       'timingFeatchCategory',
       'timingFeatchCategoryOnce',
-      'initWaitingPage',
+      'initWaitingPage'
     ]),
     ...mapLayoutMutations([
       'setCategory',
@@ -1053,68 +1072,68 @@ export default {
       'setTimer',
       'clearSync',
       'setParams',
-      'setErrorMessage',
+      'setErrorMessage'
     ]),
     ...mapCustomMutations(['setData']),
     isClicked() {
-      d3.select('.el-icon-refresh').attr('class', 'el-icon-refresh anim');
+      d3.select('.el-icon-refresh').attr('class', 'el-icon-refresh anim')
       setTimeout(() => {
-        d3.select('.anim').attr('class', 'el-icon-refresh');
-      }, 5000);
+        d3.select('.anim').attr('class', 'el-icon-refresh')
+      }, 5000)
       // 手动的数据同步
-      this.timingFeatchCategoryOnce(this.$route.path);
+      this.timingFeatchCategoryOnce(this.$route.path)
     },
     change(item) {
-      this.initFlag = false;
-      this.selected = item.id;
-      this.todoName = item.rawName;
+      this.initFlag = false
+      this.selected = item.id
+      this.todoName = item.rawName
     },
     getOptions() {
-      this.options = this.initRunFile;
+      this.options = this.initRunFile
     },
     isHide(item) {
       if (item.ref === 'left') {
-        item.shaowFlag = false;
-        this.leftSilderIcons[1].shaowFlag = true;
-        this.leftStyle.width = '62px';
-        this.rightStyle.width = 'calc(100% - 62px)';
-        this.logoFlag = false;
+        item.shaowFlag = false
+        this.leftSilderIcons[1].shaowFlag = true
+        this.leftStyle.width = '62px'
+        this.rightStyle.width = 'calc(100% - 62px)'
+        this.logoFlag = false
         this.allCategoryInform.forEach((val) => {
-          val.name = '';
-        });
-        this.leftStyle.categoryFlage = true;
-        this.logoImgStyleFlage = true;
+          val.name = ''
+        })
+        this.leftStyle.categoryFlage = true
+        this.logoImgStyleFlage = true
       } else if (item.ref === 'right') {
-        item.shaowFlag = false;
-        this.leftSilderIcons[0].shaowFlag = true;
-        this.leftStyle.width = '180px';
-        this.rightStyle.width = 'calc(100% - 180px)';
-        this.logoFlag = true;
+        item.shaowFlag = false
+        this.leftSilderIcons[0].shaowFlag = true
+        this.leftStyle.width = '180px'
+        this.rightStyle.width = 'calc(100% - 180px)'
+        this.logoFlag = true
         this.allCategoryInform.forEach((val) => {
-          val.icon = val.iconCopy;
-          val.name = val.nameCopy;
-        });
-        this.leftStyle.categoryFlage = false;
-        this.logoImgStyleFlage = false;
+          val.icon = val.iconCopy
+          val.name = val.nameCopy
+        })
+        this.leftStyle.categoryFlage = false
+        this.logoImgStyleFlage = false
       }
     },
     rightSilder(item) {
       if (item.ref === 'right') {
-        item.shaowFlag = false;
-        this.rightSilderIcons[1].shaowFlag = true;
-        this.contentsStyle.leftWidth = 'calc(100% - 26px)';
-        this.contentsStyle.rightShowFlag = false;
-        this.rightRetract.setBackLeft = '0.5';
-        this.rightRetract.width = '26px';
-        this.rightRetract.retractFlage = true;
+        item.shaowFlag = false
+        this.rightSilderIcons[1].shaowFlag = true
+        this.contentsStyle.leftWidth = 'calc(100% - 26px)'
+        this.contentsStyle.rightShowFlag = false
+        this.rightRetract.setBackLeft = '0.5'
+        this.rightRetract.width = '26px'
+        this.rightRetract.retractFlage = true
       } else if (item.ref === 'left') {
-        item.shaowFlag = false;
-        this.rightSilderIcons[0].shaowFlag = true;
-        this.contentsStyle.leftWidth = 'calc(100% - 290px)';
-        this.contentsStyle.rightShowFlag = true;
-        this.rightRetract.setBackLeft = '0';
-        this.rightRetract.width = '290px';
-        this.rightRetract.retractFlage = false;
+        item.shaowFlag = false
+        this.rightSilderIcons[0].shaowFlag = true
+        this.contentsStyle.leftWidth = 'calc(100% - 290px)'
+        this.contentsStyle.rightShowFlag = true
+        this.rightRetract.setBackLeft = '0'
+        this.rightRetract.width = '290px'
+        this.rightRetract.retractFlage = false
       }
     },
     jsutTest(val) {
@@ -1123,120 +1142,120 @@ export default {
           if (this.svgDownloadList[this.selectedRaw].length === 0) {
             this.setErrorMessage(
               `${'请先在当前页面勾选需要下载的图片' + '_'}${new Date().getTime()}`
-            );
+            )
           } else {
-            this.dialogFormVisible = true;
+            this.dialogFormVisible = true
           }
         } else {
-          this.setErrorMessage(`${'当前页面不支持下载' + '_'}${new Date().getTime()}`);
-          this.dialogFormVisible = false;
+          this.setErrorMessage(`${'当前页面不支持下载' + '_'}${new Date().getTime()}`)
+          this.dialogFormVisible = false
         }
       } else if (val === 'fullScreen') {
         const isFull =
           document.fullscreenElement ||
           document.mozFullScreenElement ||
           document.webkitFullscreenElement ||
-          document.msFullscreenElement;
+          document.msFullscreenElement
         if (isFull) {
           if (document.cancelFullScreen) {
-            document.cancelFullScreen();
+            document.cancelFullScreen()
           } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
+            document.mozCancelFullScreen()
           } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
+            document.webkitCancelFullScreen()
           } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
+            document.msExitFullscreen()
           }
         } else {
-          let element;
+          let element
           if (this.selectedRaw === 'graph') {
-            element = document.getElementById('full-screen1');
+            element = document.getElementById('full-screen1')
           } else {
-            element = document.getElementById('full-screen');
+            element = document.getElementById('full-screen')
           }
           if (element.requestFullscreen) {
-            element.requestFullscreen();
+            element.requestFullscreen()
           } else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen();
+            element.msRequestFullscreen()
           } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
+            element.mozRequestFullScreen()
           } else if (element.webkitRequestFullScreen) {
-            element.webkitRequestFullScreen();
+            element.webkitRequestFullScreen()
           }
         }
       } else if (val === 'custom') {
         const { className } = document
           .getElementsByClassName('category-selected')[0]
-          .getElementsByTagName('i')[0];
-        const iconName = className.split(' ')[1];
-        let index = 0;
+          .getElementsByTagName('i')[0]
+        const iconName = className.split(' ')[1]
+        let index = 0
         for (; index < this.allCategoryInform.length; index += 1) {
           if (this.allCategoryInform[index].icon === iconName) {
-            index = this.allCategoryInform[index].rawName;
-            break;
+            index = this.allCategoryInform[index].rawName
+            break
           }
         }
-        this.setData(index);
+        this.setData(index)
         if (this.$route.path !== '/index/custom') {
-          this.$router.push({ path: '/index/custom' });
+          this.$router.push({ path: '/index/custom' })
         }
       }
     },
     downloadSvg() {
-      this.dialogFormVisible = false;
+      this.dialogFormVisible = false
       this.svgDownloadList[this.selectedRaw].forEach((val) => {
-        const testDOM = document.querySelector(val);
+        const testDOM = document.querySelector(val)
         download.covertSVG2Image(
           testDOM,
           this.form.input,
           testDOM.width.baseVal.value,
           testDOM.height.baseVal.value,
           this.form.type
-        );
-      });
-      this.form.input = '下载';
-      this.form.type = 'png';
+        )
+      })
+      this.form.input = '下载'
+      this.form.type = 'png'
     },
     downCancel() {
-      this.dialogFormVisible = false;
-      this.form.input = '下载';
-      this.form.type = 'png';
+      this.dialogFormVisible = false
+      this.form.input = '下载'
+      this.form.type = 'png'
     },
     testDownloadJson2csv() {
       const testObject = [
         {
           name: 'xds',
           age: '26',
-          gender: 'male',
+          gender: 'male'
         },
         {
           name: 'zhngsnan',
           age: '22',
-          gender: 'male',
-        },
-      ];
-      download.downloadJSON2CSV(testObject);
+          gender: 'male'
+        }
+      ]
+      download.downloadJSON2CSV(testObject)
     },
     getTigger(val) {
-      const time = new Date();
-      const currentTime = time.toLocaleString();
-      if (val.ref === 'setting') {
-        this.setTimer(currentTime);
-      }
+      // const time = new Date()
+      // const currentTime = time.toLocaleString()
+      // if (val.ref === 'setting') {
+      //   this.setTimer(currentTime)
+      // }
       if (val.ref === 'setting') {
         // 将同步窗口显示
-        this.dataSyncVisible = true;
+        this.dataSyncVisible = true
       }
       if (val.ref === 'help') {
-        this.operationGuide = true;
+        this.operationGuide = true
       }
     },
     fontSize() {
-      const deviceWidth = document.documentElement.offsetWidth;
-      this.autoFontSize = parseInt(deviceWidth / 109, 10);
-    },
-  },
-};
+      const deviceWidth = document.documentElement.offsetWidth
+      this.autoFontSize = parseInt(deviceWidth / 109, 10)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -1290,7 +1309,7 @@ export default {
   border-radius: 3px;
 
   /deep/ .el-select__tags {
-    top: 40%;
+    top: 70%;
     flex-wrap: nowrap;
     overflow: hidden;
   }
@@ -1317,7 +1336,11 @@ export default {
   /deep/ .el-input__suffix {
     top: 10%;
   }
-
+  
+  /deep/ .el-select__caret{
+    margin: 20% 0 0 0;
+  }
+  
   /deep/ .is-reverse {
     margin: -20% 0 0 0;
   }

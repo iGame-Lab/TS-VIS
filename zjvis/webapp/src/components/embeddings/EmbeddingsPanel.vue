@@ -107,7 +107,7 @@
                 </el-col>
                 <el-col :span="6">
                   <div class="grid-content">
-                    <span text-align="center" class="midFont">{{ curMapStep }} / {{ curMax }}</span>
+                    <span text-align="center" class="midFont">{{ curMapStep }}/{{ curMax }}</span>
                   </div>
                 </el-col>
               </el-row>
@@ -254,18 +254,20 @@ export default {
       'getMessage',
       'getInitStateFlag',
       'getErrorMessage',
-      'getLineWidth'
+      'getLineWidth',
+      'getIntervalChange'
     ]),
     ...mapLayoutStates([
       'userSelectRunFile'
     ]),
-    ...mapLayoutGetters(['getParams'])
+    ...mapLayoutGetters(['getParams', 'getTimer'])
   },
   watch: {
     curLineWidth: function() {
       this.setLineWidth(this.curLineWidth)
     },
     getReceivedCurInfo: function() { // 只触发一次第一次
+      if(this.getReceivedCurInfo == false) return
       if (this.userSelectRunFile === '') {
         return
       }
@@ -275,14 +277,20 @@ export default {
           this.curTags = this.getCategoryInfo.curTags[i].slice(0)
         }
       }
-      this.curTag = this.curTags[0]
+      let index = this.curTags.indexOf(this.curTag);
+      if(index < 0 || this.curTag == '')  {
+        this.curTag = this.curTags[0]
+        this.setCurInfo(['curStep', 0])
+        this.curStep = this.getCurInfo.curStep  
+      }
       this.curMethod = this.getCurInfo.curMethod
       this.curDim = this.getCurInfo.curDim
-      this.curStep = this.getCurInfo.curStep
+      
       this.curMax = this.getQuestionInfo[this.userSelectRunFile][this.curTag].allSteps[this.getQuestionInfo[this.userSelectRunFile][this.curTag].curMax]
       this.curMapMax = this.getQuestionInfo[this.userSelectRunFile][this.curTag].curMax
       this.curMin = 0
       this.curMapStep = this.getQuestionInfo[this.userSelectRunFile][this.curTag].allSteps[this.curStep]
+      this.setCurInfo(['curMapStep', this.curMapStep])
       const param = {
         run: this.userSelectRunFile,
         tag: this.curTag,
@@ -342,13 +350,45 @@ export default {
             } else {
               vm.curStep++
             }
-            // vm.curStep++
-            // if (vm.curStep >= vm.curMapMax) {
-            //   vm.playAction = false
-            // }
           }
         }, 2000)
       }
+    },
+    getIntervalChange: function() {
+      this.setMessage('')
+      if (!this.getReceivedQuestionInfo) {
+        // console.log('数据还没有整理好')
+        return
+      }
+      this.setCurInfo(['received', false]) // 屏蔽别的请求
+      this.fetchOneStep(this.userSelectRunFile);
+      // console.log(this.getTimer)
+      // if(this.getReceivedCurInfo == false) return
+      // if (this.userSelectRunFile === '') {
+      //   return
+      // }
+      // this.setCurInfo(['received', false]) // 屏蔽别的请求
+      // for (let i = 0; i < this.getCategoryInfo.curRuns.length; i++) {
+      //   if (this.userSelectRunFile === this.getCategoryInfo.curRuns[i]) {
+      //     this.curTags = this.getCategoryInfo.curTags[i].slice(0)
+      //   }
+      // }
+      // if(this.curTag.length == 0) this.curTag = this.curTags[0];
+      // this.curMethod = this.getCurInfo.curMethod
+      // this.curDim = this.getCurInfo.curDim
+      // this.curStep = this.getCurInfo.curStep
+      // this.curMax = this.getQuestionInfo[this.userSelectRunFile][this.curTag].allSteps[this.getQuestionInfo[this.userSelectRunFile][this.curTag].curMax]
+      // this.curMapMax = this.getQuestionInfo[this.userSelectRunFile][this.curTag].curMax
+      // this.curMin = 0
+      // this.curMapStep = this.getQuestionInfo[this.userSelectRunFile][this.curTag].allSteps[this.curStep]
+      // const param = {
+      //   run: this.userSelectRunFile,
+      //   tag: this.curTag,
+      //   step: this.curMapStep,
+      //   method: this.curMethod.toLowerCase(),
+      //   dims: parseInt(this.curDim)
+      // }
+      // this.fetchDataPower(param)
     },
     userSelectRunFile: function() {
       this.setMessage('')
@@ -357,27 +397,7 @@ export default {
         return
       }
       this.setCurInfo(['received', false]) // 屏蔽别的请求
-      for (let i = 0; i < this.getCategoryInfo.curRuns.length; i++) {
-        if (this.userSelectRunFile === this.getCategoryInfo.curRuns[i]) {
-          this.curTags = this.getCategoryInfo.curTags[i].slice(0)
-        }
-      }
-      this.curTag = this.curTags[0]
-      this.curMethod = 'PCA'
-      this.curDim = '3维'
-      this.curStep = 0
-      this.curMax = this.getQuestionInfo[this.userSelectRunFile][this.curTag].allSteps[this.getQuestionInfo[this.userSelectRunFile][this.curTag].curMax]
-      this.curMapMax = this.getQuestionInfo[this.userSelectRunFile][this.curTag].curMax
-      this.curMin = 0
-      this.curMapStep = this.getQuestionInfo[this.userSelectRunFile][this.curTag].allSteps[this.curStep]
-      const param = {
-        run: this.userSelectRunFile,
-        tag: this.curTag,
-        step: this.curMapStep,
-        method: this.curMethod.toLowerCase(),
-        dims: parseInt(this.curDim)
-      }
-      this.fetchDataPower(param)
+      this.fetchOneStep(this.userSelectRunFile);
     },
     getErrorMessage(val) {
       this.$message({
@@ -392,7 +412,7 @@ export default {
     if (!this.getInitStateFlag) {
       if (this.getReceivedCategoryInfo) {
         // console.log('mounted fetchAllStep')
-        this.fetchAllStep()
+        this.fetchOneStep()
       }
     } else {
       this.setInitStateFlag(false)
@@ -432,7 +452,7 @@ export default {
       'setInitStateFlag',
       'setLineWidth'
     ]),
-    ...mapEmbeddingActions(['fetchSampleData', 'featchData', 'fetchAllStep']),
+    ...mapEmbeddingActions(['fetchSampleData', 'featchData', 'fetchAllStep', 'fetchOneStep']),
     playActionClick() {
       this.playAction = !this.playAction // 取非
       if (this.playAction) {

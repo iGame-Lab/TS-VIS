@@ -150,7 +150,7 @@
               :tag="item[1]"
               :itemp="item[4]"
               :componentName="componentName"
-              :runColor="getStatisticColor[item[3] % 5]"
+              :runColor="getStatisticColor[item[3] % getStatisticColor.length]"
               :divId="idArray[item[4]]"
               :parentComponent="parentComponent"
               checked="false"
@@ -201,13 +201,24 @@ export default {
       'getDataSetsState',
       'getStatisticColor',
       'getHistShow',
-      'getDistShow'
+      'getDistShow',
+      'getUpdateFlag',
+      'getFeatchHistDataFinished',
+      'getFeatchDistDataFinished'
     ]),
     ...mapLayoutStates([
       'userSelectRunFile'
     ])
   },
   watch: {
+    getUpdateFlag() {
+      if (this.categoryInfo === 'distribution' && this.getFeatchDistDataFinished && this.showFlag) {
+        this.featchAllDistData()
+      }
+      if (this.categoryInfo === 'histogram' && this.getFeatchHistDataFinished && this.showFlag) {
+        this.featchAllHistData()
+      }
+    },
     getMode(curMode) {
       if (this.categoryInfo === 'histogram') {
         if (curMode === '三维') {
@@ -219,7 +230,7 @@ export default {
     },
     getBinNum(newBinNum) {
       if (this.categoryInfo === 'histogram') {
-        this.manageHistData(true)
+        this.manageHistData({ index: 0, length: this.getHistData.length })
       }
     },
     getHistData(data) {
@@ -249,6 +260,7 @@ export default {
       if (this.categoryInfo === 'histogram') {
         this.showFlag = val
         if (val) {
+          this.setHistData()
           document.getElementsByClassName('statistics-container')[0].scrollIntoView(true)
         }
       }
@@ -266,17 +278,20 @@ export default {
   created() {
     if (this.categoryInfo === 'histogram') {
       this.categoryName = '直方图'
-      this.showFlag = true
-      this.setHistShow(true) // 初始默认
-      this.setHistData()
+      this.showFlag = this.getHistShow
+      if (this.showFlag) {
+        this.setHistData()
+      }
     } else {
       this.categoryName = '分布图'
-      this.showFlag = false
-      this.setDistShow(false)
+      this.showFlag = this.getDistShow
+      if (this.showFlag) {
+        this.setDistData()
+      }
     }
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll, true) // 监听滑动条
+    // window.addEventListener('scroll', this.handleScroll, true) // 监听滑动条
     this.setDatasetsShow()
   },
   methods: {
@@ -286,7 +301,9 @@ export default {
       'setDataSetsState',
       'setInitStateFlag',
       'setHistShow',
-      'setDistShow'
+      'setDistShow',
+      'clearHistData',
+      'clearDistData'
     ]),
     showContent() {
       if (this.categoryInfo === 'histogram') {
@@ -331,16 +348,16 @@ export default {
       }
       this.setRunData()
     },
-    handleScroll(e) { // 页面滑动过程中修改histDist标志，高亮右侧控制面板
-      if (document.getElementsByClassName('statistics-container')[1] !== undefined) {
-        const curDistHeight = document.getElementsByClassName('statistics-container')[1].getBoundingClientRect().top
-        if (curDistHeight < window.innerHeight * 0.7) {
-          this.setDistShow(true)
-        } else if (curDistHeight > window.innerHeight) {
-          this.setHistShow(true)
-        }
-      }
-    },
+    // handleScroll(e) { // 页面滑动过程中修改histDist标志，高亮右侧控制面板
+    //   if (document.getElementsByClassName('statistics-container')[1] !== undefined) {
+    //     const curDistHeight = document.getElementsByClassName('statistics-container')[1].getBoundingClientRect().top
+    //     if (curDistHeight < window.innerHeight * 0.7) {
+    //       this.setDistShow(true)
+    //     } else if (curDistHeight > window.innerHeight) {
+    //       this.setHistShow(true)
+    //     }
+    //   }
+    // },
     setDatasetsShow() {
       const stateTemp = []
       for (let i = 0; i < this.getDataSets.length; i++) {
@@ -367,6 +384,7 @@ export default {
         runDataTemp[count].push(this.allData[i])
       }
       this.runData = runDataTemp
+      this.setDatasetsShow()
     }
   }
 }

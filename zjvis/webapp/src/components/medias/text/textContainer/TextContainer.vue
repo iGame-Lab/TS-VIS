@@ -39,8 +39,8 @@
               class="my-label"
             >
               <div class="circle-father"><div class="circle" /></div>
-              <div class="my-text">
-                <p>
+              <div class="my-text" >
+                <p style="white-space: pre-wrap;" v-html="item">
                   {{ item }}
                 </p>
               </div>
@@ -67,6 +67,7 @@ const {
   mapMutations: mapCustomMutations,
   mapGetters: mapCustomGetters
 } = createNamespacedHelpers('custom')
+const { mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
 import { unixTimestamp2Normal } from '@/utils/utils'
 export default {
   name: 'TextContainer',
@@ -84,11 +85,15 @@ export default {
     }
   },
   computed: {
-    ...mapCustomGetters(['getText'])
+    ...mapCustomGetters(['getText']),
+    ...mapLayoutGetters(['getParams', 'getTimer'])
   },
   watch: {
     scrollvalue(val) {
       this.normalTime = unixTimestamp2Normal(this.textcontent[this.scrollvalue].wall_time)
+    },
+    getTimer: function() {
+      this.textcontent = this.content.value[Object.keys(this.content.value)[0]]
     }
   },
   created() {

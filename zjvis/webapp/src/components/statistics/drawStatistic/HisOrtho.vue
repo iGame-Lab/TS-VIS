@@ -42,6 +42,34 @@ export default {
   },
   methods: {
     ...mapStatisticMutations(['setStatisticInfo']),
+    // 科学计数法
+    numberChangeToE(d) {
+      if (Math.abs(d) > 10000) {
+        let numLen = numLen = d.toString().length - 1
+        if (d < 0) {
+          numLen = d.toString().length - 2
+        }
+        return `${(d / Math.pow(10, numLen)).toFixed(2)}e+${numLen}`
+      } else if (Math.abs(d) < 0.001) {
+        if (d === 0) return d
+        const dString = d.toString()
+        if (dString.indexOf('e') !== -1) return d
+        let i = 3
+        if (d < 0) {
+          i = 4
+        }
+        for (; i < dString.length; i++) {
+          if (dString[i] !== '0') {
+            break
+          }
+        }
+        if (d < 0) {
+          i = i - 1
+        }
+        return `${(d * Math.pow(10, i - 1)).toFixed(2)}e-${(i - 1)}`
+      }
+      return d
+    },
     drawOverlay: function() {
       // label是这组数据的标签，ttlabel是这组数据属于哪个集合
       const label = this.id
@@ -102,13 +130,7 @@ export default {
             .scale(xscale)
             .ticks(5)
             .tickSize(-height)
-            .tickFormat(d => {
-              if (d > 10000) {
-                const numLen = d.toString().length - 1
-                return d / Math.pow(10, numLen) + 'e+' + numLen
-              }
-              return d
-            })
+            .tickFormat(d => this.numberChangeToE(d))
         )
       const yscale = d3
         .scaleLinear()
@@ -126,23 +148,7 @@ export default {
           d3
             .axisRight()
             .scale(yscale)
-            .tickFormat(d => {
-              if (d > 10000) {
-                const numLen = d.toString().length - 1
-                return d / Math.pow(10, numLen) + 'e+' + numLen
-              } else if (d < 0.001) {
-                if (d === 0) return d
-                const dString = d.toString()
-                let i = 3
-                for (; i < dString.length; i++) {
-                  if (dString[i] !== '0') {
-                    break
-                  }
-                }
-                return (d * Math.pow(10, i - 1)).toFixed(1) + 'e-' + (i - 1)
-              }
-              return d
-            })
+            .tickFormat(d => this.numberChangeToE(d))
             .tickSize(-width)
         )
       svg.append('g').append('text')

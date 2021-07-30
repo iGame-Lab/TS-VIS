@@ -28,8 +28,9 @@ const state = {
   freshFlag: true, // 上一步刷新的请求全部结束后再进行这一步的请求
   downLoadArray: [], // 下载svg图暂存id
   // 在加载数据和渲染时不允许用户操作控制面板
-  featchDataFinished: false,
-  drawAllSvgFinished: false
+  featchHistDataFinished: true,
+  featchDistDataFinished: true,
+  updateFlag: false
 }
 
 const getters = {
@@ -52,8 +53,9 @@ const getters = {
   getHistShow: (state) => state.histShow,
   getDistShow: (state) => state.distShow,
   getDownLoadArray: (state) => state.downLoadArray,
-  getFeatchDataFinished: (state) => state.featchDataFinished,
-  getDrawAllSvgFinished: (state) => state.drawAllSvgFinished
+  getFeatchHistDataFinished: (state) => state.featchHistDataFinished,
+  getFeatchDistDataFinished: (state) => state.featchDistDataFinished,
+  getUpdateFlag: (state) => state.updateFlag
 }
 
 const actions = {
@@ -67,10 +69,18 @@ const actions = {
       }
     }
   },
-
+  async getIntervalSelfCategoryInfo(context, param) {
+    // 上一次还没有请求结束，这一次就不响应了
+    if (context.state.featchDistDataFinished && context.state.featchHistDataFinished) {
+      param.push({ initStateFlag: false })
+      context.commit('setIntervalSelfCategoryInfo', param)
+      context.commit('setUpdateFlag')
+    }
+  },
   async featchAllDistData(context) {
-    for (let k = 0; k < context.state.dataSets.length; k++) {
-      for (let i = 0; i < context.state.histTags[k].length; i++) {
+    context.commit('setFeatchDistDataFinished', false)
+    for (let k = 0, count = 0; k < context.state.dataSets.length; k++) {
+      for (let i = 0; i < context.state.histTags[k].length; i++, count++) {
         await http.useGet(port.category.distribution,
           { run: context.state.dataSets[k], tag: context.state.histTags[k][i] })
           .then(res => {
@@ -78,18 +88,17 @@ const actions = {
               context.commit('setErrorMessage', context.state.dataSets[k] + ',' + context.state.histTags[k][i] + ',' + res.data.msg)
               return
             }
-            context.commit('storeDistData', [context.state.dataSets[k], context.state.histTags[k][i], res.data.data[context.state.histTags[k][i]], k])
-            context.commit('manageDistData')
+            context.commit('storeDistData', [context.state.dataSets[k], context.state.histTags[k][i], res.data.data[context.state.histTags[k][i]], k, count])
+            context.commit('manageDistData', count)
           })
       }
     }
+    context.commit('setFeatchDistDataFinished', true)
   },
   async featchAllHistData(context) {
-    context.commit('clearData')
-    context.commit('setFeatchDataFinished', false) // 定时刷新时
-    context.commit('setDrawAllSvgFinished', false)
-    for (let k = 0; k < context.state.dataSets.length; k++) {
-      for (let i = 0; i < context.state.histTags[k].length; i++) {
+    context.commit('setFeatchHistDataFinished', false)
+    for (let k = 0, count = 0; k < context.state.dataSets.length; k++) {
+      for (let i = 0; i < context.state.histTags[k].length; i++, count++) {
         await http.useGet(port.category.histogram,
           { run: context.state.dataSets[k], tag: context.state.histTags[k][i] })
           .then(res => {
@@ -103,14 +112,12 @@ const actions = {
               context.commit('changeShownumber', Math.round(5000.0 / dataLen))
             }
             // 根据上面也可以确定桶个数的最大值
-            if (k === context.state.dataSets.length - 1 && i === context.state.histTags[k].length - 1) {
-              context.commit('setFeatchDataFinished', true)
-            }
-            context.commit('storeHistData', [context.state.dataSets[k], context.state.histTags[k][i], res.data.data[context.state.histTags[k][i]], k])
-            context.commit('manageHistData', false)
+            context.commit('storeHistData', [context.state.dataSets[k], context.state.histTags[k][i], res.data.data[context.state.histTags[k][i]], k, count])
+            context.commit('manageHistData', { index: count, length: 1 })
           })
       }
     }
+    context.commit('setFeatchHistDataFinished', true)
     context.commit('setFreshFlag', true)
   }
 }
@@ -127,6 +134,22 @@ const mutations = {
       state.dataSetsState[state.dataSets[i]] = true
     }
     state.initStateFlag = param[2]['initStateFlag']
+  },
+  setIntervalSelfCategoryInfo: (state, param) => {
+    state.categoryInfo = ['histogram', 'distribution']
+    state.dataSets = param[0]
+    for (let i = 0; i < state.dataSets.length; i++) {
+      state.histTags.push(param[1][i]['histogram'])
+    }
+    state.initStateFlag = param[2]['initStateFlag']
+    // 然后判断run和tag的长度有没有变化，去修改distData、histData的长度
+    // 这里可以暂时不要，现在认为run和tag不会发生变化，只有具体的数据内容发生变化
+    // let len = 0
+    // for (let i = 0; i < state.dataSets.length; i++) {
+    //   len += param[1][i]['histogram'].length
+    // }
+    // state.histData.length = len
+    // state.distData.length = len
   },
   setInitStateFlag: (state, param) => {
     state.initStateFlag = param
@@ -155,10 +178,16 @@ const mutations = {
     state.showNumber = curNumber
   },
   storeDistData: (state, data) => {
-    state.oldDistData.push(data)
+    const k = data.pop()
+    if (state.oldDistData.length > k) {
+      state.oldDistData.splice(k, 1, data)
+    } else {
+      state.oldDistData.push(data)
+    }
   },
-  manageDistData: (state) => {
-    const k = state.oldDistData.length - 1 // 每次只处理最新获取到的数据
+  manageDistData: (state, param) => {
+    // 还要考虑是否是更新的数据
+    const k = param // 每次只处理最新获取到的数据
     const oneData = state.oldDistData[k][2]
     const newData = []
     for (let i = 0; i <= 8; i++) {
@@ -178,28 +207,37 @@ const mutations = {
         newData[i][j].push(newData[i - 1][j][1])
       }
     }
-    state.distData.push([state.oldDistData[k][0], state.oldDistData[k][1], newData, state.oldDistData[k][3], k])
-    state.distCheckedArray.push(false)
+    const newTempData = [state.oldDistData[k][0], state.oldDistData[k][1], newData, state.oldDistData[k][3], k]
+    if (param >= state.distData) {
+      state.distData.push(newTempData)
+      state.distCheckedArray.push(false)
+    } else {
+      state.distData.splice(k, 1, newTempData)
+    }
   },
-  clearData: (state) => {
+  clearHistData: (state) => {
     state.oldHistData = []
     state.histData = []
     state.histCheckedArray = []
-    // 同时清空dist数据，因为页面刷新
+  },
+  clearDistData: (state) => {
     state.oldDistData = []
     state.distData = []
     state.distCheckedArray = []
   },
   storeHistData: (state, data) => {
-    state.oldHistData.push(data)
+    const k = data.pop()
+    if (state.oldHistData.length > k) {
+      state.oldHistData.splice(k, 1, data)
+    } else {
+      state.oldHistData.push(data)
+    }
   },
   manageHistData: (state, param) => {
     // 不仅在取出初始数据时调用，在修改桶数时也调用这个函数
-    // 加个param，false表示是初始获取数据，处理最后一个；true表示是修改桶数，处理所有
+    // 加个param，是数组开始下标和长度
     const histDataTemp = []
-    let k = 0
-    if (!param) k = state.oldHistData.length - 1
-    for (; k < state.oldHistData.length; k++) {
+    for (let k = param.index, len = param.index + param.length; k < len; k++) {
       const data = state.oldHistData[k][2]
       const newdata = []
       let min = 1000
@@ -242,11 +280,11 @@ const mutations = {
       }
       histDataTemp.push([state.oldHistData[k][0], state.oldHistData[k][1], newdata, state.oldHistData[k][3], k])
     }
-    if (!param) {
-      state.histData.push(histDataTemp[0])
+    if (param.index >= state.histData.length) {
       state.histCheckedArray.push(false)
-    } else { // 修改桶数
-      state.histData = histDataTemp
+      state.histData.push(histDataTemp[0])
+    } else {
+      state.histData.splice(param.index, param.length, ...histDataTemp)
     }
   },
   setBinNum: (state, binNum) => {
@@ -286,11 +324,14 @@ const mutations = {
       }
     }
   },
-  setDrawAllSvgFinished(state, param) {
-    state.drawAllSvgFinished = param
+  setFeatchHistDataFinished(state, param) {
+    state.featchHistDataFinished = param
   },
-  setFeatchDataFinished(state, param) {
-    state.featchDataFinished = param
+  setFeatchDistDataFinished(state, param) {
+    state.featchDistDataFinished = param
+  },
+  setUpdateFlag(state) {
+    state.updateFlag = !state.updateFlag
   }
 }
 

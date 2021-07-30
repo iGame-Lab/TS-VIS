@@ -17,8 +17,8 @@
 """
 from watchdog.observers.polling import PollingObserver
 from watchdog.events import *
-from loader.logfile_loader import Trace_Thread
-from utils.logfile_utils import *
+from zjvis.parser.loader.logfile_loader import Trace_Thread
+from zjvis.parser.utils.logfile_utils import *
 
 class Watcher_Handler(FileSystemEventHandler):
     def __init__(self, run, path, cache_path, event):

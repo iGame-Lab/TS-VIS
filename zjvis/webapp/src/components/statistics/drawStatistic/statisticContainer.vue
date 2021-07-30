@@ -183,16 +183,18 @@ export default {
       this.setDownLoadArray([this.rightTopShow, idTemp])
       this.setDownloadSvgClass['statistic'] = this.getDownLoadArray
     },
-    setRangeNumber: function() {
-      let newNumber = this.getShowNumber
-      if (!this.parentComponent) newNumber = this.getStatisticShowNumber
-      const datalen = this.data.length
-      const count = Math.ceil(newNumber / 100.0 * datalen)
-      const stepspace = datalen / count
-      this.rateData = []
-      for (let j = 0; j < count; j++) {
-        const step = Math.floor(stepspace * j)
-        this.rateData.push(this.data[step])
+    setRangeNumber() {
+      if (this.componentName !== 'overlook') {
+        let newNumber = this.getShowNumber
+        if (!this.parentComponent) newNumber = this.getStatisticShowNumber
+        const datalen = this.data.length
+        const count = Math.ceil(newNumber / 100.0 * datalen)
+        const stepspace = datalen / count
+        this.rateData = []
+        for (let j = 0; j < count; j++) {
+          const step = Math.floor(stepspace * j)
+          this.rateData.push(this.data[step])
+        }
       }
     }
   }
