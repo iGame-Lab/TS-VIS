@@ -35,7 +35,7 @@
     <div class="temp">
       <div id="excepDisplay" :class="['display-panel']">
         <div v-if="getExceptionShow">
-          <excepContainer :oneData="getAllData[0]" :index="0" :oneAllStep="getAllStep[0]" />
+          <excepContainer :oneData="getAllData[0]" :index="0" :oneAllStep="oneAllStep[0]" />
         </div>
       </div>
     </div>
@@ -52,10 +52,22 @@ export default {
     excepContainer
   },
   computed: {
-    ...mapExceptionGetters(['getRun', 'getTag', 'getAllStep', 'getAllData', 'getInitStateFlag', 'getErrorMessage', 'getExceptionShow', 'getUpdateFlag']),
-    ...mapLayoutStates(['userSelectRunFile'])
+    ...mapExceptionGetters(['getRun', 'getTag', 'getAllStep', 'getAllData', 'getInitStateFlag', 'getErrorMessage', 'getExceptionShow', 'getUpdateFlag', 'getFetchAllStepNotify', 'getUpdateHistMatrixDataFlag', 'getCurRunTag']),
+    ...mapLayoutStates(['userSelectRunFile']),
+    oneAllStep() {
+      return this.getAllStep
+    }
   },
   watch: {
+    getFetchAllStepNotify() {
+      if (this.getUpdateHistMatrixDataFlag === 'none') { // 如果run、tag、step没有变化，就不用请求颜色矩阵、直方图等数据了
+        return
+      } else if (this.getUpdateHistMatrixDataFlag.substr(0, 4) === 'step') { // 如果只是step变化，就用fetchOneData取数据
+        this.fetchOneData({ step: this.getCurRunTag.step })
+      } else {
+        this.fetchAllData()
+      }
+    },
     userSelectRunFile(val) {
       if (!this.getExceptionShow) return
       // 稳定后再响应run的变化
@@ -68,7 +80,7 @@ export default {
       }
       const param = { run: val, tag: this.getTag[index][0], index: index, step: '' }
       this.setCurRunTag(param)
-      this.setUpdateHistMatrixDataFlag(true)
+      this.setUpdateHistMatrixDataFlag('run' + val)
       this.fetchAllStep()
     },
     getErrorMessage(val) {
@@ -90,7 +102,7 @@ export default {
     }
   },
   methods: {
-    ...mapExceptionActions(['fetchAllStep', 'fetchAllData']),
+    ...mapExceptionActions(['fetchAllStep', 'fetchAllData', 'fetchOneData']),
     ...mapExceptionMutations(['setInitStateFlag', 'setRectCurInfo', 'setCurIqrTimes', 'setCurRunTag', 'setUpdateHistMatrixDataFlag'])
   }
 }

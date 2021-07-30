@@ -194,7 +194,7 @@ export default {
       temp['index'] = this.getCurRunTag.index
       temp['step'] = ''
       this.setCurRunTag(temp)
-      this.setUpdateHistMatrixDataFlag(true)
+      this.setUpdateHistMatrixDataFlag('tag' + newVal)
       this.fetchAllStep()
     },
     getRectCurInfo(val) {

@@ -158,14 +158,26 @@ export default {
       'getLinkChecked',
       'getDq0Show',
       'getUpDownValue',
-      'getUpdateHistMatrixDataFlag'
+      'getUpdateHistMatrixDataFlag',
+      'getCurRunTag'
     ])
   },
   watch: {
     oneAllStep(val) {
-      if (!this.getUpdateHistMatrixDataFlag) { // 如果只更新了step数据
+      if (this.getUpdateHistMatrixDataFlag === 'none' || this.getUpdateHistMatrixDataFlag.substr(0, 4) === 'step') { // 如果只更新了step数据
         this.myAllStep = val[2].step
         this.myBoxPercent = val[2].box
+        this.curExcepBox = []
+        if (this.getUpdateHistMatrixDataFlag.substr(0, 4) === 'step') {
+          this.curStepIndex = this.myAllStep.indexOf(this.getCurRunTag.step)
+          if (this.curStepIndex <= 4) {
+            this.boxLeftIndex = 0
+            this.boxRightIndex = 4
+          } else {
+            this.boxLeftIndex = this.curStepIndex - 4
+            this.boxRightIndex = this.curStepIndex
+          }
+        }
         this.drawExcepBox()
         this.drawExcepStepAxis()
         d3.select(`#${this.excepBoxId}`).select(`.boxRect${this.curStepIndex}`).style('fill', '#B0B6E6')
@@ -622,7 +634,7 @@ export default {
       const padding = { left: 50, top: 10, right: 30, bottom: 10 }
       const stepWidth = stepSvgWidth - padding.left - padding.right
       const stepSvg = d3.select(`#${this.excepStepAxisId}`).append('svg').attr('width', '100%').attr('height', '100%')
-        .attr('preserveAspectRatio', 'xMidYMid meet').attr('viewBox', `0 0 ${stepSvgWidth} ${stepSvgHeight}`) // .append('g')
+        .attr('preserveAspectRatio', 'xMidYMid meet').attr('viewBox', `0 0 ${stepSvgWidth} ${stepSvgHeight}`)
       const allStep = this.myAllStep
       const stepArrayLen = allStep.length - 1
       const maxStep = allStep[stepArrayLen]
@@ -643,38 +655,27 @@ export default {
           if (d3.event.selection === null) {
             return
           }
+          // 只算brushLeft最接近的step，右侧的加上4
           const brushLeft = stepXScale.invert(d3.event.selection[0])
-          const brushRight = stepXScale.invert(d3.event.selection[1])
-          if (brushLeft > maxStep && brushRight > maxStep) return
           let leftK = 0
-          let rightK = stepArrayLen
           for (let i = 1; i <= stepArrayLen; i += 1) {
             if (brushLeft < allStep[i]) {
               leftK = i - 1
-              if (brushLeft - allStep[i - 1] > allStep[i] - brushLeft) {
+              if ((brushLeft - allStep[i - 1]) > (allStep[i] - brushLeft)) {
                 leftK = i
               }
               break
             }
           }
-          for (let i = leftK + 1; i <= stepArrayLen; i += 1) {
-            if (brushRight < allStep[i]) {
-              rightK = i - 1
-              if (brushRight - allStep[i - 1] > allStep[i] - brushRight) {
-                rightK = i
-              }
-              break
-            }
-          }
-          if (leftK === that.boxLeftIndex && rightK === that.boxRightIndex) {
+          if (leftK === that.boxLeftIndex) {
             return
           }
-          if (that.curStepIndex < leftK || that.curStepIndex > rightK) {
+          if (that.curStepIndex < leftK || that.curStepIndex > (leftK + 4)) {
             that.curExcepBox = []
             that.getOneStepData(leftK)
           }
           that.boxLeftIndex = leftK
-          that.boxRightIndex = rightK
+          that.boxRightIndex = (leftK + 4) >= stepArrayLen ? stepArrayLen : leftK + 4
           that.drawExcepBox()
           d3.select(`#${that.excepBoxId}`).select(`.boxRect${that.curStepIndex}`).style('fill', '#B0B6E6')
         })
@@ -951,7 +952,7 @@ export default {
       if (this.curStepIndex === idx) return
       this.drawRectFinished = false
       this.curStepIndex = idx
-      const param = { run: this.myOneData[0], tag: this.myOneData[1], step: this.myAllStep[idx], index: this.index }
+      const param = { step: this.myAllStep[idx] }
       this.fetchOneData(param)
     },
     getOneStepBoxData(flag, value, idx) { // 调整，获取新的异常点
