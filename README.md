@@ -1,6 +1,12 @@
-# zjvis
+<p align="center">
+  <img src="docs/images/logo.svg"></img>
+</p>
 
-[![](https://img.shields.io/badge/Python-%3E=3.6-blue.svg)](https://www.python.org/downloads/release/python-361/) ![](https://img.shields.io/badge/Version-0.1-rgb(68,204,17).svg)
+<p align="center">
+  <a href="https://www.python.org/downloads/release/python-361"><img src="https://img.shields.io/badge/Python-%3E=3.6-blue.svg"></img></a>
+  <a><img src="https://img.shields.io/badge/Version-0.2-rgb(68,204,17).svg"></img></a>
+  <a><img src="https://img.shields.io/badge/pypi-v0.2-blue.svg"></img></a>
+</p>
 
 Zjvis是杭州电子大学与之江实验室联合开发的深度学习可视化Python包。
 
