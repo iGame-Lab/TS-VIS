@@ -57,10 +57,10 @@ if __name__ == "__main__":
     export_onnx_model(eval_job, onnx_model_path='./logs/flow')
 
     # create a summaryWriter for logging data in train stage.
-    summaryWriter = SummaryWriter('../zjvis/logs/test/')
+    summaryWriter = SummaryWriter('./logs/flow')
 
     # add onnx and hparams
-    # summaryWriter.add_onnx_graph('./logs/flow/model.onnx')
+    summaryWriter.add_onnx_graph('./logs/flow/model.onnx')
     summaryWriter.add_hparams(tag='letnet',
                               hparam_dict={'batchSize':BATCH_SIZE, 'lrate':0.1},
                               metrics=['loss'])

@@ -50,11 +50,11 @@ class Trace_Thread(threading.Thread):
                 # caclulate_graph.json
                 sg_file_path = path_parser(self.cache_path, self.runname,
                                            category="graph", tag="s_graph")
-                cg_file_path = path_parser(self.cache_path, self.runname,
-                                           category="graph", tag="c_graph")
+                # cg_file_path = path_parser(self.cache_path, self.runname,
+                #                            category="graph", tag="c_graph")
 
                 CacheIO(sg_file_path).set_cache(data=_sg_content)
-                CacheIO(cg_file_path).set_cache(data=_cg_content)
+                # CacheIO(cg_file_path).set_cache(data=_cg_content)
             # 已完成graph文件解析，将完成标志放入队列
             if self.comm:
                 self.comm.put(self.name)
