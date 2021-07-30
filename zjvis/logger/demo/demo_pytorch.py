@@ -55,7 +55,7 @@ def train(epochs=10):
     summarywriter.add_hparams(tag='mnist',
                               hparam_dict={'lrate': lrate,
                                            'batchSize': batchSize,
-                                           'epoch': epochs},
+                                           'epoch':epochs},
                               metrics=['loss'])
 
     train_accs = []
