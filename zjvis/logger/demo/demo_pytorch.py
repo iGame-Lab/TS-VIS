@@ -51,7 +51,7 @@ def train(epochs=10):
     # the tag of embedding and embedding_sample must be same.
     summarywriter = SummaryWriter('./logs/torch/')
     summarywriter.add_graph(net, (test_x.to(device),), verbose=False)
-    summarywriter.add_embedding_sample('minist', test_x.cpu().numpy(), 'image')
+    summarywriter.add_embedding_sample('minist', test_x.squeeze().cpu().numpy(), 'image')
     summarywriter.add_hparams(tag='mnist',
                               hparam_dict={'lrate': lrate,
                                            'batchSize': batchSize,

@@ -95,7 +95,7 @@ def train():
             writer = SummaryWriter('logs/tf/')
 
             writer.add_graph(sess.graph, model_type='tensorflow')
-            writer.add_embedding_sample('output', test_batch[0], sample_type='image')
+            writer.add_embedding_sample('output', test_batch[0].reshape(-1,28,28), sample_type='image')
             writer.add_hparams(tag='mnist_tf', hparam_dict={'batch':50, 'lrate':1e-4}, metrics=None)
 
             for i in range(500):
