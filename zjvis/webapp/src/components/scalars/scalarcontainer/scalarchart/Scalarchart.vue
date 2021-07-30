@@ -109,7 +109,7 @@ export default {
   watch: {
     freshnumber: function(val) {
       if (this.mergetype === '') {
-        d3.select('#svg' + this.classname).remove()
+        // d3.select('#svg' + this.classname).remove()
         this.SvgDraw()
       }
     },
@@ -324,6 +324,13 @@ export default {
         }
       }
       const smoothdata = [].concat(JSON.parse(JSON.stringify(data)))
+      
+      if (smoothdata.length === 0) {
+        return
+      } else {
+        d3.select('#svg' + this.classname).remove()
+      }
+      
       let last = smoothdata[0].value
       for (let i = 1; i < smoothdata.length; i++) {
         smoothdata[i].value = last * smooth + (1 - smooth) * smoothdata[i].value

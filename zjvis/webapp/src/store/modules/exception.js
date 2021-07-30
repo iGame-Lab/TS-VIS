@@ -22,7 +22,8 @@ const state = {
   oneDataTemp: [],
   successFlag: false,
   // 定时刷新
-  updateFlag: false // run和tag是否有变化，如果有变化，判断当前数据是否存在，如果存在就重新请求，否则请求一个新数据
+  updateFlag: false, // run和tag是否有变化，如果有变化，判断当前数据是否存在，如果存在就重新请求，否则请求一个新数据
+  updateHistMatrixDataFlag: true // 如果run、tag或step有变化，需要重新请求颜色矩阵和直方图的数据
 }
 
 const getters = {
@@ -42,7 +43,8 @@ const getters = {
   getErrorMessage: (state) => state.errorMessage,
   getDq0Show: (state) => state.dq0Show,
   getUpDownValue: (state) => state.upDownValue,
-  getUpdateFlag: (state) => state.updateFlag
+  getUpdateFlag: (state) => state.updateFlag,
+  getUpdateHistMatrixDataFlag: (state) => state.updateHistMatrixDataFlag
 }
 
 const actions = {
@@ -58,6 +60,7 @@ const actions = {
     // 不能在这里发起请求，得在vue组件中判断请求，否则不在本页面也会请求新数据
     context.commit('setIntervalSelfCategoryInfo', param)
   },
+  // 初始请求，改变run、改变tag时需要重新请求数据step数据，定时刷新也需要重新请求数据
   async fetchAllStep(context) { // param={run, tag}
     const param = {}
     param['run'] = context.state.curRunTag.run
@@ -75,14 +78,18 @@ const actions = {
     context.commit('setAllStep', allStepTemp)
     if (state.curRunTag.step === '' || allStepTemp[0][2].step.indexOf(state.curRunTag.step) === -1) {
       await context.commit('setCurStep', allStepTemp[0][2].step[0])
+      await context.commit('setUpdateHistMatrixDataFlag', true)
     }
-    context.dispatch('fetchAllData')
+    if (context.state.updateHistMatrixDataFlag) {
+      context.dispatch('fetchAllData')
+    }
   },
   async fetchData(context) {
-    const param = {}
-    param['run'] = context.state.curRunTag.run
-    param['tag'] = context.state.curRunTag.tag
-    param['step'] = context.state.curRunTag.step
+    const param = {
+      run: context.state.curRunTag.run,
+      tag: context.state.curRunTag.tag,
+      step: context.state.curRunTag.step
+    }
     const oneDataTemp = []
     let successFlag = true
     await http.useGet(port.category.exception_data, param).then(res => {
@@ -231,16 +238,20 @@ const mutations = {
     state.updateFlag = !state.updateFlag // 不管值如何，只监听变化
     // 如果run、tag发生变化，修改curRun、curTag
     if (state.curRunTag === null || state.run.indexOf(state.curRunTag.run) === -1) {
-      state.curRunTag['run'] = state.run[0]
-      state.curRunTag['tag'] = state.tag[0][0]
-      state.curRunTag['index'] = 0
-      state.curRunTag['step'] = ''
+      state.curRunTag = { run: state.run[0], tag: state.tag[0], index: 0, step: '' }
+      state.updateHistMatrixDataFlag = true
     } else if (state.tag[state.curRunTag['index']].indexOf(state.curRunTag.tag) === -1) {
       state.curRunTag['tag'] = state.tag[state.curRunTag['index']][0]
+      state.updateHistMatrixDataFlag = true
+    } else {
+      state.updateHistMatrixDataFlag = false
     }
   },
   setCurStep(state, param) {
     state.curRunTag.step = param
+  },
+  setUpdateHistMatrixDataFlag(state, param) {
+    state.updateHistMatrixDataFlag = param
   }
 }
 

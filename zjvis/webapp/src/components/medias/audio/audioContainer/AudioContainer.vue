@@ -108,9 +108,12 @@ export default {
   },
   computed: {
     ...mapCustomGetters(['getAudio']),
-    ...mapLayoutGetters(['getParams'])
+    ...mapLayoutGetters(['getParams', 'getTimer'])
   },
   watch: {
+    getTimer: function() {
+      this.audiocontent = this.content.value[Object.keys(this.content.value)[0]]
+    },
     async scrollvalue(val) {
       this.normalTime = unixTimestamp2Normal(this.audiocontent[this.scrollvalue].wall_time)
       const params = {

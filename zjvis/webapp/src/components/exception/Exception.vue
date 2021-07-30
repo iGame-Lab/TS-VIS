@@ -68,6 +68,7 @@ export default {
       }
       const param = { run: val, tag: this.getTag[index][0], index: index, step: '' }
       this.setCurRunTag(param)
+      this.setUpdateHistMatrixDataFlag(true)
       this.fetchAllStep()
     },
     getErrorMessage(val) {
@@ -90,7 +91,7 @@ export default {
   },
   methods: {
     ...mapExceptionActions(['fetchAllStep', 'fetchAllData']),
-    ...mapExceptionMutations(['setInitStateFlag', 'setRectCurInfo', 'setCurIqrTimes', 'setCurRunTag'])
+    ...mapExceptionMutations(['setInitStateFlag', 'setRectCurInfo', 'setCurIqrTimes', 'setCurRunTag', 'setUpdateHistMatrixDataFlag'])
   }
 }
 </script>
