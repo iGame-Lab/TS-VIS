@@ -155,8 +155,8 @@
               <div v-if="getMessage == ''">
                 <span>暂无信息</span>
               </div>
-              <el-card v-if="getMessage != ''" :body-style="{ padding: '0px' }" class="infoCard" display="none">
-                <div v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample']" class="showBox">
+              <el-card v-if="getMessage != ''" :body-style="{ padding: '0px' }" class="infoCard" display="none" align="middle">
+                <div v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample']" class="showBox" type="flex" align="middle">
                   <!-- <img v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample_type'] == 'image' && getMessage != ''" :src="getMessage[0]+'&trainJobName='+getParams.trainJobName" class="image"> -->
                   <!-- <AudioContainer v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample_type'] == 'audio' && getMessage != ''" :theUrl="getMessage[0]+'&trainJobName='+getParams.trainJobName" theControlList="noMuted noSpeed onlyOnePlaying" :index="1000" /> -->
                   <div v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample_type'] == 'text' && getMessage != ''" class="image">
@@ -173,15 +173,16 @@
                       />
                     <!-- </el-scrollbar> -->
                   </div>
-                  <div v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample_type'] == 'audio' && getMessage != ''" class="image">
-                    <el-scrollbar style="height: 100%">
-                      <AudioContainer
+                  <div v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample_type'] == 'audio' && getMessage != ''" class="audio" >
+                    <!-- <el-scrollbar style="height: 100%"> -->
+                      <customAudio
+                        
                         v-if="getQuestionInfo[userSelectRunFile][getCurInfo.curTag]['sample_type'] == 'audio' && getMessage != ''"
                         :theUrl="getPanelSampleData['url']"
                         :index="1000"
-                        theControlList="noMuted noSpeed onlyOnePlaying"
+                        theControlList="noMuted noSpeed onlyOnePlaying noDownload noPadding"
                       />
-                    </el-scrollbar>
+                    <!-- </el-scrollbar> -->
                   </div>
                 </div>
                 <div style="padding: 14px;" class="imageSpan">
@@ -205,8 +206,11 @@ const {
   mapActions: mapEmbeddingActions
 } = createNamespacedHelpers('embedding')
 const { mapState: mapLayoutStates, mapGetters: mapLayoutGetters } = createNamespacedHelpers('layout')
+// import { audioContainer } from './audioContainer'
+import { customAudio } from '../medias/audio/audioContainer'
 export default {
   components: {
+    customAudio
   },
   data() {
     return {
@@ -555,6 +559,17 @@ export default {
       .image {
         width: 100%;
         height: 300px;
+        display: block;
+        p{
+          margin-left: 2%;
+          margin-right: 2%;
+          margin-top: 2%;
+          margin-bottom: 2%;
+        }
+      }
+      .audio{
+        width: 100%;
+        height: 100%;
         display: block;
         p{
           margin-left: 2%;

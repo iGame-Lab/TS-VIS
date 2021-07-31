@@ -16,7 +16,7 @@
 
     <div class="audioOut">
       <el-card class="mainAudio myCard">
-        <el-row key="1" type="flex" justify="center" class="row-bg">
+          <el-row key="1" type="flex" justify="center" class="row-bg">
           <el-col :span="2">
             <el-button
               :icon="audio.playing ?'iconfont icon-zanting':'iconfont icon-ziyuan74'"
@@ -26,13 +26,16 @@
               @click="startPlayOrPause"
             />
           </el-col>
-          <el-col :span="6" class="hidden-md-and-down">
-            <span type="info" class="timeInfo">{{ audio.currentTime | formatSecond }}/{{ audio.maxTime | formatSecond }}</span>
+          <el-col :span="2" v-show="controlList.noPadding">
+            <span type="info" class="timeInfo" >&#32;&#32;&#32;&#32;&#32;</span>
           </el-col>
-          <el-col :span="13" class="hidden-sm-and-down">
-            <el-slider v-show="!controlList.noProcess" v-model="sliderTime" :format-tooltip="formatProcessToolTip" class="slider" @change="changeCurrentTime" />
+          <el-col :span="6" class="hidden-md-and-down" v-show="!controlList.noDownload">
+            <span type="info" class="timeInfo" >{{ audio.currentTime | formatSecond }}/{{ audio.maxTime | formatSecond }}</span>
           </el-col>
-          <el-col :span="2" :class="['mutedKey'+index, 'hidden-sm-and-down']">
+          <el-col :span="13" class="hidden-sm-and-down" v-show="!controlList.noProcess">
+            <el-slider  v-model="sliderTime" :format-tooltip="formatProcessToolTip" class="slider" @change="changeCurrentTime" />
+          </el-col>
+          <el-col :span="2" :class="['mutedKey'+index, 'hidden-sm-and-down']"  v-show="!controlList.noMuted">
             <!-- 音量按钮 -->
             <!-- <div :id="'myMute'+index" class="volmeBand">
               <el-slider
@@ -50,7 +53,7 @@
               @click="startMutedOrNot"
             />
           </el-col>
-          <el-col :span="2" class="hidden-md-and-down">
+          <el-col :span="2" class="hidden-md-and-down"  v-show="!controlList.noDownload">
             <el-button
               :href="url"
               download="audio.wav"
@@ -156,7 +159,8 @@ export default {
         // 只能播放一个
         onlyOnePlaying: false,
         // 不要快进按钮
-        noSpeed: false
+        noSpeed: false,
+        noPadding: false,
       }
     }
   },
@@ -318,7 +322,8 @@ export default {
 
   .download {
     color: #409EFF;
-    float: left;
+    //float: left;
+    text-align: center;
   }
 
   .dn{
@@ -348,6 +353,9 @@ export default {
   }
   .download{
     color:#8F8AD7;
+  }
+  /deep/.hidden-md-and-down{
+    text-align: center;
   }
   /deep/.playButton{
     float:right;
