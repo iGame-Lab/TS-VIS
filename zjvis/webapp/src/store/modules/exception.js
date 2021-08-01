@@ -240,8 +240,9 @@ const mutations = {
     state.tag = param[1]
     state.updateFlag = !state.updateFlag // 不管值如何，只监听变化
     // 如果run、tag发生变化，修改curRun、curTag
-    if (state.curRunTag === null || state.run.indexOf(state.curRunTag.run) === -1) {
-      state.curRunTag = { run: state.run[0], tag: state.tag[0], index: 0, step: '' }
+    // if (state.curRunTag === null || state.run.indexOf(state.curRunTag.run) === -1) {
+    if (state.curRunTag === null || state.run.indexOf(state.curRunTag.run) === -1 || state.allStep.length === 0) {
+      state.curRunTag = { run: state.run[0], tag: state.tag[0][0], index: 0, step: '' }
       state.updateHistMatrixDataFlag = 'run' + state.run[0]
     } else if (state.tag[state.curRunTag['index']].indexOf(state.curRunTag.tag) === -1) {
       state.curRunTag['tag'] = state.tag[state.curRunTag['index']][0]
