@@ -409,31 +409,33 @@ const mutations = {
     let detailInfo = []
     let initOption = []
     let temp = ''
-    state.runCategoryDetail[value].forEach((val, i) => {
-      detailInfo.push({
-        value: val,
-        label: val
-      })
-      if (constants.RUNFILESHOWFlAG[value] === 0) {
-        temp = false
-        if (i === 0) {
-          initOption = val
+    if (state.runCategoryDetail[value] !== undefined) {
+      state.runCategoryDetail[value].forEach((val, i) => {
+        detailInfo.push({
+          value: val,
+          label: val
+        })
+        if (constants.RUNFILESHOWFlAG[value] === 0) {
+          temp = false
+          if (i === 0) {
+            initOption = val
+          }
+        } else {
+          initOption.push(val)
+          temp = true
         }
+        if (constants.RUNFILESHOWFlAG[value] === 2) {
+          detailInfo = []
+          initOption = []
+          temp = 2
+        }
+      })
+      if (value in state.stateStore) {
+        state.userSelectRunFile = state.stateStore[value]
       } else {
-        initOption.push(val)
-        temp = true
+        state.stateStore[value] = initOption
+        state.userSelectRunFile = initOption
       }
-      if (constants.RUNFILESHOWFlAG[value] === 2) {
-        detailInfo = []
-        initOption = []
-        temp = 2
-      }
-    })
-    if (value in state.stateStore) {
-      state.userSelectRunFile = state.stateStore[value]
-    } else {
-      state.stateStore[value] = initOption
-      state.userSelectRunFile = initOption
     }
     state.runFileCategory = detailInfo
     // console.log(state.runFileCategory)
