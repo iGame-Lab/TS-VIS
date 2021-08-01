@@ -1,0 +1,29 @@
+name: Build zjvis frontend
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: ['14']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+          node-version: ${{ matrix.node-version }}
+    - name: build frontend
+      run: |
+          cd zjvis/webapp
+          npm install && npm run build
+    - name: Upload frontend
+      uses: actions/upload-artifact@v2
+      with:
+          name: frontend
+          path: zjvis/webapp/dist/*

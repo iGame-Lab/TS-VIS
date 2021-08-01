@@ -7,6 +7,7 @@ from setuptools import setup, find_packages
 # 移除构建的build文件夹
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 VERSION = "0.4.1"
+ROOT = os.path.realpath(os.path.dirname(__file__))
 preparing_PyPI_package = 'sdist' in sys.argv or 'bdist_wheel' in sys.argv
 
 def clean():
@@ -15,6 +16,9 @@ def clean():
         if os.path.isdir(path):
             print('INFO del dir ', path)
             shutil.rmtree(path)
+
+def read(name):
+    return open(os.path.join(ROOT, name)).read()
 
 def get_git_version():
     _git_vetsion = ""
@@ -33,6 +37,7 @@ def write_version():
         f.writelines(_file)
 
 
+INSTALL_REQUIRES = read("requirements.txt")
 write_version()
 setup(
     name='zjvis',
@@ -45,18 +50,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,  # 启用清单文件MANIFEST.in,包含数据文件
     entry_points={'console_scripts': ['zjvis = zjvis.server.main:run'] },  # 动态法线服务和插件
-    install_requires=[  # 自动安装依赖
-        'watchdog>=2.1.3',
-        'tsne-mp>=0.1.13',
-        'soundfile>=0.10.3',
-        'six>=1.16.0',
-        'protobuf>=3.15.8',
-        'pillow>=8.2.0',
-        'numpy>=1.16.6',
-        'django>=3.2.4',
-        'django-cors-headers>=3.7.0',
-        'crc32c>=2.2'
-    ],
+    install_requires=INSTALL_REQUIRES,
 )
 if not preparing_PyPI_package:
     clean()
