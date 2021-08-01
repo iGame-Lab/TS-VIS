@@ -198,6 +198,9 @@ const actions = {
           'setErrorMessage',
           `${'日志文件中尚未发现可展示信息！_'}${new Date().getTime()}`
         )
+        categoryToRunFile['custom'] = ['Ax7yxZA1']
+        categoryOrder.push(9)
+        newIndex = 0
       }
       context.commit('setRunCategoryDetail', categoryToRunFile)
       context.commit('setCategory', [categoryOrder, newIndex])
