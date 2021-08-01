@@ -72,7 +72,6 @@ const actions = {
   async getIntervalSelfCategoryInfo(context, param) {
     // 上一次还没有请求结束，这一次就不响应了
     if (context.state.featchDistDataFinished && context.state.featchHistDataFinished) {
-      param.push({ initStateFlag: false })
       context.commit('setIntervalSelfCategoryInfo', param)
       context.commit('setUpdateFlag')
     }
@@ -138,18 +137,22 @@ const mutations = {
   setIntervalSelfCategoryInfo: (state, param) => {
     state.categoryInfo = ['histogram', 'distribution']
     state.dataSets = param[0]
+    state.histTags = []
     for (let i = 0; i < state.dataSets.length; i++) {
       state.histTags.push(param[1][i]['histogram'])
     }
-    state.initStateFlag = param[2]['initStateFlag']
-    // 然后判断run和tag的长度有没有变化，去修改distData、histData的长度
-    // 这里可以暂时不要，现在认为run和tag不会发生变化，只有具体的数据内容发生变化
-    // let len = 0
-    // for (let i = 0; i < state.dataSets.length; i++) {
-    //   len += param[1][i]['histogram'].length
-    // }
-    // state.histData.length = len
-    // state.distData.length = len
+    state.initStateFlag = false
+    // 然后判断run和tag的长度有没有变化，去修改distData、histData数据，让数据和runtag保持一致
+    let len = 0
+    for (let i = 0; i < state.dataSets.length; i++) {
+      len += param[1][i]['histogram'].length
+    }
+    if (len < state.histData.length) {
+      state.oldHistData = state.oldHistData.slice(0, len)
+      state.oldDistData = state.oldDistData.slice(0, len)
+      state.histData = state.histData.slice(0, len)
+      state.distData = state.distData.slice(0, len)
+    }
   },
   setInitStateFlag: (state, param) => {
     state.initStateFlag = param
@@ -226,9 +229,9 @@ const mutations = {
     state.distCheckedArray = []
   },
   storeHistData: (state, data) => {
-    const k = data.pop()
-    if (state.oldHistData.length > k) {
-      state.oldHistData.splice(k, 1, data)
+    const index = data.pop()
+    if (state.oldHistData.length > index) {
+      state.oldHistData.splice(index, 1, data)
     } else {
       state.oldHistData.push(data)
     }

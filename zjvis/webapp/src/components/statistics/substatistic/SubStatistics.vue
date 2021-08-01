@@ -377,7 +377,7 @@ export default {
       let count = 0
       const runDataTemp = [[this.allData[0]]]
       for (let i = 1; i < this.allData.length; i++) {
-        if (this.allData[i][0] !== this.allData[i - 1][0]) {
+        if (this.allData[i][0] !== this.allData[i - 1][0]) { // 认为run是按顺序排放的
           count++
           runDataTemp.push([])
         }
