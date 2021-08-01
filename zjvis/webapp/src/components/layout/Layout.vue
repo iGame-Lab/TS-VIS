@@ -590,7 +590,7 @@
               ref="eachMiddle"
               :class="['layout-sidebar-category-each-middle']"
               :style="
-                item.id == selected || (i == initId && initFlag)
+                item.rawName == selectedRaw || (i == initId && initFlag)
                   ? { borderLeft: '4px solid #2e4fde' }
                   : {}
               "
@@ -598,7 +598,7 @@
               <router-link
                 :to="item.routerName"
                 :class="[
-                  item.id == selected || (i == initId && initFlag) ? 'category-selected' : '',
+                  item.rawName == selectedRaw || (i == initId && initFlag) ? 'category-selected' : '',
                 ]"
                 tag="li"
                 @click.native="change(item)"
@@ -607,7 +607,7 @@
                 <span
                   :class="[leftStyle.categoryFlage ? 'span-after' : '']"
                   :style="
-                    item.id == selected || (i == initId && initFlag)
+                    item.rawName == selectedRaw || (i == initId && initFlag)
                       ? { fontSize: 16 + 'px', color: 'rgb(46, 79, 222)' }
                       : { fontSize: 16 + 'px' }
                   "
