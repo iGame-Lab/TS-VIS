@@ -89,7 +89,8 @@ class EventFileWriter(object):
             name: 文件写入器的名字
             filename_suffix: event文件的后缀名
         """
-        file_name = f'events.out.{socket.gethostname()}'
+        t = time.strftime("%y%m%d-%H%M%S", time.localtime())
+        file_name = f'events.out.{t}.{socket.gethostname()}'
         file_name = f'{name}.{file_name}' if isinstance(name, str) else file_name
 
         self._logFileName = os.path.join(logdir,  file_name + filename_suffix)
