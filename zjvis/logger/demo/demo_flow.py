@@ -48,13 +48,15 @@ def eval_job(images: tp.Numpy.Placeholder((BATCH_SIZE, 1, 28, 28), dtype=flow.fl
         logits = lenet(images, train=True)
     return logits
 
+
 if __name__ == "__main__":
     # train_images.shape = (600, 100, 1, 28, 28) They are batch_num, batch_size, channel, height, width
     (train_images, train_labels), (test_images, test_labels) = flow.data.load_mnist(
         BATCH_SIZE, BATCH_SIZE)
 
     import os
-    os.mkdir(LOG_PATH)
+    if not os.path.exists(LOG_PATH):
+        os.mkdir(LOG_PATH)
     # export flow model to model.onnx
     export_onnx_model(eval_job, onnx_model_path=LOG_PATH)
 
