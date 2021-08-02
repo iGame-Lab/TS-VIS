@@ -102,9 +102,7 @@ const actions = {
     }
   },
   async getIntervalSelfCategoryInfo(context, param) {
-    console.log('state.curInfo.curRun', state.curInfo.curRun)
     context.commit('setIntervalSelfCategoryInfo', param)
-    console.log('param', param)
     //context.dispatch('fetchOneStep', context.state.categoryInfo.curRuns[0])
   },
   async fetchOneStep(context, param) {

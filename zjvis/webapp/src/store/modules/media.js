@@ -109,11 +109,16 @@ const mutations = {
     state.detailData = param
   },
   setIntervalDetailDataInfo: (state, param) => {
-    Object.keys(param).forEach(value => {
-      if(Object.keys(state.detailData).indexOf(value)==-1) {
-        state.detailData[value] = []
-      }
-    })
+    // console.log("param", param, state.detailData)
+    if(state.detailData == '') {
+      state.detailData = param
+    }else {
+      Object.keys(param).forEach(value => {
+        if(Object.keys(state.detailData).indexOf(value)==-1) {
+          state.detailData[value] = []
+        }
+      })
+    }
     // state.IntervalChange = !state.IntervalChange 母鸡为什么这个不更新也会去请求新数据
   },
   setDetailData: (state, param) => {
