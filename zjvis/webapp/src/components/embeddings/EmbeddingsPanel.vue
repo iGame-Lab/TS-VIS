@@ -359,7 +359,7 @@ export default {
       }
     },
     getIntervalChange: function() {
-      this.setMessage('')
+      // this.setMessage('')
       if (!this.getReceivedQuestionInfo) {
         // console.log('数据还没有整理好')
         return

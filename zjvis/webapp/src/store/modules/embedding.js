@@ -102,7 +102,9 @@ const actions = {
     }
   },
   async getIntervalSelfCategoryInfo(context, param) {
+    console.log('state.curInfo.curRun', state.curInfo.curRun)
     context.commit('setIntervalSelfCategoryInfo', param)
+    console.log('param', param)
     //context.dispatch('fetchOneStep', context.state.categoryInfo.curRuns[0])
   },
   async fetchOneStep(context, param) {
@@ -199,12 +201,16 @@ const mutations = {
     state.categoryInfo.curRuns = param[0].slice(0)
     state.categoryInfo.curTags = param[1].slice(0) // 实现深度拷贝[][]
     state.IntervalChange = !state.IntervalChange
-    // for (let i = 0; i < state.categoryInfo.curRuns.length; i++) {
-    //   state.questionInfo[state.categoryInfo.curRuns[i]] = {}
-    //   for (let j = 0; j < state.categoryInfo.curTags[i].length; j++) {
-    //     state.questionInfo[state.categoryInfo.curRuns[i]][state.categoryInfo.curTags[i][j]] = {}
-    //   }
-    // }
+    if(state.curInfo.curRun == undefined){
+      state.curInfo.curRun = state.categoryInfo.curRuns[0]
+      state.curInfo.curTags = state.categoryInfo.curTags[0]
+      state.curInfo.curTag = state.categoryInfo.curTags[0][0]
+      state.curInfo.curStep = 0
+      state.curInfo.curMapStep = 0
+      state.categoryInfo.received = true // 类目信息完备
+      state.receivedCategoryInfo = true
+      //state.initStateFlag = param[2]['initStateFlag']
+    }
   },
   setSelfCategoryInfo: (state, param) => { // 处理分类
     state.categoryInfo.curRuns = param[0].slice(0)
