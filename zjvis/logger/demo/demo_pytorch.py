@@ -46,7 +46,6 @@ def train(epochs=10):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     net = net.to(device)
 
-
     # add graph， hparams, embedding_sample,
     # the tag of embedding and embedding_sample must be same.
     summarywriter = SummaryWriter('./logs/torch/')
@@ -55,7 +54,7 @@ def train(epochs=10):
     summarywriter.add_hparams(tag='mnist',
                               hparam_dict={'lrate': lrate,
                                            'batchSize': batchSize,
-                                           'epoch':epochs},
+                                           'epoch': epochs},
                               metrics=['loss'])
 
     train_accs = []
@@ -87,13 +86,12 @@ def train(epochs=10):
                 train_loss.clear()
                 train_accs.clear()
 
-
             # add scalar, image, histogram, exception, embedding
             if i%10 == 0:
-                step =  i+len(train_loader)*epoch
+                step = i+len(train_loader)*epoch
                 summarywriter.add_scalar('loss', loss.cpu().item(), step)
 
-                image =  inputs[0].permute(1,2,0).cpu().numpy()
+                image = inputs[0].permute(1,2,0).cpu().numpy()
                 summarywriter.add_image('image', image, step)
 
                 weight = net.conv1.weight.data.cpu().numpy()
@@ -102,8 +100,9 @@ def train(epochs=10):
                 grad = net.conv1.weight.grad.cpu().numpy()
                 summarywriter.add_exception('conv1_w_grad', grad, step)
 
-                test_out =  net.forward(test_x.to(device))
+                test_out = net.forward(test_x.to(device))
                 summarywriter.add_embedding('minist',test_out.detach().cpu().numpy(), test_y.cpu().numpy(), step)
+
 
 if __name__ == '__main__':
     train(epochs=1)
