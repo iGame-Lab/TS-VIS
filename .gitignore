@@ -9,3 +9,6 @@ frontend/
 # cache files
 __viscache__
 dev_test_file/
+
+# frontend
+constants.js

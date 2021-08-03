@@ -4,11 +4,6 @@ from typing import Union, Optional, Dict, List
 from .writer import EventFileWriter
 from .summary import scalar, image, audio, text, histogram, hparams, exception, embedding, embedding_sample
 numpy_compatible = np.ndarray
-try:
-    import torch
-    numpy_compatible = torch.Tensor
-except ImportError:
-    pass
 
 class SummaryWriter(object):
     def __init__(self,

@@ -64,7 +64,7 @@ const actions = {
     context.commit('setSelgCategoryInfo', param);
   },
   async getIntervalSelfCategoryInfo(context, param) {
-    context.commit('setSelgCategoryInfo', param);
+    context.commit('setIntervalSelgCategoryInfo', param);
   },
   async getFullData(context, param) {
     if (!param.run) {
@@ -111,6 +111,12 @@ const mutations = {
     // eslint-disable-next-line
     state.curTag = state.tagName[0][0];
   },
+  setIntervalSelgCategoryInfo: (state, param) => {
+    // eslint-disable-next-line
+    state.runName = param[0];
+    // eslint-disable-next-line
+    state.tagName = param[1];
+  },
   setGraphData: (state, param) => {
     state.graphData = param;
     state.copy[0] = param;
@@ -143,6 +149,7 @@ const mutations = {
     state.modifyClick = param;
   },
   setCurTag: (state, param) => {
+    // console.log('setCurTag')
     state.curTag = param;
   },
   setRunChangeTag: (state, param) => {

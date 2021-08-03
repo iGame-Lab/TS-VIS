@@ -13,7 +13,7 @@ import port from '@/utils/api'
 const state = {
   initshowrun: {},
   categoryInfo: '', // 存放自己的类目信息
-  detailData: '', // 具体全部数据
+  detailData: {}, // 具体全部数据
   clickState: false,
   smoothvalue: 0, // 平滑参数
   yaxis: 'linear', // y轴数据类型
@@ -120,11 +120,33 @@ const actions = {
 
 const mutations = {
   setIntervalSelfCategoryInfo: (state, param) => {
+    // console.log('param:',param);
+    // console.log('state.detailData:',state.detailData);
+    if(Object.keys(state.detailData).length == 0){
+      for (let i = 0; i < param[1].length; i++) {
+        for (let value of Object.keys(param[1][i])){
+          if(Object.keys(state.detailData).indexOf(value) == -1){
+            state.detailData[value] = []
+          }
+        }
+      }
+    }
+
+    if(Object.keys(state.initshowrun).length == 0){
+      for (let i = 0; i < param[1].length; i++) {
+        Object.keys(param[1][i]).forEach(value => {
+          if (!(value in state.initshowrun)) {
+            state.initshowrun[value] = {}
+          }
+          state.initshowrun[value][param[0][i]] = true
+        })
+      }
+    }
+
     // setSelfCategoryInfo
     state.categoryInfo = param
     // setfreshnumber
     state.freshnumber += 1
-
     // state.IntervalChange = !state.IntervalChange
   },
   setinitshowrun: (state, param) => {

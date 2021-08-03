@@ -38,7 +38,6 @@ export default {
   watch: {
     userSelectRunFile(val) {
       // this.$message(val)
-      if (!this.getCategoryInfo) {
         if (val === '') {
           this.setAllData('null')
           this.setHypEmpty(true)
@@ -47,9 +46,18 @@ export default {
           this.featchAllData(param)
           this.setHypEmpty(false)
         }
-      } else {
-        this.setSelfCategoryInfo(false)
-      }
+      // if (!this.getCategoryInfo) {
+      //   if (val === '') {
+      //     this.setAllData('null')
+      //     this.setHypEmpty(true)
+      //   } else {
+      //     const param = { run: val }
+      //     this.featchAllData(param)
+      //     this.setHypEmpty(false)
+      //   }
+      // } else {
+      //   this.setSelfCategoryInfo(false)
+      // }
     },
     getErrorMessage(val) {
       this.$message({
