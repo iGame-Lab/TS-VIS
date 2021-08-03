@@ -64,8 +64,10 @@ export default {
         return
       } else if (this.getUpdateHistMatrixDataFlag.substr(0, 4) === 'step') { // 如果只是step变化，就用fetchOneData取数据
         this.fetchOneData({ step: this.getCurRunTag.step })
+        this.setCurIqrTimes(['', '', '', 1.50, 1.50])
       } else {
         this.fetchAllData()
+        this.setCurIqrTimes(['', '', '', 1.50, 1.50])
       }
     },
     userSelectRunFile(val) {
@@ -92,7 +94,6 @@ export default {
     getUpdateFlag() {
       this.fetchAllStep()
       this.setRectCurInfo([])
-      this.setCurIqrTimes(['', '', '', 1.50, 1.50])
     }
   },
   created() {

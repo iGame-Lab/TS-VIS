@@ -167,8 +167,8 @@ export default {
       if (this.getUpdateHistMatrixDataFlag === 'none' || this.getUpdateHistMatrixDataFlag.substr(0, 4) === 'step') { // 如果只更新了step数据
         this.myAllStep = val[2].step
         this.myBoxPercent = val[2].box
-        this.curExcepBox = []
         if (this.getUpdateHistMatrixDataFlag.substr(0, 4) === 'step') {
+          this.curExcepBox = []
           this.curStepIndex = this.myAllStep.indexOf(this.getCurRunTag.step)
           if (this.curStepIndex <= 4) {
             this.boxLeftIndex = 0
@@ -176,6 +176,18 @@ export default {
           } else {
             this.boxLeftIndex = this.curStepIndex - 4
             this.boxRightIndex = this.curStepIndex
+          }
+        }
+        if (this.getUpdateHistMatrixDataFlag === 'none') {
+          // 根据存下的四分位数状态恢复刷新前的选取状态
+          const dq = this.myBoxPercent[this.curStepIndex][0][1] - this.myBoxPercent[this.curStepIndex][0][3]
+          if (dq !== 0) {
+            // 修改这个子组件中的数据
+            this.myBoxPercent[this.curStepIndex][0][0] = this.myBoxPercent[this.curStepIndex][0][1] + this.getCurIqrTimes[3] * dq
+            this.myBoxPercent[this.curStepIndex][0][4] = this.myBoxPercent[this.curStepIndex][0][3] - this.getCurIqrTimes[4] * dq
+            // 修改vuex中保存的数据
+            this.setAllStepBoxUp({ index: this.index, step: this.curStepIndex, up: this.myBoxPercent[this.curStepIndex][0][0] })
+            this.setAllStepBoxDown({ index: this.index, step: this.curStepIndex, down: this.myBoxPercent[this.curStepIndex][0][4] })
           }
         }
         this.drawExcepBox()
@@ -867,7 +879,7 @@ export default {
       const maxg = svg.append('g')
       // max line的背景，扩大鼠标的选中的范围
       maxg.append('line')
-        .attr('class', `excepUpLine${index}`)
+        .attr('class', `excepUpLineBg${index}`)
         .attr('x1', center - width / 2)
         .attr('x2', center + width / 2)
         .attr('y1', function _nonName() {
