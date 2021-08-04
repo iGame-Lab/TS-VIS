@@ -126,6 +126,7 @@
 .scalars-title:hover{
   cursor: pointer;
 }
+
 </style>
 <template>
   <div v-show="subshow" class="scalars-container">
@@ -145,7 +146,7 @@
     <div :class="[show?'showClass':'']">
       <div class="scalarscontent">
         <el-row :gutter="20">
-          <scalar-container v-for="item in data" v-show="isshow[item.run]" :key="item.index" :content="item" :subname="subname" />
+          <scalar-container v-for="item in data" v-show="isshow[item.run]" :key="item.index" :content="item" :subname="subname"/>
         </el-row>
       </div>
     </div>
@@ -155,8 +156,15 @@
 import { createNamespacedHelpers } from 'vuex'
 import { ScalarContainer } from '../scalarcontainer'
 
-const { mapGetters: mapScalarGetters, mapActions: mapScalarActions, mapMutations: mapScalarMutations } = createNamespacedHelpers('scalar')
-const { mapGetters: mapLayoutGetters,mapState: mapLayoutStates } = createNamespacedHelpers('layout')
+const { 
+  mapGetters: mapScalarGetters, 
+  mapActions: mapScalarActions, 
+  mapMutations: mapScalarMutations 
+  } = createNamespacedHelpers('scalar')
+const { 
+  mapGetters: mapLayoutGetters,
+  mapState: mapLayoutStates 
+  } = createNamespacedHelpers('layout')
 export default {
   components: {
     ScalarContainer
@@ -168,7 +176,7 @@ export default {
   },
   data() {
     return {
-      data: {},
+      data: [],
       show: true,
       isshow: {},
       subshow: true,
@@ -177,7 +185,11 @@ export default {
   },
   computed: {
     ...mapScalarGetters([
-      'detailData', 'categoryInfo', 'initshowrun', 'showFlag', 'subisshow'
+      'detailData', 
+      'categoryInfo', 
+      'initshowrun', 
+      'showFlag', 
+      'subisshow'
     ]),
     ...mapLayoutStates([
       'userSelectRunFile'
@@ -191,12 +203,19 @@ export default {
       let flag = 1
       for (let i = 0; i < Object.keys(this.isshow).length; i += 1) {
         if (val.indexOf(Object.keys(this.isshow)[i]) > -1) {
-          this.isshow[Object.keys(this.isshow)[i]] = true
+          // this.isshow[Object.keys(this.isshow)[i]] = true
+          this.$set(this.isshow, Object.keys(this.isshow)[i], true)
           flag -= 1
         } else {
-          this.isshow[Object.keys(this.isshow)[i]] = false
+          // this.isshow[Object.keys(this.isshow)[i]] = false
+          this.$set(this.isshow, Object.keys(this.isshow)[i], false)
         }
       }
+      // 对象的深度拷贝
+      let tt = {}
+      tt = this.isshow
+      this.isshow = {}
+      this.isshow = tt
       if (flag === 1) {
         this.setsubisshow([this.subname, false])
         this.subshow = this.subisshow[this.subname]
@@ -206,6 +225,12 @@ export default {
       }
     },
     getTimer: function () {
+      let isshow = this.initshowrun[this.subname]
+      let keys = Object.keys(isshow)
+      for(let i=0;i<keys.length;i++){
+        // this.isshow[keys[i]] = isshow[keys[i]]
+        this.$set(this.isshow, keys[i], isshow[keys[i]])
+      }
       this.data = this.detailData[this.subname]
     }
   },
@@ -244,8 +269,35 @@ export default {
       'getData'
     ]),
     ...mapScalarMutations([
-      'setDetailData', 'setshowrun', 'back', 'setFreshInfo', 'setshowFlag', 'setsubisshow'
+      'setDetailData', 
+      'setshowrun', 
+      'back', 
+      'setFreshInfo', 
+      'setshowFlag', 
+      'setsubisshow'
     ]),
+    deepClone(data){
+       var type = getType(data);
+       var obj;
+       if(type === 'array'){
+           obj = [];
+       } else if(type === 'object'){
+           obj = {};
+       } else {
+           //不再具有下一层次
+           return data;
+       }
+       if(type === 'array'){
+           for(var i = 0, len = data.length; i < len; i++){
+               obj.push(deepClone(data[i]));
+           }
+       } else if(type === 'object'){
+           for(var key in data){
+               obj[key] = deepClone(data[key]);
+           }
+       }
+       return obj;
+    },
     showContent() {
       if (this.showFlag[this.subname]) {
         this.setshowFlag([this.subname, false])
@@ -259,7 +311,7 @@ export default {
         this.setFreshInfo([this.subname, this.showFlag[this.subname]])
       }
     }
-    
   }
 }
 </script>
+

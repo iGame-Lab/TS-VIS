@@ -62,14 +62,8 @@ export default {
     },
     // 定时请求数据
     getIntervalChange() {
-      // console.log("scalar_time")
-      // if (!this.settotaltag) {
-      //   // console.log('数据还没有整理好')
-      //   return
-      // }
       this.settotaltag()
       this.totaltag = this.getTotaltag
-      console.log('this.totaltag', this.totaltag)
     }
   },
   created() {
@@ -77,7 +71,6 @@ export default {
       this.totaltag = this.getTotaltag
     } else {
       this.settotaltag()
-      
     }
   },
   mounted() {

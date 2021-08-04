@@ -91,7 +91,7 @@ export default {
   },
   props: {
     content: Object,
-    subname: String
+    subname: String,
   },
   data() {
     return {
@@ -140,7 +140,6 @@ export default {
       }
     },
     getTimer: function() {
-      // console.log('here---', this.content, this.chartdata.value, Object.keys(this.content.value)[0]);
       let content = this.content.value[Object.keys(this.content.value)[0]]
       this.chartdata.run = this.content.run
       this.chartdata.value[Object.keys(this.content.value)[0]] = []
@@ -247,7 +246,6 @@ export default {
     this.chartgrade = this.grade[this.classname]
   },
   methods: {
-    
     ...mapScalarMutations([
       'setcheckeditem',
       'deletecheckeditem',
