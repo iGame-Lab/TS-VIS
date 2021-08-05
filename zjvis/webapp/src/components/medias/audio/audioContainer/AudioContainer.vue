@@ -60,7 +60,7 @@ audio::-webkit-media-controls-panel{
       </el-card>
 
       <div class="audiocontent">
-        <customAudio :theUrl="audiourl" :index="index" theControlList="noMuted noSpeed onlyOnePlaying" />
+        <customAudio :theUrl="audiourl" :index="index" theControlList="noSpeed onlyOnePlaying" />
         <el-slider
           v-model="scrollvalue"
           :max="audiocontent.length - 1"
