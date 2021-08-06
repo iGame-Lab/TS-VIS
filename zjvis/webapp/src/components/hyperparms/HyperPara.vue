@@ -5,7 +5,7 @@
       <el-table
         :data="data"
         :fit="choice"
-        :default-sort="{prop:'accuracy', order:'descending'}"
+        :default-sort="{prop:'keys[0]', order:'descending'}"
         :header-cell-style="{background:'rgb(224, 231, 250)',color:'#606266'}"
         :row-class-name="tableRowClassName"
         :row-style="{height:'10px'}"
@@ -17,6 +17,7 @@
         <el-table-column align="center" type="index" />
         <el-table-column
           v-for="(item, index) in keys"
+          sortable
           :key="index"
           :prop="item"
           :label="item"
