@@ -1,4 +1,4 @@
-name: Build zjvis frontend
+name: Build tsvis frontend
 
 # Controls when the workflow will run
 on:
@@ -20,10 +20,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
     - name: build frontend
       run: |
-          cd zjvis/webapp
+          cd tsvis/webapp
           npm install && npm run build
     - name: Upload frontend
       uses: actions/upload-artifact@v2
       with:
           name: frontend
-          path: zjvis/webapp/dist/*
+          path: tsvis/webapp/dist/*

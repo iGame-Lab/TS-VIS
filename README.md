@@ -8,9 +8,9 @@
   <a><img src="https://img.shields.io/badge/pypi-v0.2-blue.svg"></img></a>
 </p>
 
-Zjvis是杭州电子大学与之江实验室联合开发的深度学习可视化Python包，支持目前主流深度学习框架的可视化。
+TS-VIS是杭州电子大学与之江实验室联合开发的深度学习可视化Python包，支持目前主流深度学习框架的可视化。
 
-**[文档](https://feyily.github.io/zjvis-document/)**
+**[文档](https://feyily.github.io/tsvis-document/)**
 
 ![](docs/images/demo.gif)
 
@@ -41,12 +41,12 @@ Zjvis是杭州电子大学与之江实验室联合开发的深度学习可视化
 ### 使用pip安装（暂未上线）
 
 ```
-pip install zjvis
+pip install tsvis
 ```
 
 ### 从源码安装
 
-zjvis采用前后端分离的架构，所以从源码安装需要分别编译前端、后端
+TS-VIS采用前后端分离的架构，所以从源码安装需要分别编译前端、后端
 
 - **从源码编译前端：**
 
@@ -63,7 +63,7 @@ zjvis采用前后端分离的架构，所以从源码安装需要分别编译前
 
 - 从源码编译后端
 
-  从源码安装后端需要先将前端编译生成的静态文件移动到`zjvis/server/frontend`文件夹下
+  从源码安装后端需要先将前端编译生成的静态文件移动到`tsvis/server/frontend`文件夹下
 
   然后安装Python依赖包`setuptools`
   
@@ -71,7 +71,7 @@ zjvis采用前后端分离的架构，所以从源码安装需要分别编译前
   pip install setuptools
   ```
   
-  执行`setup.py`文件安装zjvis到Python环境
+  执行`setup.py`文件安装TS-VIS到Python环境
   
   ```
   python setup.py install
@@ -82,13 +82,13 @@ zjvis采用前后端分离的架构，所以从源码安装需要分别编译前
 安装完成之后，可以通过下面的命令查看当前安装版本号，若安装成功，则会输出版本信息到控制台
 
 ```
-zjvis -v
+tsvis -v
 ```
 
-若zjvis已正确安装，则可以通过运行可视化后端
+若TS-VIS已正确安装，则可以通过运行可视化后端
 
 ```
-zjvis --logdir path/to/logdir/
+tsvis --logdir path/to/logdir/
 ```
 
 默认情况下，可视化服务会启动在`http://127.0.0.1:9898`，打开浏览器访问即可查看可视化内容

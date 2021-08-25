@@ -11,7 +11,7 @@ ROOT = os.path.realpath(os.path.dirname(__file__))
 preparing_PyPI_package = 'sdist' in sys.argv or 'bdist_wheel' in sys.argv
 
 def clean():
-    for name in ['build', 'dist', 'zjvis.egg-info']:
+    for name in ['build', 'dist', 'tsvis.egg-info']:
         path = os.path.join(CUR_PATH, name)
         if os.path.isdir(path):
             print('INFO del dir ', path)
@@ -29,9 +29,9 @@ def get_git_version():
 
 def write_version():
     _git = get_git_version()
-    with open("zjvis/__init__.py", "r") as f:
+    with open("tsvis/__init__.py", "r") as f:
         _file = f.readlines()[0: -2]
-    with open("zjvis/__init__.py", "w") as f:
+    with open("tsvis/__init__.py", "w") as f:
         _file.append(f"__version__ = '{VERSION}'\n")
         _file.append(f"__git_version__ = '{_git}'\n")
         f.writelines(_file)
@@ -40,7 +40,7 @@ def write_version():
 INSTALL_REQUIRES = read("requirements.txt")
 write_version()
 setup(
-    name='zjvis',
+    name='tsvis',
     version=VERSION,
     author='hdu',
     author_email='',
@@ -49,7 +49,7 @@ setup(
     description="Visualize the training process of the neural network",
     packages=find_packages(),
     include_package_data=True,  # 启用清单文件MANIFEST.in,包含数据文件
-    entry_points={'console_scripts': ['zjvis = zjvis.server.main:run'] },  # 动态法线服务和插件
+    entry_points={'console_scripts': ['tsvis = tsvis.server.main:run'] },  # 动态法线服务和插件
     install_requires=INSTALL_REQUIRES,
 )
 if not preparing_PyPI_package:
