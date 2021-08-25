@@ -1,8 +1,8 @@
 import unittest
 from hypothesis import given
 import hypothesis.strategies as st
-from zjvis.logger.summary import *
-from zjvis.proto import event_pb2
+from tsvis.logger.summary import *
+from tsvis.proto import event_pb2
 
 def _decoder_tensor(tensor):
     tensor_shape = tuple([i.size for i in tensor.tensor_shape.dim])

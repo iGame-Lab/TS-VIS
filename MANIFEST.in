@@ -1,1 +1,1 @@
-recursive-include zjvis/server/frontend *
+recursive-include tsvis/server/frontend *

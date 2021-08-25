@@ -5,8 +5,8 @@
 # @Software: PyCharm
 import unittest
 import sys
-sys.path.append("../zjvis")
-sys.path.append("../zjvis/parser")
+sys.path.append("../tsvis")
+sys.path.append("../tsvis/parser")
 
 class TestParser(unittest.TestCase):
     @classmethod
@@ -15,21 +15,21 @@ class TestParser(unittest.TestCase):
         cls.torch_log = "test_logs/events.out.FX50-PRO"
 
     def test_log_read(self):
-        from zjvis.parser.visparser import SummaryReader
+        from tsvis.parser.visparser import SummaryReader
         with open(self.torch_log, "rb") as fd:
             reader = SummaryReader(fd)
             for items in reader:
                 self.assertIsNotNone(items['value'])
 
     def test_path_parser(self):
-        from zjvis.parser.utils.logfile_utils import path_parser
+        from tsvis.parser.utils.logfile_utils import path_parser
         from pathlib import Path
         cache_path = Path("/cache")
         _path = path_parser(cache_path, "test", category="graph", tag="s_graph")
         self.assertEqual(_path, Path("/cache/test/graph/s_graph"))
 
     def test_get_runinfo(self):
-        from zjvis.parser.utils.logfile_utils import get_runinfo
+        from tsvis.parser.utils.logfile_utils import get_runinfo
         from pathlib import Path
         _runs = get_runinfo(self.logdir)
         self.assertEqual(_runs["."], Path(self.logdir).absolute())
