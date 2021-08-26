@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 # https://www.ietf.org/rfc/rfc3309.txt
 import array
 import os

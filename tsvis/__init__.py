@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 __all__ = ['SummaryWriter', 'EventFileWriter']
 
 from tsvis.logger.summary_writer import SummaryWriter

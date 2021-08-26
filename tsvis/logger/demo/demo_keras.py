@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 # TensorFlow and tf.keras
 import numpy as np
 import tensorflow as tf

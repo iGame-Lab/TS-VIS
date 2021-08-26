@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 from tsvis import SummaryWriter

@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from pathlib import Path
 from tsvis.proto.graph_pb2 import GraphDef
 from tsvis.proto.node_def_pb2 import NodeDef

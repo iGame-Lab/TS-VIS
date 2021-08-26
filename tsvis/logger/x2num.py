@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 # DO NOT alter/distruct/free input object !
 from __future__ import absolute_import
 from __future__ import division

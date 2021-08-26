@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import logging
 import time
 from .proto_graph import node_proto

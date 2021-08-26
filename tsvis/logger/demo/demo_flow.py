@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 # lenet_train.py
 import numpy as np
 import oneflow as flow

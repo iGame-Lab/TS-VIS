@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from tsvis.proto.node_def_pb2 import NodeDef
 from tsvis.proto.attr_value_pb2 import AttrValue
 from tsvis.proto.tensor_pb2 import TensorShapeProto
