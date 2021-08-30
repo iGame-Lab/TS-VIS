@@ -8,7 +8,7 @@
   <a><img src="https://img.shields.io/badge/pypi-v0.2-blue.svg"></img></a>
 </p>
 
-TS-VIS是杭州电子大学与之江实验室联合开发的深度学习可视化Python包，支持目前主流深度学习框架的可视化。
+TS-VIS（天枢Vis）是[天枢人工智能开源开放平台](https://gitee.com/zhijiangtianshu/Dubhe)的可视化组件，支持Tensorflow、Pytorch、Oneflow等主流深度学习框架的可视化功能。
 
 **[文档](https://feyily.github.io/tsvis-document/)**
 
