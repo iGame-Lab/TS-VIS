@@ -1,7 +1,9 @@
-#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+# !/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+
 
 def main(argv):
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tsvis.server.backend.settings')
