@@ -4,13 +4,13 @@
 
 <p align="center">
   <a href="https://www.python.org/downloads/release/python-361"><img src="https://img.shields.io/badge/Python-%3E=3.6-blue.svg"></img></a>
-  <a><img src="https://img.shields.io/badge/Version-0.2-rgb(68,204,17).svg"></img></a>
-  <a><img src="https://img.shields.io/badge/pypi-v0.2-blue.svg"></img></a>
+  <a><img src="https://img.shields.io/badge/Version-0.4.2-rgb(68,204,17).svg"></img></a>
+  <a><img src="https://img.shields.io/badge/pypi-v0.4.2-blue.svg"></img></a>
 </p>
 
 TS-VIS（天枢Vis）是[天枢人工智能开源开放平台](https://gitee.com/zhijiangtianshu/Dubhe)的可视化组件，支持Tensorflow、Pytorch、Oneflow等主流深度学习框架的可视化功能。
 
-**[文档](https://feyily.github.io/tsvis-document/)**
+**[文档: https://feyily.github.io/tsvis-document/](https://feyily.github.io/tsvis-document/)**
 
 ![](docs/images/demo.gif)
 
