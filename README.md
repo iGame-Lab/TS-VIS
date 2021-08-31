@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/logo.svg"></img>
+  <img src="https://raw.githubusercontent.com/iGame-Lab/TS-VIS/master/docs/images/logo.svg"></img>
 </p>
 
 <p align="center">
@@ -8,15 +8,15 @@
   <a><img src="https://img.shields.io/badge/pypi-v0.4.2-blue.svg"></img></a>
 </p>
 
-TS-VIS（天枢Vis）是[天枢人工智能开源开放平台](https://gitee.com/zhijiangtianshu/Dubhe)的可视化组件，支持Tensorflow、Pytorch、Oneflow等主流深度学习框架的可视化功能。
+TS-VIS（天枢Vis）是[天枢人工智能开源开放平台](https://gitee.com/zhijiangtianshu/Dubhe)的可视化组件，支持TensorFlow、PyTorch、OneFlow等主流深度学习框架的可视化功能。
 
 **[文档: https://feyily.github.io/tsvis-document/](https://feyily.github.io/tsvis-document/)**
 
-![](docs/images/demo.gif)
+![](https://raw.githubusercontent.com/iGame-Lab/TS-VIS/master/docs/images/demo.gif)
 
 ## 亮点
 
-* 框架无关，支持TensorFlow、Pytorch、Oneflow等主流深度学习框架可视化
+* 框架无关，支持TensorFlow、PyTorch、OneFlow等主流深度学习框架可视化
 * 超快的响应速度
 * 支持大规模的可视化
 * 支持训练过程实时可视化
@@ -36,9 +36,9 @@ TS-VIS（天枢Vis）是[天枢人工智能开源开放平台](https://gitee.com
 
 ## 安装
 
-我们提供了两种安装方式：pip安装和源码安装，不管通过那种方式安装，都需要确保你的Python版本为3.6以上，如果不满足请先升级Python
+我们提供了两种安装方式：pip安装和源码安装，不管通过哪种方式安装，都需要确保你的Python版本为3.6以上，如果不满足请先升级Python
 
-### 使用pip安装（暂未上线）
+### 使用pip安装
 
 ```
 pip install tsvis

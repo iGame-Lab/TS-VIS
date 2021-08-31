@@ -1,4 +1,4 @@
-/** Copyright 2020 Tianshu AI Platform. All Rights Reserved.
+/** Copyright 2021 Tianshu AI Platform. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1336,11 +1336,11 @@ export default {
   /deep/ .el-input__suffix {
     top: 10%;
   }
-  
+
   /deep/ .el-select__caret{
     margin: 20% 0 0 0;
   }
-  
+
   /deep/ .is-reverse {
     margin: -20% 0 0 0;
   }
