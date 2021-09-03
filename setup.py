@@ -62,7 +62,7 @@ setup(
     name='tsvis',
     version=VERSION,
     author='iGame',
-    author_email='',
+    author_email='igalab@163.com',
     long_description=README,
     long_description_content_type='text/markdown',
     # url='',
