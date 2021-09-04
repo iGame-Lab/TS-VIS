@@ -10,7 +10,7 @@
   <a><img src="https://img.shields.io/badge/pypi-v0.4.2-blue.svg"></img></a>
 </p>
 
-TS-VIS(Tianshu Visualization) is a visualization tool kit of [Tianshu AI Platform.](https://gitee.com/zhijiangtianshu/Dubhe), 
+TS-VIS(Tianshu Visualization) is a visualization tool kit of <a href="https://gitee.com/zhijiangtianshu/Dubhe" target="_blank"> Tianshu AI Platform. </a>, 
 which support visualization of the most popular deep learning frameworks, such as TensorFlow, PyTorch, OneFlow, etc.
 
 **[Document (Chinese): https://feyily.github.io/tsvis-document/](https://feyily.github.io/tsvis-document/)**
