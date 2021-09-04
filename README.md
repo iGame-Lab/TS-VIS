@@ -1,16 +1,17 @@
 [Chinese](docs/README_CN.md)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/iGame-Lab/TS-VIS/master/docs/images/logo.svg"></img>
+  <img src="https://raw.githubusercontent.com/iGame-Lab/TS-VIS/master/docs/images/logo.svg" alt="logo"/>
 </p>
 
 <p align="center">
-  <a href="https://www.python.org/downloads/release/python-361"><img src="https://img.shields.io/badge/Python-%3E=3.6-blue.svg"></img></a>
-  <a><img src="https://img.shields.io/badge/Version-0.4.2-rgb(68,204,17).svg"></img></a>
-  <a><img src="https://img.shields.io/badge/pypi-v0.4.2-blue.svg"></img></a>
+  <a href="https://www.python.org/downloads/release/python-361"><img src="https://img.shields.io/badge/Python-%3E=3.6-blue.svg" alt="python"/></a>
+  <a href="https://github.com/iGame-Lab/TS-VIS/blob/master/LICENSE"><img src="https://img.shields.io/github/license/iGame-Lab/TS-VIS" alt="license"/></a>
+  <a href="https://pypi.org/project/tsvis"><img src="https://img.shields.io/pypi/v/tsvis" alt="pypi"/></a>
+  <a><img src="https://img.shields.io/github/workflow/status/iGame-Lab/TS-VIS/Build%20tsvis" alt="build"></a>
 </p>
 
-TS-VIS(Tianshu Visualization) is a visualization tool kit of [Tianshu AI Platform.](https://gitee.com/zhijiangtianshu/Dubhe), 
+TS-VIS(Tianshu Visualization) is a visualization tool kit of <a href="https://gitee.com/zhijiangtianshu/Dubhe" target="_blank"> Tianshu AI Platform. </a>, 
 which support visualization of the most popular deep learning frameworks, such as TensorFlow, PyTorch, OneFlow, etc.
 
 **[Document (Chinese): https://feyily.github.io/tsvis-document/](https://feyily.github.io/tsvis-document/)**
