@@ -65,7 +65,7 @@ setup(
     author_email='igalab@163.com',
     long_description=README,
     long_description_content_type='text/markdown',
-    # url='',
+    url='https://github.com/iGame-Lab/TS-VIS',
     license = 'Apache License',
     description="TS-VIS is a Python module for deep learning visualization",
     packages=find_packages(),
