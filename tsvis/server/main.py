@@ -17,7 +17,7 @@
 """
 import sys
 from tsvis.server import manage
-from .command_line import get_cmd_line
+from tsvis.server.command_line import get_cmd_line
 
 def run_migrate(args):
     argvs = [

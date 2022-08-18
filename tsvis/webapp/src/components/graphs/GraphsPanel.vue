@@ -15,8 +15,8 @@
  */
 
 <template>
-  <div class="temp">
-    <div class="graphPanel">
+  <div :class="['temp',  getFoldTag ? '' : 'fold']">
+    <div class="graphPanel" v-show="getFoldTag">
       <div class="graphPanelHead">
         <div
           id="c-graph"
@@ -33,10 +33,10 @@
           结构图
         </div>
       </div>
-      <el-card>
+      <el-card v-show="cGraph">
         <div class="graphPanelContent">
           <div v-show="cGraph" class="cGraphPanel">
-            <el-row style="margin-bottom: 7%; font-size: 15px;">条件过滤</el-row>
+            <el-row style="margin-bottom: 7%; font-size: 15px">条件过滤</el-row>
 
             <template v-for="(item1, index1) in item">
               <template v-if="index1">
@@ -46,11 +46,11 @@
               </template>
 
               <el-row :key="index1 + 'mainSection'" class="mainSection">
-                <el-row style="height: 5%;">
-                  <div style="float: right;">
+                <el-row style="height: 5%">
+                  <div style="float: right">
                     <el-button
                       :icon="0 ? 'iconfont icon-zise' : 'iconfont icon-zise-'"
-                      style="color: #662d91;"
+                      style="color: #662d91"
                       size="mini"
                       class="choose"
                       @click="delOr(index1)"
@@ -60,16 +60,22 @@
 
                 <template v-for="(item2, index2) in item1">
                   <template v-if="index2">
-                    <el-row :key="index1 + '-' + index2 + '-seg'" class="andRow">
+                    <el-row
+                      :key="index1 + '-' + index2 + '-seg'"
+                      class="andRow"
+                    >
                       <el-link disabled>AND</el-link>
                     </el-row>
                   </template>
 
                   <div
                     :key="index1 + '-' + index2 + '-section'"
-                    style=" margin-right: 2%; margin-left: 4%;"
+                    style="margin-right: 2%; margin-left: 4%"
                   >
-                    <el-row :key="index1 + '-' + index2 + '-condition'" class="coloredRow">
+                    <el-row
+                      :key="index1 + '-' + index2 + '-condition'"
+                      class="coloredRow"
+                    >
                       <el-col :span="22">
                         <el-row :gutter="7">
                           <el-col :span="8">
@@ -114,11 +120,15 @@
                           </el-col>
                         </el-row>
                       </el-col>
-                      <el-col :span="2" style="padding: 0;">
-                        <div style="margin-top: 20%;">
+                      <el-col :span="2" style="padding: 0">
+                        <div style="margin-top: 20%">
                           <el-button
-                            :icon="0 ? 'iconfont icon-huangse' : 'iconfont icon-huangse-'"
-                            style="color: #fbb03b;"
+                            :icon="
+                              0
+                                ? 'iconfont icon-huangse'
+                                : 'iconfont icon-huangse-'
+                            "
+                            style="color: #fbb03b"
                             size="mini"
                             class="choose"
                             @click="delAnd(item1, item2, index1, index2)"
@@ -129,11 +139,15 @@
                   </div>
                 </template>
                 <el-row>
-                  <div style=" margin-top: 2%; margin-bottom: 2%; margin-left: 47%;">
+                  <div
+                    style="margin-top: 2%; margin-bottom: 2%; margin-left: 47%"
+                  >
                     AND
                     <el-button
-                      :icon="1 ? 'iconfont icon-huangse' : 'iconfont icon-huangse-'"
-                      style="color: #fbb03b;"
+                      :icon="
+                        1 ? 'iconfont icon-huangse' : 'iconfont icon-huangse-'
+                      "
+                      style="color: #fbb03b"
                       size="mini"
                       class="choose"
                       @click="addAnd(item1)"
@@ -144,12 +158,12 @@
             </template>
 
             <el-row>
-              <div style=" margin-top: 3%; margin-bottom: 3%; margin-left: 47%;">
+              <div style="margin-top: 3%; margin-bottom: 3%; margin-left: 47%">
                 OR
                 <el-button
                   :icon="1 ? 'iconfont icon-zise' : 'iconfont icon-zise-'"
                   class="choose"
-                  style="color: #662d91;"
+                  style="color: #662d91"
                   size="mini"
                   @click="addOr()"
                 />
@@ -158,7 +172,11 @@
           </div>
           <div v-show="!cGraph" class="sGraphPanel">
             <div>
-              <el-select v-model="value1" placeholder="请选择" style="width: 100%;">
+              <el-select
+                v-model="value1"
+                placeholder="请选择"
+                style="width: 100%"
+              >
                 <el-option
                   v-for="item2 in option"
                   :key="item2.value"
@@ -172,56 +190,58 @@
       </el-card>
     </div>
 
-    <div class="buttons">
+    <div class="buttons" v-show="cGraph">
       <el-tooltip
         class="item"
         effect="dark"
         content="条件过滤后点击该按钮隐藏节点"
         placement="top-start"
       >
-        <el-button v-show="cGraph" class="buttonOption1" round size="mini" @click="hidde()"
+        <el-button class="buttonOption1" round size="mini" @click="hidde()"
           >隐藏</el-button
         >
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="隐藏节点后点击该按钮" placement="top-start">
-        <el-button v-if="cGraph" class="buttonOption1" round size="mini" @click="Run()"
-          >布局</el-button
-        >
-        <el-button
-          v-else
-          class="buttonOption1"
-          style="margin-left: 40%;"
-          round
-          size="mini"
-          @click="Run()"
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="隐藏节点后点击该按钮"
+        placement="top-start"
+      >
+        <el-button class="buttonOption1" round size="mini" @click="Run()"
           >布局</el-button
         >
       </el-tooltip>
-      <el-button v-show="cGraph" class="buttonOption2" round size="mini" @click="Pre()"
+      <el-button class="buttonOption2" round size="mini" @click="Pre()"
         >上一步</el-button
       >
-      <el-button v-show="cGraph" class="buttonOption2" round size="mini" @click="Clear()"
+      <el-button class="buttonOption2" round size="mini" @click="Clear()"
         >初始化</el-button
       >
     </div>
 
-    <div class="info">
-      <div class="infoTitle"><i class="el-icon-chat-line-round dot" />数据信息栏</div>
+    <div class="info" v-show="cGraph">
+      <div class="infoTitle">
+        <i class="el-icon-chat-line-round dot" />数据信息栏
+      </div>
       <el-card>
         <div class="infoContent">
           <template v-for="(item3, index) in obj">
             <div
               :key="index + '-control'"
               class="information"
-              style="float: left; width: 100%; clear: both;"
+              style="float: left; width: 100%; clear: both"
             >
               <el-card class="cardStyle">
                 <el-col :span="24">
                   <el-col :span="3">
-                    <div style="float: left; margin-bottom: 10px;">
+                    <div style="float: left; margin-bottom: 10px">
                       <el-button
-                        :icon="tag[index] == 0 ? 'iconfont icon-suohui' : 'iconfont icon-zhankai1'"
-                        style="color: #6f6bd8;"
+                        :icon="
+                          tag[index] == 0
+                            ? 'iconfont icon-suohui'
+                            : 'iconfont icon-zhankai1'
+                        "
+                        style="color: #6f6bd8"
                         size="mini"
                         @click="switchTag(index)"
                       />
@@ -229,7 +249,7 @@
                   </el-col>
 
                   <el-col :span="21">
-                    <div style="float: left; margin-bottom: 5%;">
+                    <div style="float: left; margin-bottom: 5%">
                       {{ index }}
                     </div>
                   </el-col>
@@ -237,16 +257,25 @@
               </el-card>
             </div>
 
-            <div :id="index" :key="index + '-box'" class="flag" style='display:&quot;inline&quot;;clear:both'>
+            <div
+              :id="index"
+              :key="index + '-box'"
+              class="flag"
+              style="display: 'inline'; clear: both"
+            >
               <ul>
                 <template v-for="(name, value4) in item3">
-                  <div :key="value4" style="padding: 1%; clear: both;">
+                  <div :key="value4" style="padding: 1%; clear: both">
                     <li>
                       <el-col :span="12">
-                        <div style="float: left;"><span class="ddot" />{{ value4 }}</div>
+                        <div style="float: left">
+                          <span class="ddot" />{{ value4 }}
+                        </div>
                       </el-col>
 
-                      <div style="float: left; word-break:break-all; ">{{ name }}</div>
+                      <div style="float: left; word-break: break-all">
+                        {{ name }}
+                      </div>
                     </li>
                   </div>
                 </template>
@@ -256,27 +285,30 @@
         </div>
       </el-card>
     </div>
+    <FeatureMapBox
+      v-show="!cGraph&&(getFmType[userSelectRunFile]?Object.keys(getFmType[userSelectRunFile]).length>0:!getFmType[userSelectRunFile])"
+      :class="getFoldTag ? 'featureOption_fold' : 'featureOption_unfold'"
+    ></FeatureMapBox>
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-import { createNamespacedHelpers } from 'vuex';
-import * as d3 from 'd3';
-
+import Vue from "vue";
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+import { createNamespacedHelpers } from "vuex";
+import FeatureMapBox from "./FeatureMapBox.vue";
+import * as d3 from "d3";
 Vue.use(ElementUI);
 
-const { mapGetters: mapGraphGetters, mapMutations: mapGraphMutations } = createNamespacedHelpers(
-  'graph'
-);
-const { mapState: mapLayoutStates } = createNamespacedHelpers('layout');
+const { mapGetters: mapGraphGetters, mapMutations: mapGraphMutations } =
+  createNamespacedHelpers("graph");
+const { mapState: mapLayoutStates } = createNamespacedHelpers("layout");
 export default {
-  name: 'GraphsPanel',
+  name: "GraphsPanel",
   data() {
     return {
-      value1: '',
+      value1: "",
       option: [],
       tag: {
         NODE_PROPERTIES: 0,
@@ -285,65 +317,80 @@ export default {
         ATTRIBUTES: 0,
       },
       graphDegree: 100,
-      reg: '',
+      reg: "",
       clickNode: [],
-      value: '',
-      min: '',
-      max: '',
-      text1: '',
-      text2: '',
-      obj: '',
+      value: "",
+      min: "",
+      max: "",
+      text1: "",
+      text2: "",
+      obj: "",
       options: [
         {
-          value: 'input',
-          label: '入度',
+          value: "input",
+          label: "入度",
         },
         {
-          value: 'output',
-          label: '出度',
+          value: "output",
+          label: "出度",
         },
       ],
       tags: [
         {
-          value: '<',
-          label: '<',
+          value: "<",
+          label: "<",
         },
         {
-          value: '<=',
-          label: '<=',
+          value: "<=",
+          label: "<=",
         },
         {
-          value: '==',
-          label: '=',
+          value: "==",
+          label: "=",
         },
         {
-          value: '>',
-          label: '>',
+          value: ">",
+          label: ">",
         },
         {
-          value: '>=',
-          label: '>=',
+          value: ">=",
+          label: ">=",
         },
       ],
-      item: [[{ type: '', tag: '', num: '' }]],
-      Reg: '',
+      item: [[{ type: "", tag: "", num: "" }]],
+      Reg: "",
       tagRadioFlag: true,
       cGraph: true,
     };
   },
+  components: {
+    FeatureMapBox,
+  },
   computed: {
     ...mapGraphGetters([
-      'getInfo',
-      'getClick',
-      'getRunName',
-      'getTagName',
-      'getCurTag',
-      'getRunChangeTag',
-      'getIsDrawing',
-      'getSList',
-      'getInitOption',
+      "getInfo",
+      "getClick",
+      "getRunName",
+      "getTagName",
+      "getCurTag",
+      "getRunChangeTag",
+      "getIsDrawing",
+      "getSList",
+      "getInitOption",
+      "getFeatureMapShow",
+      "getFmType",
+      "getSelectFmType",
+      "getFoldTag",
     ]),
-    ...mapLayoutStates(['userSelectRunFile']),
+    ...mapLayoutStates(["userSelectRunFile"]),
+    selectType: {
+      get() {
+        return this.getSelectFmType;
+      },
+      set(val) {
+        this.setSelectFmType(val);
+      },
+    },
   },
   watch: {
     getInitOption(val) {
@@ -356,22 +403,24 @@ export default {
       this.setData(val);
     },
     getCurTag(val) {
-      this.obj = '';
-      if (val === 'c_graph') {
+      this.obj = "";
+      if (val === "c_graph") {
         this.cGraph = true;
       } else {
         this.cGraph = false;
       }
     },
     userSelectRunFile() {
-      if (this.getCurTag === 'c_graph') {
+      this.clearGraphData();
+      this.setFoldTag('reset');
+      if (this.getCurTag === "c_graph") {
         this.cGraph = true;
       } else {
         this.cGraph = false;
       }
     },
     getInfo(val) {
-      d3.selectAll('.flag').style('display', '');
+      d3.selectAll(".flag").style("display", "");
       this.tag.ATTRIBUTES = 1;
       this.tag.INPUTS = 1;
       this.tag.OUTPUTS = 1;
@@ -380,8 +429,8 @@ export default {
       const info = {};
 
       if (obj.info) {
-        if (obj.info === 'init') {
-          this.obj = '';
+        if (obj.info === "init") {
+          this.obj = "";
         }
         return;
       }
@@ -394,17 +443,17 @@ export default {
       if (obj.attr) {
         info.ATTRIBUTES = {};
         for (const i in obj.attr) {
-          if (i === '_output_shapes') {
+          if (i === "_output_shapes") {
             if (obj.attr[i].length === 1) {
-              if (obj.attr[i][0] !== '') {
+              if (obj.attr[i][0] !== "") {
                 // eslint-disable-next-line
                 info.ATTRIBUTES[i] = obj.attr[i][0];
               }
             } else {
               info.ATTRIBUTES[i] = obj.attr[i];
             }
-          } else if (i === 'shape') {
-            if (obj.attr[i] !== '') {
+          } else if (i === "shape") {
+            if (obj.attr[i] !== "") {
               info.ATTRIBUTES[i] = obj.attr[i];
             }
           } else {
@@ -415,12 +464,12 @@ export default {
 
       if (obj.inNode.length > 0) {
         info.INPUTS = {};
-        const name = 'input';
+        const name = "input";
         if (obj.inNode.length === 1) {
           // eslint-disable-next-line
           info.INPUTS[name] = obj.inNode[0];
         } else {
-          let curname = '';
+          let curname = "";
           for (const i in obj.inNode) {
             curname = name + i.toString();
             info.INPUTS[curname] = obj.inNode[i];
@@ -430,12 +479,12 @@ export default {
 
       if (obj.outNode.length > 0) {
         info.OUTPUTS = {};
-        const name = 'output';
+        const name = "output";
         if (obj.outNode.length === 1) {
           // eslint-disable-next-line
           info.OUTPUTS[name] = obj.outNode[0];
         } else {
-          let curname = '';
+          let curname = "";
           for (const i in obj.outNode) {
             curname = name + i.toString();
             info.OUTPUTS[curname] = obj.outNode[i];
@@ -448,9 +497,12 @@ export default {
     getClick(val) {
       this.clickNode.push(val);
     },
+    selectType(val) {
+      this.setSelectFmType(val);
+    },
   },
   mounted() {
-    if (this.getCurTag === 'c_graph') {
+    if (this.getCurTag === "c_graph") {
       this.cGraph = true;
     } else {
       this.cGraph = false;
@@ -460,15 +512,19 @@ export default {
   },
   methods: {
     ...mapGraphMutations([
-      'Clear',
-      'regularEx',
-      'Run',
-      'Hidden',
-      'Pre',
-      'Modify',
-      'regClear',
-      'setCurTag',
-      'setData',
+      "Clear",
+      "regularEx",
+      "Run",
+      "Hidden",
+      "Pre",
+      "Modify",
+      "regClear",
+      "setCurTag",
+      "setData",
+      "setFeatureMapShow",
+      "setSelectFmType",
+      "clearGraphData",
+      "setFoldTag"
     ]),
     changeTag(param) {
       if (!this.getRunChangeTag && !this.getIsDrawing) {
@@ -486,13 +542,18 @@ export default {
     },
     addAnd(val) {
       val.push({
-        type: '',
-        tag: '',
-        num: '',
+        type: "",
+        tag: "",
+        num: "",
       });
     },
     delAnd(val1, val2, index1, index2) {
-      if (index1 === 0 && index2 === 0 && this.item.length === 1 && val1.length === 1) {
+      if (
+        index1 === 0 &&
+        index2 === 0 &&
+        this.item.length === 1 &&
+        val1.length === 1
+      ) {
         return;
       }
       const index = val1.indexOf(val2);
@@ -502,7 +563,7 @@ export default {
       }
     },
     addOr() {
-      this.item.splice(this.item.length, 0, [{ type: '', tag: '', num: '' }]);
+      this.item.splice(this.item.length, 0, [{ type: "", tag: "", num: "" }]);
     },
     delOr(index1) {
       if (index1 === 0 && this.item.length === 1) {
@@ -511,31 +572,35 @@ export default {
       this.item.splice(index1, 1);
     },
     to_Reg() {
-      let outStr = '';
+      let outStr = "";
       for (let i = 0; i < this.item.length; i += 1) {
-        let inStr = '';
+        let inStr = "";
         for (let j = 0; j < this.item[i].length; j += 1) {
-          let childStr = '';
+          let childStr = "";
           if (
-            this.item[i][j].type === '' ||
-            this.item[i][j].tag === '' ||
-            this.item[i][j].num === '' ||
+            this.item[i][j].type === "" ||
+            this.item[i][j].tag === "" ||
+            this.item[i][j].num === "" ||
             isNaN(Number(this.item[i][j].num))
           ) {
-            childStr = '';
+            childStr = "";
           } else {
-            childStr = childStr + this.item[i][j].type + this.item[i][j].tag + this.item[i][j].num;
+            childStr =
+              childStr +
+              this.item[i][j].type +
+              this.item[i][j].tag +
+              this.item[i][j].num;
           }
           if (childStr) {
             inStr = `${inStr + childStr}&&`;
           }
         }
-        if (inStr.slice(-2) === '&&') {
+        if (inStr.slice(-2) === "&&") {
           inStr = inStr.substring(0, inStr.length - 2);
         }
         if (inStr) {
           inStr = `(${inStr})`;
-          if (i > 0 && outStr !== '') {
+          if (i > 0 && outStr !== "") {
             inStr = `||${inStr}`;
           }
 
@@ -550,22 +615,34 @@ export default {
       this.Hidden();
     },
     switchTag(id) {
-      id = id.replace(/\s/, '');
+      id = id.replace(/\s/, "");
       const val = d3.select(`#${id}`)._groups[0][0].style.display;
-      if (val === 'none') {
-        d3.select(`#${id}`).style('display', '');
+      if (val === "none") {
+        d3.select(`#${id}`).style("display", "");
         this.tag[id] = 1;
       } else {
-        d3.select(`#${id}`).style('display', 'none');
+        d3.select(`#${id}`).style("display", "none");
         this.tag[id] = 0;
       }
+    },
+    changeFeatureMap() {
+      this.setFeatureMapShow();
     },
   },
 };
 </script>
 <style lang="less" scoped>
+#featureMap {
+  width: 200px;
+  height: 100px;
+  background-color: #625eb3;
+}
 .temp {
   height: 100px;
+}
+.fold {
+  width: 50% !important;
+  height: calc(100% - 47px) !important;
 }
 
 .mainSection {
@@ -579,7 +656,20 @@ export default {
 .buttonOption2 {
   padding: 7px 7px;
 }
-
+.featureOption_fold {
+  width: 94%;
+  height: calc(95% - 30px);
+  margin: 5% 3% 0 3%;
+  border-radius: 3px;
+  box-shadow: 0 0 10px #ccc;
+}
+.featureOption_unfold {
+  height: 97.5%;
+  width: 98.5%;
+  margin: 1% 1% 0 0.5%;
+  border-radius: 3px 3px 0 0;
+  box-shadow:  rgba(0, 0, 0, 0.3) 0 0 10px;
+}
 .information .el-button {
   border: none;
 }
@@ -761,7 +851,7 @@ li {
 }
 
 /deep/ .iconfont {
-  font-family: 'iconfont' !important;
+  font-family: "iconfont" !important;
   -webkit-font-smoothing: antialiased;
   font-size: 20px;
 }

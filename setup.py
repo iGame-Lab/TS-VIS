@@ -22,7 +22,7 @@ import subprocess
 import shutil
 from setuptools import setup, find_packages
 
-VERSION = "0.4.2"
+VERSION = "1.0.0"
 
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.realpath(os.path.dirname(__file__))
@@ -36,7 +36,7 @@ def clean():
             shutil.rmtree(path)
 
 def read(name):
-    return open(os.path.join(ROOT, name)).read()
+    return open(os.path.join(ROOT, name), encoding='utf-8').read()
 
 def get_git_version():
     _git_vetsion = ""

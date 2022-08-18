@@ -16,8 +16,8 @@
 
 <style lang="less" scoped>
 .scalars-container {
-  background-color: #FFF;
-  margin-bottom:0.5%;
+  background-color: #fff;
+  margin-bottom: 0.5%;
   .scalars-title {
     height: auto;
     display: flex;
@@ -33,83 +33,83 @@
   padding: 1% 2% 0 2%;
   background-color: white;
 }
-    .my-label{
-      display:flex;
-      width: 100%;
-      .triangle{
-        position: absolute;
-        width: 0px;
-        height: 0px;
-        overflow: hidden;
-        border-top-width: 15px;
-        border-bottom-width: 15px;
-        border-left-width: 18px;
-        border-right-width: 18px;
-        border-style: dashed  dashed  dashed solid;
-        border-color: transparent transparent   transparent #7f7cc1;
-      }
-      .triangle-father{
-        position: relative;
-      }
-      .circle-father{
-        height: 30px;
-        width: 15%;
-        position: relative;
-        background-color:#7f7cc1;
-      }
-      .circle{
-        position: absolute;
-        width:8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: white;
-        left: 50%;
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%);
-      }
-      .my-text{
-        width: 70%;
-        height: 30px;
-        text-align: left;
-        vertical-align: center;
-        background-color:#7f7cc1;
-      }
-      span{
-        align-items: left;
-        margin-left: 10%;
-        line-height: 30px;
-        color:white;
-      }
-    }
-    .sub .triangle{
-      border-color: transparent transparent   transparent #b8c6ff;
-    }
-    .sub .circle-father{
-      background-color:#b8c6ff;
-    }
-    .sub .my-text{
-      background-color:#b8c6ff;
-    }
-    .sub{
-      background-size: 100% 100%;
-      width: 9.5%;
-      height:30px;
-      display: flex;
-      align-items: center;
-      font-family: sans-serif;
-      font-size: 12px;
-      color: #FFF;
-    }
-    .sub1{
-      background-size: 100% 100%;
-      width: 9.5%;
-      height:30px;
-      display: flex;
-      align-items: center;
-      font-family: sans-serif;
-      font-size: 12px;
-      color: #FFF;
-    }
+.my-label {
+  display: flex;
+  width: 100%;
+  .triangle {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+    border-top-width: 15px;
+    border-bottom-width: 15px;
+    border-left-width: 18px;
+    border-right-width: 18px;
+    border-style: dashed dashed dashed solid;
+    border-color: transparent transparent transparent #7f7cc1;
+  }
+  .triangle-father {
+    position: relative;
+  }
+  .circle-father {
+    height: 30px;
+    width: 15%;
+    position: relative;
+    background-color: #7f7cc1;
+  }
+  .circle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: white;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  .my-text {
+    width: 70%;
+    height: 30px;
+    text-align: left;
+    vertical-align: center;
+    background-color: #7f7cc1;
+  }
+  span {
+    align-items: left;
+    margin-left: 10%;
+    line-height: 30px;
+    color: white;
+  }
+}
+.sub .triangle {
+  border-color: transparent transparent transparent #b8c6ff;
+}
+.sub .circle-father {
+  background-color: #b8c6ff;
+}
+.sub .my-text {
+  background-color: #b8c6ff;
+}
+.sub {
+  background-size: 100% 100%;
+  width: 9.5%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-family: sans-serif;
+  font-size: 12px;
+  color: #fff;
+}
+.sub1 {
+  background-size: 100% 100%;
+  width: 9.5%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-family: sans-serif;
+  font-size: 12px;
+  color: #fff;
+}
 .line1 {
   height: 2px;
   width: 88%;
@@ -117,16 +117,15 @@
 }
 .line2 {
   height: 5px;
-  width:2.5%;
+  width: 2.5%;
   background-color: #625eb3;
 }
-.linestyle{
+.linestyle {
   background-color: #bac6ff;
 }
-.scalars-title:hover{
+.scalars-title:hover {
   cursor: pointer;
 }
-
 </style>
 <template>
   <div v-show="subshow" class="scalars-container">
@@ -134,7 +133,9 @@
       <div :class="[show?'sub':'sub1']">
         <div class="my-label">
           <div class="my-text"><span>{{ info }}</span></div>
-          <div class="circle-father"><div class="circle" /></div>
+          <div class="circle-father">
+            <div class="circle" />
+          </div>
           <div class="triangle-father">
             <div class="triangle" />
           </div>
@@ -146,7 +147,8 @@
     <div :class="[show?'showClass':'']">
       <div class="scalarscontent">
         <el-row :gutter="20">
-          <scalar-container v-for="item in data" v-show="isshow[item.run]" :key="item.index" :content="item" :subname="subname"/>
+          <scalar-container v-for="item in data" v-show="isshow[item.run]"
+            :key="item.index" :content="item" :subname="subname" />
         </el-row>
       </div>
     </div>
@@ -156,15 +158,15 @@
 import { createNamespacedHelpers } from 'vuex'
 import { ScalarContainer } from '../scalarcontainer'
 
-const { 
-  mapGetters: mapScalarGetters, 
-  mapActions: mapScalarActions, 
-  mapMutations: mapScalarMutations 
-  } = createNamespacedHelpers('scalar')
-const { 
+const {
+  mapGetters: mapScalarGetters,
+  mapActions: mapScalarActions,
+  mapMutations: mapScalarMutations
+} = createNamespacedHelpers('scalar')
+const {
   mapGetters: mapLayoutGetters,
-  mapState: mapLayoutStates 
-  } = createNamespacedHelpers('layout')
+  mapState: mapLayoutStates
+} = createNamespacedHelpers('layout')
 export default {
   components: {
     ScalarContainer
@@ -174,7 +176,7 @@ export default {
     index: Number,
     value: Array
   },
-  data() {
+  data () {
     return {
       data: [],
       show: true,
@@ -185,10 +187,10 @@ export default {
   },
   computed: {
     ...mapScalarGetters([
-      'detailData', 
-      'categoryInfo', 
-      'initshowrun', 
-      'showFlag', 
+      'detailData',
+      'categoryInfo',
+      'initshowrun',
+      'showFlag',
       'subisshow'
     ]),
     ...mapLayoutStates([
@@ -199,15 +201,13 @@ export default {
     ])
   },
   watch: {
-    userSelectRunFile(val) {
+    userSelectRunFile (val) {
       let flag = 1
       for (let i = 0; i < Object.keys(this.isshow).length; i += 1) {
         if (val.indexOf(Object.keys(this.isshow)[i]) > -1) {
-          // this.isshow[Object.keys(this.isshow)[i]] = true
           this.$set(this.isshow, Object.keys(this.isshow)[i], true)
           flag -= 1
         } else {
-          // this.isshow[Object.keys(this.isshow)[i]] = false
           this.$set(this.isshow, Object.keys(this.isshow)[i], false)
         }
       }
@@ -227,14 +227,13 @@ export default {
     getTimer: function () {
       let isshow = this.initshowrun[this.subname]
       let keys = Object.keys(isshow)
-      for(let i=0;i<keys.length;i++){
-        // this.isshow[keys[i]] = isshow[keys[i]]
+      for (let i = 0; i < keys.length; i++) {
         this.$set(this.isshow, keys[i], isshow[keys[i]])
       }
       this.data = this.detailData[this.subname]
     }
   },
-  created() {
+  created () {
     this.info = this.subname
     if (this.info.length > 10) {
       this.info = `${this.info.slice(0, 7)}...`
@@ -269,36 +268,14 @@ export default {
       'getData'
     ]),
     ...mapScalarMutations([
-      'setDetailData', 
-      'setshowrun', 
-      'back', 
-      'setFreshInfo', 
-      'setshowFlag', 
+      'setDetailData',
+      'setshowrun',
+      'back',
+      'setFreshInfo',
+      'setshowFlag',
       'setsubisshow'
     ]),
-    deepClone(data){
-       var type = getType(data);
-       var obj;
-       if(type === 'array'){
-           obj = [];
-       } else if(type === 'object'){
-           obj = {};
-       } else {
-           //不再具有下一层次
-           return data;
-       }
-       if(type === 'array'){
-           for(var i = 0, len = data.length; i < len; i++){
-               obj.push(deepClone(data[i]));
-           }
-       } else if(type === 'object'){
-           for(var key in data){
-               obj[key] = deepClone(data[key]);
-           }
-       }
-       return obj;
-    },
-    showContent() {
+    showContent () {
       if (this.showFlag[this.subname]) {
         this.setshowFlag([this.subname, false])
         this.show = this.showFlag[this.subname]

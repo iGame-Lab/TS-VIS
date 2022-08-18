@@ -137,3 +137,33 @@ def get_exception_hist(request):
 @response_wrapper
 def get_exception_box(request):
     return validate_get_request(request, get_exception_box_data)
+
+
+@gzip_page
+@response_wrapper
+def get_featuremap(request):
+    return validate_get_request(request, get_featuremap_data)
+
+
+@gzip_page
+@response_wrapper
+def get_transformer_text(request):
+    return validate_get_request(request, get_transformer_text_data)
+
+
+@gzip_page
+@response_wrapper
+def get_transformer_image(request):
+    return validate_get_request(request, get_transformer_image_data)
+
+
+@gzip_page
+@response_wrapper
+def get_hidden_state(request):
+    return validate_get_request(request, get_state_data)
+
+
+@gzip_page
+@response_wrapper
+def get_hidden_state_select(request):
+    return validate_get_request(request, get_state_select_data)

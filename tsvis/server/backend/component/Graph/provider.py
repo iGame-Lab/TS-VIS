@@ -22,23 +22,34 @@ from .graph_read import get_data as graph_get_data
 from .s_graph_read import get_s_graph_data
 from .graph import graph_op
 from tsvis.server.backend.api.utils import get_api_params
+from .graph_read import filter
 
-
-def graph_provider(file_path):
+def graph_provider(file_path, tag):
     res = CacheIO(file_path).get_cache()
     if res:
-        return {
-            'net': get_s_graph_data(res) if isinstance(res, str) else graph_get_data(res),
-            'operator': graph_op
-        }
+        if tag == "c_graph":
+            # if isinstance(res, str):
+            #     data = get_s_graph_data(res)
+            # else:
+            data, _ = graph_get_data(res)
+            return {
+                'net': data,
+                'operator': graph_op
+            }
+        else:
+            g, graph = graph_get_data(res)
+            return {
+                'net': [filter(g, graph)],
+                'operator': graph_op
+            }
     else:
         raise ValueError('Parameter error, no data found')
 
 
 def get_graph_data(request):
-    params = ['run', 'tag']
+    params = ['run', 'tag']  #type = "c_graph":获取计算图数据 type = "s_graph" :获取结构图数据
     run, tag = get_api_params(request, params)
 
     from tsvis.parser.utils.vis_logging import get_logger
-    file_path = path_parser(get_logger().cachedir, run, 'graph', tag)
-    return json.dumps(graph_provider(file_path))
+    file_path = path_parser(get_logger().cachedir, run, 'graph', "c_graph")
+    return json.dumps(graph_provider(file_path, tag))

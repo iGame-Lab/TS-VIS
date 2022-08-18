@@ -1,41 +1,35 @@
 <template>
   <div v-loading="audio.waiting" class="di main-wrap">
     <!-- 这里设置了ref属性后，在vue组件中，就可以用this.$refs.audio来访问该dom元素 -->
-    <audio
-      ref="audio"
-      :src="url"
-      :preload="audio.preload"
-      class="dn"
-      @play="onPlay"
-      @error="onError"
-      @waiting="onWaiting"
-      @pause="onPause"
-      @timeupdate="onTimeupdate"
-      @loadedmetadata="onLoadedmetadata"
-    />
+    <audio ref="audio" :src="url" :preload="audio.preload" class="dn"
+      @play="onPlay" @error="onError" @waiting="onWaiting" @pause="onPause"
+      @timeupdate="onTimeupdate" @loadedmetadata="onLoadedmetadata" />
 
     <div class="audioOut">
       <el-card class="mainAudio myCard">
-          <el-row key="1" type="flex" justify="center" class="row-bg">
+        <el-row key="1" type="flex" justify="center" class="row-bg">
           <el-col :span="2">
             <el-button
               :icon="audio.playing ?'iconfont icon-zanting':'iconfont icon-ziyuan74'"
-              type="primary"
-              size="medium"
-              class="playButton"
-              @click="startPlayOrPause"
-            />
+              type="primary" size="medium" class="playButton"
+              @click="startPlayOrPause" />
           </el-col>
           <el-col :span="2" v-show="controlList.noPadding">
-            <span type="info" class="timeInfo" >&#32;&#32;&#32;&#32;&#32;</span>
+            <span type="info" class="timeInfo">&#32;&#32;&#32;&#32;&#32;</span>
           </el-col>
-          <el-col :span="6" class="hidden-md-and-down" v-show="!controlList.noDownload">
-            <span type="info" class="timeInfo" >{{ audio.currentTime | formatSecond }}/{{ audio.maxTime | formatSecond }}</span>
+          <el-col :span="6" class="hidden-md-and-down"
+            v-show="!controlList.noDownload">
+            <span type="info"
+              class="timeInfo">{{ audio.currentTime | formatSecond }}/{{ audio.maxTime | formatSecond }}</span>
           </el-col>
-          <el-col :span="13" class="hidden-sm-and-down" v-show="!controlList.noProcess">
-            <el-slider  v-model="sliderTime" :format-tooltip="formatProcessToolTip" class="slider" @change="changeCurrentTime" />
+          <el-col :span="13" class="hidden-sm-and-down"
+            v-show="!controlList.noProcess">
+            <el-slider v-model="sliderTime"
+              :format-tooltip="formatProcessToolTip" class="slider"
+              @change="changeCurrentTime" />
           </el-col>
-          <el-col :span="2" :class="['mutedKey'+index, 'hidden-sm-and-down']"  v-show="!controlList.noMuted">
+          <el-col :span="2" :class="['mutedKey'+index, 'hidden-sm-and-down']"
+            v-show="!controlList.noMuted">
             <!-- 音量按钮 -->
             <!-- <div :id="'myMute'+index" class="volmeBand">
               <el-slider
@@ -45,24 +39,15 @@
                 >
               </el-slider>
             </div> -->
-            <el-button
-              :class="[audio.muted ? 'gray' : 'light']"
-              type="primary"
-              icon="iconfont icon-ziyuan73"
-              size="medium"
-              @click="startMutedOrNot"
-            />
+            <el-button :class="[audio.muted ? 'gray' : 'light']" type="primary"
+              icon="iconfont icon-ziyuan73" size="medium"
+              @click="startMutedOrNot" />
           </el-col>
-          <el-col :span="2" class="hidden-md-and-down"  v-show="!controlList.noDownload">
-            <el-button
-              :href="url"
-              download="audio.wav"
-              icon="el-icon-bottom"
-              type="primary"
-              class="download"
-              target="_blank"
-              @click="downAudio(url)"
-            />
+          <el-col :span="2" class="hidden-md-and-down"
+            v-show="!controlList.noDownload">
+            <el-button :href="url" download="audio.wav" icon="el-icon-bottom"
+              type="primary" class="download" target="_blank"
+              @click="downAudio(url)" />
           </el-col>
           <!-- <el-button v-show="!controlList.noMuted" type="text" @click="startMutedOrNot">{{audio.muted | transMutedOrNot}}</el-button> -->
           <!-- <el-slider
@@ -85,7 +70,7 @@
 <script>
 import 'element-ui/lib/theme-chalk/display.css'
 import * as d3 from 'd3'
-function realFormatSecond(second) {
+function realFormatSecond (second) {
   var secondType = typeof second
 
   if (secondType === 'number' || secondType === 'string') {
@@ -100,16 +85,16 @@ function realFormatSecond(second) {
 
 export default {
   filters: {
-    formatSecond(second = 0) {
+    formatSecond (second = 0) {
       return realFormatSecond(second)
     },
-    transPlayPause(value) { // 暂时不适用过滤器
+    transPlayPause (value) { // 暂时不适用过滤器
       return value ? '暂停' : '播放'
     },
-    transMutedOrNot(value) {
+    transMutedOrNot (value) {
       return value ? '放音' : '静音'
     },
-    transSpeed(value) {
+    transSpeed (value) {
       return '快进: x' + value
     }
   },
@@ -120,7 +105,7 @@ export default {
     },
     theSpeeds: {
       type: Array,
-      default() {
+      default () {
         return [1, 1.5, 2]
       }
     },
@@ -130,7 +115,7 @@ export default {
     },
     index: Number
   },
-  data() {
+  data () {
     return {
       url: this.theUrl || 'http://devtest.qiniudn.com/secret base~.mp3',
       audio: {
@@ -165,19 +150,19 @@ export default {
     }
   },
   watch: {
-    theUrl: function() {
+    theUrl: function () {
       this.url = this.theUrl
       this.audio.playing = false
     }
   },
-  created() {
+  created () {
     this.setControlList()
   },
-  mounted() {
+  mounted () {
     this.changeMutedKey()
   },
   methods: {
-    downAudio(param) {
+    downAudio (param) {
       const filename = 'audio.wav'
       fetch(param, {
         headers: new Headers({
@@ -192,7 +177,7 @@ export default {
           window.URL.revokeObjectURL(blobUrl)
         })
     },
-    download(href, filename) {
+    download (href, filename) {
       const a = document.createElement('a')
       a.download = filename
       a.href = href
@@ -200,7 +185,7 @@ export default {
       a.click()
       a.remove()
     },
-    setControlList() {
+    setControlList () {
       const controlList = this.theControlList.split(' ')
       controlList.forEach((item) => {
         if (this.controlList[item] !== undefined) {
@@ -208,57 +193,57 @@ export default {
         }
       })
     },
-    changeSpeed() {
+    changeSpeed () {
       const index = this.speeds.indexOf(this.audio.speed) + 1
       this.audio.speed = this.speeds[index % this.speeds.length]
       this.$refs.audio.playbackRate = this.audio.speed
     },
-    startMutedOrNot() {
+    startMutedOrNot () {
       this.$refs.audio.muted = !this.$refs.audio.muted
       this.audio.muted = this.$refs.audio.muted
     },
     // 音量条toolTip
-    formatVolumeToolTip(index) {
+    formatVolumeToolTip (index) {
       return '音量条: ' + index
     },
     // 进度条toolTip
-    formatProcessToolTip(index = 0) {
+    formatProcessToolTip (index = 0) {
       index = parseInt(this.audio.maxTime / 100 * index)
       return '进度条: ' + realFormatSecond(index)
     },
     // 音量改变
-    changeVolume(index = 0) {
+    changeVolume (index = 0) {
       this.$refs.audio.volume = index / 100
       this.volume = index
     },
     // 播放跳转
-    changeCurrentTime(index) {
+    changeCurrentTime (index) {
       this.$refs.audio.currentTime = parseInt(index / 100 * this.audio.maxTime)
     },
-    startPlayOrPause() {
+    startPlayOrPause () {
       return this.audio.playing ? this.pausePlay() : this.startPlay()
     },
     // 开始播放
-    startPlay() {
+    startPlay () {
       this.$refs.audio.play()
     },
     // 暂停
-    pausePlay() {
+    pausePlay () {
       this.$refs.audio.pause()
     },
     // 当音频暂停
-    onPause() {
+    onPause () {
       this.audio.playing = false
     },
     // 当发生错误, 就出现loading状态
-    onError() {
+    onError () {
       this.audio.waiting = true
     },
     // 当音频开始等待
-    onWaiting(res) {
+    onWaiting (res) {
     },
     // 当音频开始播放
-    onPlay(res) {
+    onPlay (res) {
       this.audio.playing = true
       this.audio.loading = false
       if (!this.controlList.onlyOnePlaying) {
@@ -274,27 +259,27 @@ export default {
       })
     },
     // 当timeupdate事件大概每秒一次，用来更新音频流的当前播放时间
-    onTimeupdate(res) {
+    onTimeupdate (res) {
       this.audio.currentTime = res.target.currentTime
       this.sliderTime = parseInt(this.audio.currentTime / this.audio.maxTime * 100)
     },
     // 当加载语音流元数据完成后，会触发该事件的回调函数
     // 语音元数据主要是语音的长度之类的数据
-    onLoadedmetadata(res) {
+    onLoadedmetadata (res) {
       this.audio.waiting = false
       this.audio.maxTime = parseInt(res.target.duration)
     },
-    changeMutedKey() {
+    changeMutedKey () {
       d3.selectAll('.volmeBand')
         .style('display', 'none')
       var select = d3.selectAll('.volmeBand')
       // var vm = this
       select
-        .on('mouseover', function() {
+        .on('mouseover', function () {
           d3.selectAll('.volmeBand')
             .style('display', 'null')
         })
-        .on('mouseout', function() {
+        .on('mouseout', function () {
           // d3.select('#myMute' + vm.index).node()
           //   .style('display', 'none')
         })
@@ -304,79 +289,69 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .main-wrap{
-    // padding: 10px 15px;
-  }
-  .slider {
-    // display: inline-block;
-    // width: 100px;
-    // position: relative;
-    // top: 14px;
-    // margin-left: 15px;
-    padding-left: 3px;
-  }
+.slider {
+  padding-left: 3px;
+}
 
-  .di {
-    display: block;
-  }
+.di {
+  display: block;
+}
 
-  .download {
-    color: #409EFF;
-    //float: left;
-    text-align: center;
-  }
+.download {
+  color: #409eff;
+  text-align: center;
+}
 
-  .dn{
-    display: none;
+.dn {
+  display: none;
+}
+/deep/.el-button {
+  padding: 0;
+}
+.el-button--primary {
+  background-color: white;
+  color: #8f8ad7;
+  border: #8f8ad7;
+  font-size: 20px;
+}
+.row-bg {
+  align-items: center;
+}
+.mainAudio {
+  width: 100%;
+}
+.light {
+  color: #8f8ad7;
+}
+.gray {
+  color: gray;
+}
+.download {
+  color: #8f8ad7;
+}
+/deep/.hidden-md-and-down {
+  text-align: center;
+}
+/deep/.playButton {
+  float: right;
+}
+/deep/.myCard {
+  .timeInfo {
+    font-size: 9px;
   }
-  /deep/.el-button{
+  .el-slider__button {
+    border-color: #625eb3;
+  }
+  .el-slider__bar {
+    background-color: #625eb3;
+  }
+  .el-card__body {
     padding: 0;
   }
-  .el-button--primary {
-  // background-color: #736FBC;
-    background-color: white;
-    color: #8F8AD7;
-    border: #8F8AD7;
-    font-size: 20px;
-  }
-  .row-bg {
-    align-items: center;
-  }
-  .mainAudio {
-    width: 100%;
-  }
-  .light{
-    color: #8F8AD7;
-  }
-  .gray{
-    color:gray;
-  }
-  .download{
-    color:#8F8AD7;
-  }
-  /deep/.hidden-md-and-down{
-    text-align: center;
-  }
-  /deep/.playButton{
-    float:right;
-  }
-  /deep/.myCard {
-    .timeInfo{
-      font-size: 9px;
-    }
-    .el-slider__button{
-      border-color: #625EB3
-    }
-    .el-slider__bar{
-      background-color: #625EB3;
-    }
-    .el-card__body{
-      padding: 0;
-    }
-    margin-right: 1%;
-    border-radius: 30px;
-  }
-  .audioOut{
-    height: 30%;
-  }
+  margin-right: 1%;
+  border-radius: 30px;
+}
+.audioOut {
+  height: 30%;
+}
 </style>

@@ -3,98 +3,98 @@
  * @version: 1.0
  * @Author: xds
  * @Date: 2020-05-08 10:52:00
- * @LastEditors: xds
- * @LastEditTime: 2020-05-24 09:53:32
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-14 15:42:40
  */
-import Vue from 'vue'
-import Router from 'vue-router'
-import Layout from '@/components/layout/Layout.vue'
-import {Scalars, ScalarsPanel} from '@/components/scalars'
-import {Medias, MediasPanel} from '@/components/medias'
-import {Graphs, GraphsPanel} from '@/components/graphs'
-import {Hyperparms, HyperparmsPanel} from '@/components/hyperparms'
-import {Features, FeaturesPanel} from '@/components/features'
-import {Customs, CustomsPanel} from '@/components/customs'
-import {Statistics, StatisticsPanel} from '@/components/statistics'
-import {ROCs, ROCsPanel} from '@/components/rocs'
-import {Embeddings, EmbeddingsPanel} from '@/components/embeddings'
-import {Exception, ExceptionPanel} from '@/components/exception'
-
-Vue.use(Router)
+import Vue from "vue";
+import Router from "vue-router";
+import { Scalars, ScalarsPanel } from "@/components/scalars";
+import { Medias, MediasPanel } from "@/components/medias";
+const layout = () => import("@/components/layout/Layout.vue");
+const graph = () => import("@/components/graphs/Graphs.vue");
+const graphpanel = () => import("@/components/graphs/GraphsPanel.vue");
+import { Hyperparms, HyperparmsPanel } from "@/components/hyperparms";
+import { Customs, CustomsPanel } from "@/components/customs";
+import { Statistics, StatisticsPanel } from "@/components/statistics";
+import { Embeddings, EmbeddingsPanel } from "@/components/embeddings";
+import { Exception, ExceptionPanel } from "@/components/exception";
+import { Transformer, TransformerPanel } from "@/components/transformer";
+import { HiddenState, HiddenStatePanel } from "@/components/hiddenstate";
+Vue.use(Router);
 
 export default new Router({
   routes: [
-    {path: '/', redirect: '/index'},
+    { path: "/", redirect: "/index" },
     {
-      path: '/index',
-      name: 'Layout',
-      component: Layout,
+      path: "/index",
+      name: "Layout",
+      component: layout,
       children: [
         {
-          path: 'graph',
+          path: "graph",
           components: {
-            default: Graphs,
-            right: GraphsPanel
+            default: graph,
+            right: graphpanel
           }
         },
         {
-          path: 'scalar',
+          path: "scalar",
           components: {
             default: Scalars,
             right: ScalarsPanel
           }
         },
         {
-          path: 'media',
+          path: "media",
           components: {
             default: Medias,
             right: MediasPanel
           }
         },
         {
-          path: 'statistic',
+          path: "statistic",
           components: {
             default: Statistics,
             right: StatisticsPanel
           }
         },
         {
-          path: 'embedding',
+          path: "embedding",
           components: {
             default: Embeddings,
             right: EmbeddingsPanel
           }
         },
         {
-          path: 'feature',
-          components: {
-            default: Features,
-            right: FeaturesPanel
-          }
-        },
-        {
-          path: 'roc',
-          components: {
-            default: ROCs,
-            right: ROCsPanel
-          }
-        },
-        {
-          path: 'hyperparm',
+          path: "hyperparm",
           components: {
             default: Hyperparms,
             right: HyperparmsPanel
           }
         },
         {
-          path: 'exception',
+          path: "exception",
           components: {
             default: Exception,
             right: ExceptionPanel
           }
         },
         {
-          path: 'custom',
+          path: "transformer",
+          components: {
+            default: Transformer,
+            right: TransformerPanel
+          }
+        },
+        {
+          path: "hiddenstate",
+          components: {
+            default: HiddenState,
+            right: HiddenStatePanel
+          }
+        },
+        {
+          path: "custom",
           components: {
             default: Customs,
             right: CustomsPanel
@@ -103,4 +103,4 @@ export default new Router({
       ]
     }
   ]
-})
+});

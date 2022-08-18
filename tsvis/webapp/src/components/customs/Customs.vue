@@ -90,7 +90,7 @@ permissions and * limitations under the License. *
 }
 
 .noneData {
-  display: "none";
+  display: 'none';
 }
 
 .line1 {
@@ -153,7 +153,6 @@ permissions and * limitations under the License. *
 
       .statisticContaierContent {
         width: 100%;
-        // height: 80%
         .runTag {
           width: 100%;
         }
@@ -174,12 +173,8 @@ permissions and * limitations under the License. *
           <div>
             <div class="scalarscontent">
               <el-row :gutter="20">
-                <ScalarContainer
-                  v-for="(val, name) in scalarData"
-                  :key="name"
-                  :content="val"
-                  :chartname="name"
-                />
+                <ScalarContainer v-for="(val, name) in scalarData" :key="name"
+                  :content="val" :chartname="name" />
               </el-row>
             </div>
           </div>
@@ -189,13 +184,9 @@ permissions and * limitations under the License. *
           <div :style="hasAudio.hasData ? '' : 'display:none'">
             <div class="scalarscontent">
               <el-row :gutter="20">
-                <AudioContainer
-                  v-for="item in audioData"
-                  ref="AudioContainer"
-                  :key="item.index"
-                  :content="item.content"
-                  :index="item.index"
-                />
+                <AudioContainer v-for="item in audioData" ref="AudioContainer"
+                  :key="item.index" :content="item.content"
+                  :index="item.index" />
               </el-row>
             </div>
           </div>
@@ -205,14 +196,10 @@ permissions and * limitations under the License. *
           <div :style="hasImage.hasData ? '' : 'display:none'">
             <div class="scalarscontent">
               <el-row :gutter="20">
-                <ImageContainer
-                  v-for="item in imageData"
-                  ref="ImageContainer"
+                <ImageContainer v-for="item in imageData" ref="ImageContainer"
                   :key="
                     item.content.run + '/' + Object.keys(item.content.value)[0]
-                  "
-                  :content="item.content"
-                />
+                  " :content="item.content" />
               </el-row>
             </div>
           </div>
@@ -222,14 +209,10 @@ permissions and * limitations under the License. *
           <div :style="hasText.hasData ? '' : 'display:none'">
             <div class="scalarscontent">
               <el-row :gutter="20">
-                <TextContainer
-                  v-for="item in textData"
-                  ref="TextContainer"
+                <TextContainer v-for="item in textData" ref="TextContainer"
                   :key="
                     item.content.run + '/' + Object.keys(item.content.value)[0]
-                  "
-                  :content="item.content"
-                />
+                  " :content="item.content" />
               </el-row>
             </div>
           </div>
@@ -238,25 +221,14 @@ permissions and * limitations under the License. *
         <div id="histogram">
           <div class="statistics-container">
             <div :class="['statistics-content']">
-              <div
-                v-for="item in statisticData"
-                :id="item.divId"
-                :key="item.divId"
-                class="allStatisticContainer"
-              >
-                <statisticContainer
-                  ref="histoContainer"
-                  :key="item.ttlabel"
-                  :data="item.data"
-                  :ttlabel="item.ttlabel"
-                  :tag="item.tag"
-                  :itemp="item.itemp"
-                  :componentName="item.componentName"
-                  :runColor="item.runColor"
-                  :divId="item.divId"
+              <div v-for="item in statisticData" :id="item.divId"
+                :key="item.divId" class="allStatisticContainer">
+                <statisticContainer ref="histoContainer" :key="item.ttlabel"
+                  :data="item.data" :ttlabel="item.ttlabel" :tag="item.tag"
+                  :itemp="item.itemp" :componentName="item.componentName"
+                  :runColor="item.runColor" :divId="item.divId"
                   :parentComponent="parentComponent"
-                  class="statisticContaierContent"
-                />
+                  class="statisticContaierContent" />
               </div>
             </div>
           </div>
@@ -297,7 +269,7 @@ export default {
     AudioContainer,
     ScalarContainer
   },
-  data() {
+  data () {
     return {
       showFlag: false,
       parentComponent: false,
@@ -338,16 +310,16 @@ export default {
       'getScalarData'
     ])
   },
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave (to, from, next) {
     this.setRouter(7)
     next()
   },
   watch: {
-    getTimer: function() {
-      for(let i=0; i<Object.keys(this.scalarData).length; i++){
+    getTimer: function () {
+      for (let i = 0; i < Object.keys(this.scalarData).length; i++) {
         let run = Object.keys(this.scalarData)[i].split(' ')[0]
         let tag = Object.keys(this.scalarData)[i].split(' ')[1]
-        this.getScalarDataInterval({'run':run, 'tag':tag })
+        this.getScalarDataInterval({ 'run': run, 'tag': tag })
       }
       for (let i = 0; i < this.audioData.length; i++) {
         this.getAudioDataInterval([i, this.audioData[i]])
@@ -362,7 +334,7 @@ export default {
         this.getStatisticDataInterval([i, this.statisticData[i]])
       }
     },
-    getAudioData() {
+    getAudioData () {
       this.audioData = this.getAudioData
       if (this.audioData.length === 0) {
         this.hasAudio.hasData = 0
@@ -380,7 +352,7 @@ export default {
         this.hasData = false
       }
     },
-    getTextData() {
+    getTextData () {
       this.textData = this.getTextData
       if (this.textData.length === 0) {
         this.hasText.hasData = 0
@@ -398,7 +370,7 @@ export default {
         this.hasData = false
       }
     },
-    getImageData() {
+    getImageData () {
       if (this.imageData.length === 0) {
         this.hasImage.hasData = 0
         this.hasImage.showFlag = 0
@@ -416,7 +388,7 @@ export default {
         this.hasData = false
       }
     },
-    getScalarData(val) {
+    getScalarData (val) {
       this.scalarData = val
       if (
         this.audioData.length ||
@@ -430,7 +402,7 @@ export default {
         this.hasData = false
       }
     },
-    getStatisticData(val) {
+    getStatisticData (val) {
       this.statisticData = val
       if (
         this.audioData.length ||
@@ -445,7 +417,7 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.audioData = this.getAudioData
     this.textData = this.getTextData
     this.imageData = this.getImageData
@@ -463,7 +435,7 @@ export default {
       this.hasData = false
     }
   },
-  mounted() {
+  mounted () {
     if (this.audioData.length) {
       this.hasAudio.hasData = 1
     }
@@ -478,7 +450,7 @@ export default {
     ...mapCustomMutations([
       'setTextData',
       'setRouter'
-      ]),
+    ]),
     ...mapCustomActions([
       'getAudioDataInterval',
       'getImageDataInterval',
@@ -486,7 +458,7 @@ export default {
       'getScalarDataInterval',
       'getStatisticDataInterval'
     ]),
-    showContent(title) {
+    showContent (title) {
       this[title].showFlag = (this[title].showFlag + 1) % 2
     }
   }

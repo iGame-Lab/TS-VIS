@@ -1,30 +1,30 @@
 <style lang="less" scoped>
-  .medias{
-      // position: absolute;
-      height: 100%;
-      overflow-y: auto;
-      width: 100%;
-      background-color:white;
-  }
-  .testDiv{
-      margin: 1% 1% 0 1%;
-      height: 97.5%;
-      border-radius: 5px 5px 0 0;
-      background-color: white;
-      overflow-y: auto;
-  }
-  .display-panel{
-      margin: 1% 1% 0 1%;
-      height: 97.5%;
-      border-radius: 5px 5px 0 0;
-      box-shadow: rgba(0,0,0,.3) 0px 0px 10px;
-      background-color: white;
-      overflow-y: auto;
-      min-width: 400px;
-    }
-  .content{
-    margin-bottom: 0.5%;
-  }
+.medias {
+  // position: absolute;
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+  background-color: white;
+}
+.testDiv {
+  margin: 1% 1% 0 1%;
+  height: 97.5%;
+  border-radius: 5px 5px 0 0;
+  background-color: white;
+  overflow-y: auto;
+}
+.display-panel {
+  margin: 1% 1% 0 1%;
+  height: 97.5%;
+  border-radius: 5px 5px 0 0;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;
+  background-color: white;
+  overflow-y: auto;
+  min-width: 400px;
+}
+.content {
+  margin-bottom: 0.5%;
+}
 </style>
 <template>
   <div>
@@ -32,7 +32,8 @@
       <!-- v-if="totaltag != ''" -->
       <div :class="['display-panel']">
         <div v-for="(value, name, index) in totaltag" :key="index">
-          <component :is="type[name]" :value="value" :subname="name" :index="index" class="content" />
+          <component :is="type[name]" :value="value" :subname="name"
+            :index="index" class="content" />
         </div>
       </div>
     </div>
@@ -52,7 +53,7 @@ export default {
   components: {
     images, audios, texts
   },
-  data() {
+  data () {
     return {
       type: {
         'audio': 'audios',
@@ -63,7 +64,7 @@ export default {
       totaltag: ''
     }
   },
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave (to, from, next) {
     this.setRouter(2)
     next()
   },
@@ -78,28 +79,25 @@ export default {
     ...mapLayoutGetters(['getTimer'])
   },
   watch: {
-    categoryInfo() {
+    categoryInfo () {
       this.settotaltag()
     },
-    getErrorMessage(val) {
+    getErrorMessage (val) {
       this.$message({
         message: val.split('_')[0],
         type: 'error'
       })
     },
     // 实时监听layout的getTimer
-    getIntervalChange: function() {
-      // console.log("media_time")
+    getIntervalChange: function () {
       if (!this.settotaltag) {
-        // console.log('数据还没有整理好')
         return
       }
-      console.log("dataing")
       this.settotaltag()
       this.totaltag = this.getTotaltag
     }
   },
-  mounted() {
+  mounted () {
     if (this.getTotaltag !== '') {
       this.totaltag = this.getTotaltag
     } else {
@@ -112,7 +110,7 @@ export default {
     ...mapMediaActions([
       'getData'
     ]),
-    settotaltag() {
+    settotaltag () {
       if (this.categoryInfo === '') {
         return
       }

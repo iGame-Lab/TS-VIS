@@ -1,7 +1,7 @@
 <style lang='less' scoped>
 .statistics-container {
-  background-color: #FFF;
-  margin-bottom:0.5%;
+  background-color: #fff;
+  margin-bottom: 0.5%;
   .statistics-title {
     height: auto;
     display: flex;
@@ -17,15 +17,15 @@
     flex-wrap: wrap;
     width: 100%;
     height: 100%;
-    .allStatisticContainer{
+    .allStatisticContainer {
       width: 31%; // 一行放三个
       height: 100%;
       margin: 0.8%;
-      background-color:white;
-      .statisticContaierContent{
+      background-color: white;
+      .statisticContaierContent {
         width: 100%;
-        .runTag{
-          width:100%;
+        .runTag {
+          width: 100%;
         }
       }
     }
@@ -34,11 +34,11 @@
 .showClass {
   display: none;
 }
-.my-label{
-  display:flex;
+.my-label {
+  display: flex;
   width: 100%;
   cursor: pointer;
-  .triangle{
+  .triangle {
     position: absolute;
     width: 0px;
     height: 0px;
@@ -47,21 +47,21 @@
     border-bottom-width: 15px;
     border-left-width: 18px;
     border-right-width: 18px;
-    border-style: dashed  dashed  dashed solid;
-    border-color: transparent transparent   transparent #7f7cc1;
+    border-style: dashed dashed dashed solid;
+    border-color: transparent transparent transparent #7f7cc1;
   }
-  .triangle-father{
+  .triangle-father {
     position: relative;
   }
-  .circle-father{
+  .circle-father {
     height: 30px;
     width: 15%;
     position: relative;
-    background-color:#7f7cc1;
+    background-color: #7f7cc1;
   }
-  .circle{
+  .circle {
     position: absolute;
-    width:8px;
+    width: 8px;
     height: 8px;
     border-radius: 50%;
     background-color: white;
@@ -69,59 +69,59 @@
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
   }
-  .my-text{
+  .my-text {
     width: 70%;
     height: 30px;
     text-align: center;
     vertical-align: center;
-    background-color:#7f7cc1;
+    background-color: #7f7cc1;
   }
-  span{
+  span {
     align-items: center;
     line-height: 30px;
-    color:white;
+    color: white;
   }
 }
-.sub .triangle{
-  border-color: transparent transparent   transparent #b8c6ff;
+.sub .triangle {
+  border-color: transparent transparent transparent #b8c6ff;
 }
-.sub .circle-father{
-  background-color:#b8c6ff;
+.sub .circle-father {
+  background-color: #b8c6ff;
 }
-.sub .my-text{
-  background-color:#b8c6ff;
+.sub .my-text {
+  background-color: #b8c6ff;
 }
-.sub{
+.sub {
   background-size: 100% 100%;
   width: 9.5%;
-  height:30px;
+  height: 30px;
   display: flex;
   align-items: center;
   font-family: sans-serif;
   font-size: 12px;
-  color: #FFF;
+  color: #fff;
 }
-.sub1{
+.sub1 {
   background-size: 100% 100%;
   width: 9.5%;
-  height:30px;
+  height: 30px;
   display: flex;
   align-items: center;
   font-family: sans-serif;
   font-size: 12px;
-  color: #FFF;
+  color: #fff;
 }
 .line1 {
   height: 1px;
   width: 88%;
-  background-color: #F4F6FF;
+  background-color: #f4f6ff;
 }
 .line2 {
   height: 5px;
-  width:2.5%;
-  background-color: #625EB3;
+  width: 2.5%;
+  background-color: #625eb3;
 }
-.linestyle{
+.linestyle {
   background-color: #b9c6ff;
 }
 </style>
@@ -131,7 +131,9 @@
       <div :class="[showFlag?'sub1':'sub']">
         <div class="my-label">
           <div class="my-text"><span>{{ categoryName }}</span></div>
-          <div class="circle-father"><div class="circle" /></div>
+          <div class="circle-father">
+            <div class="circle" />
+          </div>
           <div class="triangle-father">
             <div class="triangle" />
           </div>
@@ -142,20 +144,16 @@
     </div>
     <div :class="[showFlag?'':'showClass']">
       <div>
-        <div v-for="(oneRunData, runIdx) in runData" :key="runIdx" :class="['statistics-content']">
-          <div v-for="(item, index) in oneRunData" v-show="getDataSetsState[item[0]]" :id="[idArray[item[4]]]" :key="index" class="allStatisticContainer">
-            <statisticContainer
-              :data="item[2]"
-              :ttlabel="item[0]"
-              :tag="item[1]"
-              :itemp="item[4]"
-              :componentName="componentName"
+        <div v-for="(oneRunData, runIdx) in runData" :key="runIdx"
+          :class="['statistics-content']">
+          <div v-for="(item, index) in oneRunData"
+            v-show="getDataSetsState[item[0]]" :id="[idArray[item[4]]]"
+            :key="index" class="allStatisticContainer">
+            <statisticContainer :data="item[2]" :ttlabel="item[0]"
+              :tag="item[1]" :itemp="item[4]" :componentName="componentName"
               :runColor="getStatisticColor[item[3] % getStatisticColor.length]"
-              :divId="idArray[item[4]]"
-              :parentComponent="parentComponent"
-              checked="false"
-              class="statisticContaierContent"
-            />
+              :divId="idArray[item[4]]" :parentComponent="parentComponent"
+              checked="false" class="statisticContaierContent" />
           </div>
         </div>
       </div>
@@ -178,7 +176,7 @@ export default {
   props: {
     categoryInfo: String
   },
-  data() {
+  data () {
     return {
       showFlag: '',
       componentName: this.categoryInfo,
@@ -211,7 +209,7 @@ export default {
     ])
   },
   watch: {
-    getUpdateFlag() {
+    getUpdateFlag () {
       if (this.categoryInfo === 'distribution' && this.getFeatchDistDataFinished && this.showFlag) {
         this.featchAllDistData()
       }
@@ -219,7 +217,7 @@ export default {
         this.featchAllHistData()
       }
     },
-    getMode(curMode) {
+    getMode (curMode) {
       if (this.categoryInfo === 'histogram') {
         if (curMode === '三维') {
           this.componentName = 'threed'
@@ -228,12 +226,12 @@ export default {
         }
       }
     },
-    getBinNum(newBinNum) {
+    getBinNum (newBinNum) {
       if (this.categoryInfo === 'histogram') {
         this.manageHistData({ index: 0, length: this.getHistData.length })
       }
     },
-    getHistData(data) {
+    getHistData (data) {
       if (this.categoryInfo === 'histogram') {
         this.allData = data
         this.idArray = []
@@ -243,7 +241,7 @@ export default {
         this.setRunData()
       }
     },
-    getDistData(data) {
+    getDistData (data) {
       if (this.categoryInfo === 'distribution') {
         this.allData = data
         this.idArray = []
@@ -253,10 +251,10 @@ export default {
         this.setRunData()
       }
     },
-    userSelectRunFile: function() {
+    userSelectRunFile: function () {
       this.setDatasetsShow()
     },
-    getHistShow(val) {
+    getHistShow (val) {
       if (this.categoryInfo === 'histogram') {
         this.showFlag = val
         if (val) {
@@ -265,7 +263,7 @@ export default {
         }
       }
     },
-    getDistShow(val) {
+    getDistShow (val) {
       if (this.categoryInfo === 'distribution') {
         this.showFlag = val
         if (val) {
@@ -275,7 +273,7 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     if (this.categoryInfo === 'histogram') {
       this.categoryName = '直方图'
       this.showFlag = this.getHistShow
@@ -290,8 +288,7 @@ export default {
       }
     }
   },
-  mounted() {
-    // window.addEventListener('scroll', this.handleScroll, true) // 监听滑动条
+  mounted () {
     this.setDatasetsShow()
   },
   methods: {
@@ -305,14 +302,14 @@ export default {
       'clearHistData',
       'clearDistData'
     ]),
-    showContent() {
+    showContent () {
       if (this.categoryInfo === 'histogram') {
         this.setHistShow(!this.showFlag)
       } else {
         this.setDistShow(!this.showFlag)
       }
     },
-    setHistData() {
+    setHistData () {
       if (this.getMode === '三维') {
         this.componentName = 'threed'
       } else {
@@ -335,7 +332,7 @@ export default {
       }
       this.setRunData()
     },
-    setDistData() {
+    setDistData () {
       this.componentName = 'overlook'
       if (this.getDistData.length === 0) {
         this.featchAllDistData()
@@ -348,17 +345,7 @@ export default {
       }
       this.setRunData()
     },
-    // handleScroll(e) { // 页面滑动过程中修改histDist标志，高亮右侧控制面板
-    //   if (document.getElementsByClassName('statistics-container')[1] !== undefined) {
-    //     const curDistHeight = document.getElementsByClassName('statistics-container')[1].getBoundingClientRect().top
-    //     if (curDistHeight < window.innerHeight * 0.7) {
-    //       this.setDistShow(true)
-    //     } else if (curDistHeight > window.innerHeight) {
-    //       this.setHistShow(true)
-    //     }
-    //   }
-    // },
-    setDatasetsShow() {
+    setDatasetsShow () {
       const stateTemp = []
       for (let i = 0; i < this.getDataSets.length; i++) {
         stateTemp[this.getDataSets[i]] = false
@@ -369,7 +356,7 @@ export default {
       // userselectRunFiles没有保存状态，statistic保存run状态
       this.setDataSetsState(stateTemp)
     },
-    setRunData() { // 按run对得到的数据再处理一下
+    setRunData () { // 按run对得到的数据再处理一下
       if (this.allData.length === 0) {
         this.runData = []
         return

@@ -18,16 +18,25 @@
 import os
 import numpy as np
 from typing import Union, Optional, Dict, List
+from .pytorch_graph import graph
+
 from .writer import EventFileWriter
-from .summary import scalar, image, audio, text, histogram, hparams, exception, embedding, embedding_sample
+from .summary import scalar, image, audio, text, histogram, hparams, exception, embedding, \
+    embedding_sample, featuremap_PFV, featuremap_GradCam, SummaryMetadata, \
+    Summary, make_tensor2, featuremap_Gray, featuremap_guidebp, featuremap_result, featuremap_label, \
+    attention, multi_attention_map, Unnormalize, state
+from torchvision import transforms as T
+from tsvis.proto.transtext_pb2 import AttentionItem
+
 numpy_compatible = np.ndarray
+
 
 class SummaryWriter(object):
     def __init__(self,
-                 log_dir: str='logs/',
+                 log_dir: str = 'logs/',
                  max_queue: int = 10,
                  flush_secs: int = 120,
-                 filename_suffix:str = ''):
+                 filename_suffix: str = ''):
         """
             创建一个日志写入器，添加event
         Args:
@@ -41,7 +50,7 @@ class SummaryWriter(object):
         self._flush_secs = flush_secs
         self._filename_suffix = filename_suffix
         self.event_file_writer = EventFileWriter(log_dir, max_queue, flush_secs, filename_suffix=filename_suffix)
-        self._file_writer = {'event':self.event_file_writer}
+        self._file_writer = {'event': self.event_file_writer}
 
     def get_writer(self,
                    name: str) -> EventFileWriter:
@@ -53,7 +62,7 @@ class SummaryWriter(object):
             返回name对应的event文件写入器
         """
         if name not in self._file_writer:
-            self._file_writer[name] = EventFileWriter(self.log_dir, name = name,
+            self._file_writer[name] = EventFileWriter(self.log_dir, name=name,
                                                       max_queue_size=self._max_queue,
                                                       flush_secs=self._flush_secs,
                                                       filename_suffix=self._filename_suffix)
@@ -71,7 +80,7 @@ class SummaryWriter(object):
             scalar_value: 浮点数，标量的值
             step: 整数，可选参数，记录数据的step
         """
-        self.event_file_writer.add_summary(summary= scalar(tag, scalar_value),
+        self.event_file_writer.add_summary(summary=scalar(tag, scalar_value),
                                            global_step=step)
 
     def add_scalars(self,
@@ -112,9 +121,126 @@ class SummaryWriter(object):
             tensors: 数组，图像数据，'uint8' 或 'float' 类型的数据，大小为(K,H,W) 或 (K,H,W,C), 其中C为1,3,4
             step: 整数，可选参数，记录数据的step
         """
-        assert tensors.ndim in [3,4], 'the shape of image tensors must be (K,H,W) or (K,H,W,C)'
+        assert tensors.ndim in [3, 4], 'the shape of image tensors must be (K,H,W) or (K,H,W,C)'
         for i, tensor in enumerate(tensors):
             self.event_file_writer.add_summary(image(f'{tag}_{i}', tensor), global_step=step)
+
+    def add_featuremap(self,
+                       model,
+                       inputs,
+                       task: str,
+                       label=None,
+                       methods: Union[tuple] = ('PFV', 'GradCam', 'Gray', 'guidedbp')
+                       ):
+        """
+            添加特征图数据到日志
+        Args:
+            model: 神经网络模型
+            inputs: 张量， 一组需要展示特征图的样本
+            task: 字符串， 模型的任务标识，分为'Classification', 'Segmentation', 'Detection' 三类
+            label: 张量， 可选参数， 输入样本的真实标签
+            methods: 元组， 可选参数， 绘制特征图的方法
+         """
+        assert (inputs is not None), 'Need to feed an input to model'
+        self.event_file_writer.add_graph(graph(model, (inputs,), False))
+        # task:'Classification' 'Segmentation' 'Detection'
+        if task not in ['Classification', 'Segmentation', 'Detection']:
+            raise Exception('请传入正确的task：Classification/Segmentation/Detection')
+        if not set(methods).issubset(('PFV', 'GradCam', 'Gray', 'guidedbp')):
+            raise Exception('请传入正确的methods')
+        metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='featuremap'))
+
+        if "PFV" in methods:
+            self.event_file_writer.add_summary(featuremap_PFV(model, inputs))
+        if "GradCam" in methods and task == 'Classification':
+            data, name = featuremap_GradCam(model, inputs)
+            for data_kid, kid_name in zip(data, name):
+                data_kid = make_tensor2(np.array(data_kid))
+                output = Summary(value=[Summary.Value(tag=kid_name + "-GradCam",
+                                                      tensor=data_kid,
+                                                      metadata=metadata)])
+                self.event_file_writer.add_summary(output)
+        if "Gray" in methods:
+            data_gray, name_gray = featuremap_Gray(model, inputs)
+            for data_kid, kid_name in zip(data_gray, name_gray):
+                data_kid = make_tensor2(np.array(data_kid))
+                output = Summary(value=[Summary.Value(tag=kid_name + "-Gray",
+                                                      tensor=data_kid,
+                                                      metadata=metadata)])
+                self.event_file_writer.add_summary(output)
+        if "guidedbp" in methods:
+            data_guided, name_guided = featuremap_guidebp(model, inputs)
+            for data_kid, kid_name in zip(data_guided, name_guided):
+                data_kid = make_tensor2(np.array(data_kid))
+                output = Summary(value=[Summary.Value(tag=kid_name + "-guidedbp",
+                                                      tensor=data_kid,
+                                                      metadata=metadata)])
+                self.event_file_writer.add_summary(output)
+        # 保存预测结果
+        self.event_file_writer.add_summary(featuremap_result(model=model,
+                                                             input_batch=inputs,
+                                                             task=task))
+        # 保存标签
+        if label is not None:
+            self.event_file_writer.add_summary(featuremap_label(label=label, task=task))
+
+    def add_attention(self,
+                      tag: str,
+                      texts: list,
+                      tokenizer_tokens: list,
+                      attention_data: list):
+        total_data = attention(texts, tokenizer_tokens, attention_data)
+        metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='transformer'))
+        for index, data in enumerate(total_data):
+            tans = Summary.Transformer()
+            for item in data["attention"]:
+                value = data["attention"][item]
+                tans.attentionItem.append(AttentionItem(tag=item,
+                                                        attn=make_tensor2(np.array(value['attn'])),
+                                                        left=make_tensor2(np.array(value['left_text'])),
+                                                        right=make_tensor2(np.array(value['right_text']))
+                                                        ))
+            tans.default_filter = data['default_filter']
+            tans.bidirectional = str(data['bidirectional'])
+            tans.displayMode = data['display_mode']
+            tans.layer = data['layer']
+            tans.head = data['head']
+            sorce = Summary(value=[Summary.Value(tag=tag + '-transformertext-' + str(index),
+                                                 transformer=tans,
+                                                 metadata=metadata)])
+            self.event_file_writer.add_summary(sorce)
+        sentence = make_tensor2(np.array(texts))
+        sentence_data = Summary(
+            value=[Summary.Value(tag=tag + "-transformertext-sentence", tensor=sentence, metadata=metadata)])
+        self.event_file_writer.add_summary(sentence_data)
+
+    def add_attentionmap(self,
+                         input_tensor,
+                         attn_map,
+                         cls=True,
+                         normalize=None,
+                         tag: str = 'transformer'):
+        # attn_map : bs, l, num_head, h, w 或bs, l, h, w
+        attn_map = multi_attention_map(input_tensor, attn_map, cls=cls)
+
+        # 写attention map 日志
+        for idx, attn_map_kid in enumerate(attn_map):
+            attn_map_kid = make_tensor2(attn_map_kid)
+            metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='transformer'))
+            output = Summary(
+                value=[Summary.Value(tag=f"{tag}-img{idx}-am", tensor=attn_map_kid, metadata=metadata)])
+            self.event_file_writer.add_summary(output)
+
+        # 写图片日志
+        for idx, img_kid in enumerate(input_tensor):
+            if normalize is not None:
+                img_kid = Unnormalize(img_kid, normalize[0], normalize[1])
+            img_kid = T.Resize((256, 256))(img_kid).permute(1, 2, 0)
+            img_kid = make_tensor2(np.array(img_kid))
+            metadata = SummaryMetadata(plugin_data=SummaryMetadata.PluginData(plugin_name='transformer'))
+            output = Summary(
+                value=[Summary.Value(tag=f"{tag}-img{idx}", tensor=img_kid, metadata=metadata)])
+            self.event_file_writer.add_summary(output)
 
     def add_audio(self,
                   tag: str,
@@ -171,9 +297,9 @@ class SummaryWriter(object):
 
     def add_graph(self,
                   model,
-                  input_to_model: Union[tuple]=None,
-                  model_type: str ='pytorch',
-                  verbose: bool =False):
+                  input_to_model: Union[tuple] = None,
+                  model_type: str = 'pytorch',
+                  verbose: bool = False):
         """
             添加神经网络的图结构到日志，支持tensorflow，pytorch
         Args:
@@ -222,9 +348,9 @@ class SummaryWriter(object):
                                                  global_step=step)
 
     def add_embedding_sample(self,
-                            tag: str,
-                            tensor: numpy_compatible,
-                            sample_type: str):
+                             tag: str,
+                             tensor: numpy_compatible,
+                             sample_type: str):
         """
             添加降维处理的高维数据对应的样本到日志，以便查看降维后数据点对应的原始样本
         Args:
@@ -232,14 +358,14 @@ class SummaryWriter(object):
             tensor: 数组，高维数据的样本，数据类型，大小为[N,*]
             sample_type: 字符串，样本数据的类型，支持‘image’,'text','audio'
         """
-        self.get_writer('projector').add_summary(summary=embedding_sample(name = tag,
-                                                                          tensor = tensor,
-                                                                          sample_type =sample_type))
+        self.get_writer('projector').add_summary(summary=embedding_sample(name=tag,
+                                                                          tensor=tensor,
+                                                                          sample_type=sample_type))
 
     def add_embedding(self,
                       tag: str,
                       tensor: numpy_compatible,
-                      label: Optional[numpy_compatible] =None,
+                      label: Optional[numpy_compatible] = None,
                       step: Optional[int] = None):
         """
             添加降维处理的高维数据到日志
@@ -254,7 +380,7 @@ class SummaryWriter(object):
 
     def add_hparams(self,
                     hparam_dict: Dict[str, Union[bool, str, float, int]],
-                    metrics: Optional[Union[list, tuple]] =None,
+                    metrics: Optional[Union[list, tuple]] = None,
                     tag: Optional[str] = None):
         """
             添加一组数据到日志
@@ -264,6 +390,13 @@ class SummaryWriter(object):
             tag: 字符串，该组超参数的标识
         """
         self.get_writer('hparams').add_summary(summary=hparams(hparam_dict, metrics, tag))
+
+    def add_hidden_state(self,
+                         hidden_state,
+                         word,
+                         tag: Optional[str] = "hidden_state"):
+        self.event_file_writer.add_summary(summary=state(hidden_state, tag))
+        self.event_file_writer.add_summary(summary=state(word, "hidden_state_word"))
 
     def close(self):
         """

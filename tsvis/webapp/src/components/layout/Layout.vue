@@ -15,12 +15,9 @@
  */
 
 <template>
-  <div class="layout-root layout-same-style" style="width: 100%;">
-    <el-dialog
-      :visible.sync="dialogFormVisible"
-      title="图片保存选项"
-      class="layout-svg-save-dialog"
-    >
+  <div class="layout-root layout-same-style" style="width: 100%">
+    <el-dialog :visible.sync="dialogFormVisible" title="图片保存选项"
+      class="layout-svg-save-dialog">
       <el-form :model="form">
         <el-form-item :label-width="formLabelWidth" label="图片名称">
           <el-input v-model="form.input" placeholder="请输入名称" clearable />
@@ -38,11 +35,8 @@
         <el-button type="primary" @click="downloadSvg">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog
-      :visible.sync="initWaitVisible"
-      title="全力加载中,请稍等..."
-      class="layout-svg-save-dialog"
-    >
+    <el-dialog :visible.sync="initWaitVisible" title="全力加载中,请稍等..."
+      class="layout-svg-save-dialog">
       <i class="el-icon-loading" />
     </el-dialog>
     <el-dialog :visible.sync="operationGuide" title="操作指南" class="layout-svg">
@@ -62,9 +56,7 @@
           <span>2.通过单击鼠标左键并移动实现图的移动</span>
         </p>
         <p>
-          <span
-          >3.单击节点会将节点具体信息显示在菜单栏，同时，与该节点相连的其他节点以及边都会标红</span
-          >
+          <span>3.单击节点会将节点具体信息显示在菜单栏，同时，与该节点相连的其他节点以及边都会标红</span>
         </p>
         <p>
           <span>4.双击节点可以实现节点的展开与缩回</span>
@@ -73,9 +65,7 @@
           <span>5.右键节点可以对节点进行边的隐藏、显示以及删除操作</span>
         </p>
         <p>
-          <span
-          >6.当通过右键删除节点时，节点会被放置在右侧的隐藏栏中。双击隐藏栏内的节点可以实现节点的放回</span
-          >
+          <span>6.当通过右键删除节点时，节点会被放置在右侧的隐藏栏中。双击隐藏栏内的节点可以实现节点的放回</span>
         </p>
         <h3>
           <a name="功能栏" class="md-header-anchor" />
@@ -97,9 +87,7 @@
         <p>
           <span>3.</span>
           <strong> <span>布局</span></strong>
-          <span
-          >按钮用于实现针对符合批量筛选条件以及单独隐藏节点的删除与重新布局，该操作会让剩余节点在当前新条件下重新绘制，会改变图的结构</span
-          >
+          <span>按钮用于实现针对符合批量筛选条件以及单独隐藏节点的删除与重新布局，该操作会让剩余节点在当前新条件下重新绘制，会改变图的结构</span>
         </p>
         <p>
           <span>4.</span>
@@ -121,9 +109,7 @@
         <p>
           <span>2.</span>
           <strong> <span>布局</span></strong>
-          <span
-          >按钮用于实现针对单独隐藏节点的删除与重新布局，该操作会让剩余节点在当前新条件下重新绘制，会改变图的结构</span
-          >
+          <span>按钮用于实现针对单独隐藏节点的删除与重新布局，该操作会让剩余节点在当前新条件下重新绘制，会改变图的结构</span>
         </p>
         <h4>
           <a name="数据信息栏" class="md-header-anchor" />
@@ -135,7 +121,7 @@
           <span>按钮实现对信息的折叠与展开</span>
         </p>
         <p>&nbsp;</p>
-        <hr >
+        <hr />
         <p>&nbsp;</p>
         <h2>
           <a name="标量数据" class="md-header-anchor" />
@@ -159,9 +145,7 @@
             <span>每一图表右上角有放大缩小按钮</span>
           </li>
           <li>
-            <span
-            >右上角矩形框可为用户定制所用，选中后再按定制按钮就可以把数据迁移上用户定制上；也可为合并多个图表时所用</span
-            >
+            <span>右上角矩形框可为用户定制所用，选中后再按定制按钮就可以把数据迁移上用户定制上；也可为合并多个图表时所用</span>
           </li>
           <li>
             <span>在图表内部拖动鼠标选择一个方形区域可进行图表局部放大，双击图表可还原</span>
@@ -175,14 +159,10 @@
           <span>Smooth：调整数据显示平滑程度，选择范围为（0 ~ 0.9）</span>
         </p>
         <p>
-          <span
-          >Y-axis：调整y轴数据显示方式，共两种，一种是linear（原始数据），一种是log-linear（取对数后的数据）</span
-          >
+          <span>Y-axis：调整y轴数据显示方式，共两种，一种是linear（原始数据），一种是log-linear（取对数后的数据）</span>
         </p>
         <p>
-          <span
-          >合并按钮：将勾选中的图表进行合并，合并限制：至多可勾选两种tag的图表，至多可勾选6幅图表</span
-          >
+          <span>合并按钮：将勾选中的图表进行合并，合并限制：至多可勾选两种tag的图表，至多可勾选6幅图表</span>
         </p>
         <p>
           <span>还原按钮：将勾选中的合并图表进行还原</span>
@@ -195,7 +175,7 @@
           <span>暂无数据</span>
         </p>
         <p>&nbsp;</p>
-        <hr >
+        <hr />
         <p>&nbsp;</p>
         <h2>
           <a name="媒体数据" class="md-header-anchor" />
@@ -256,7 +236,7 @@
             <p>&nbsp;</p>
           </li>
         </ol>
-        <hr >
+        <hr />
         <p>&nbsp;</p>
         <h2>
           <a name="统计分析" class="md-header-anchor" />
@@ -325,7 +305,7 @@
           <span>显示直方图选中的原始数据</span>
         </p>
         <p>&nbsp;</p>
-        <hr >
+        <hr />
         <p>&nbsp;</p>
         <h2>
           <a name="降维分析" class="md-header-anchor" />
@@ -401,7 +381,7 @@
             <p>&nbsp;</p>
           </li>
         </ol>
-        <hr >
+        <hr />
         <p>&nbsp;</p>
         <h2>
           <a name="超参数" class="md-header-anchor" />
@@ -464,7 +444,7 @@
           <span>显示选中数据的原始信息。</span>
         </p>
         <p>&nbsp;</p>
-        <hr >
+        <hr />
         <p>&nbsp;</p>
         <h2>
           <a name="异常检测" class="md-header-anchor" />
@@ -476,21 +456,13 @@
         </h3>
         <p>
           <span>由直方图、颜色矩阵和盒须图三部分组成</span>
-          <span
-          >直方图：数据的统计信息，区间不均匀分布，坐标轴上的红色标记对应盒须图异常点的上下边界</span
-          >
-          <span
-          >颜色矩阵：用矩形表示数值点，根据数值大小为矩形赋予一个颜色值，颜色矩阵可以通过滚轮放大缩小查看；</span
-          >
+          <span>直方图：数据的统计信息，区间不均匀分布，坐标轴上的红色标记对应盒须图异常点的上下边界</span>
+          <span>颜色矩阵：用矩形表示数值点，根据数值大小为矩形赋予一个颜色值，颜色矩阵可以通过滚轮放大缩小查看；</span>
           <span />
-          <span
-          >颜色条上下三角形可拖动，只查看一定范围内的数值分布，数值大小超出上下三角形数值的矩形颜色变灰</span
-          >
+          <span>颜色条上下三角形可拖动，只查看一定范围内的数值分布，数值大小超出上下三角形数值的矩形颜色变灰</span>
           <span>盒须图：拖动下方坐标轴上的刷子可查看相应范围内的盒须图，</span>
           <span />
-          <span
-          >点击某个盒须图，请求异常点数据，在盒须图中用红色圆圈标记出来，并把颜色矩阵中对应的矩形的边界高亮</span
-          >
+          <span>点击某个盒须图，请求异常点数据，在盒须图中用红色圆圈标记出来，并把颜色矩阵中对应的矩形的边界高亮</span>
           <span />
           <span>异常值的上下边界也可拖拽，停止拖拽时会重新获取新范围外的异常点数据</span>
           <span />
@@ -518,7 +490,7 @@
           <span>暂无数据</span>
         </p>
         <p>&nbsp;</p>
-        <hr >
+        <hr />
         <p>&nbsp;</p>
         <h2>
           <a name="用户定制" class="md-header-anchor" />
@@ -550,69 +522,47 @@
         <p>&nbsp;</p>
       </div>
     </el-dialog>
-    <el-dialog
-      :visible.sync="dataSyncVisible"
-      title="设定数据同步间隔"
-      class="layout-svg-save-dialog"
-    >
+    <el-dialog :visible.sync="dataSyncVisible" title="设定数据同步间隔"
+      class="layout-svg-save-dialog">
       <div>
         <el-checkbox v-model="syncDataBool">启用同步</el-checkbox>
       </div>
-      <div style="margin-top: 10px;">
-        <el-input-number
-          v-model="timeSync"
-          :min="5"
-          :disabled="!syncDataBool"
-          class="input-number"
-          size="mini"
-        />秒
+      <div style="margin-top: 10px">
+        <el-input-number v-model="timeSync" :min="5" :disabled="!syncDataBool"
+          class="input-number" size="mini" />秒
       </div>
     </el-dialog>
-    <div
-      ref="left"
+    <div ref="left"
       :style="{ height: leftStyle.height, width: leftStyle.width }"
-      class="layout-sidebar layout-same-style"
-    >
+      class="layout-sidebar layout-same-style">
       <logo :collapse="false" />
       <div :class="['layout-sidebar-category-container']">
         <div class="layout-sidebar-category layout-same-style">
-          <div
-            v-for="(item, i) in allCategoryInform"
-            :key="item.id"
-            :class="['layout-sidebar-category-each']"
-            :style="{
+          <div v-for="(item, i) in allCategoryInform" :key="item.id"
+            :class="['layout-sidebar-category-each']" :style="{
               height: 100 / allCategoryInform.length + '%',
               lineHeight: 100 / allCategoryInform.length + '%',
-            }"
-          >
+            }">
             <div ref="eachTop" :class="['layout-sidebar-category-each-top']" />
-            <div
-              ref="eachMiddle"
-              :class="['layout-sidebar-category-each-middle']"
-              :style="
+            <div ref="eachMiddle"
+              :class="['layout-sidebar-category-each-middle']" :style="
                 item.rawName == selectedRaw || (i == initId && initFlag)
                   ? { borderLeft: '4px solid #2e4fde' }
                   : {}
-              "
-            >
-              <router-link
-                :to="item.routerName"
-                :class="[
-                  item.rawName == selectedRaw || (i == initId && initFlag) ? 'category-selected' : '',
-                ]"
-                tag="li"
-                @click.native="change(item)"
-              >
-                <i :class="['iconfont', item.icon]" :style="{ fontSize: 16 + 'px' }" />
-                <span
-                  :class="[leftStyle.categoryFlage ? 'span-after' : '']"
+              ">
+              <router-link :to="item.routerName" :class="[
+                  item.rawName == selectedRaw || (i == initId && initFlag)
+                    ? 'category-selected'
+                    : '',
+                ]" tag="li" @click.native="change(item)">
+                <i :class="['iconfont', item.icon]"
+                  :style="{ fontSize: 16 + 'px' }" />
+                <span :class="[leftStyle.categoryFlage ? 'span-after' : '']"
                   :style="
                     item.rawName == selectedRaw || (i == initId && initFlag)
                       ? { fontSize: 16 + 'px', color: 'rgb(46, 79, 222)' }
                       : { fontSize: 16 + 'px' }
-                  "
-                >{{ item.name }}</span
-                >
+                  ">{{ item.name }}</span>
               </router-link>
             </div>
             <div :class="['layout-sidebar-category-each-bottom']" />
@@ -620,367 +570,344 @@
         </div>
       </div>
       <div :class="['layout-sidebar-setting']">
-        <p
-          v-for="item in leftSilderIcons"
-          v-show="item.shaowFlag"
-          ref="item.ref"
-          :key="item.id"
+        <p v-for="item in leftSilderIcons" v-show="item.shaowFlag"
+          ref="item.ref" :key="item.id"
           :style="{ position: 'absolute', marginLeft: item.margin }"
-          @click="isHide(item)"
-        >
-          <i :class="['iconfont', item.name]" :style="{ fontSize: item.size }" />
+          @click="isHide(item)">
+          <i :class="['iconfont', item.name]"
+            :style="{ fontSize: item.size }" />
         </p>
       </div>
     </div>
-    <div
-      :style="{ height: rightStyle.height, width: rightStyle.width }"
-      class="layout-header-content layout-same-style"
-    >
+    <div :style="{ height: rightStyle.height, width: rightStyle.width }"
+      class="layout-header-content layout-same-style">
       <div class="layout-header layout-same-style">
-        <div :class="['same-div']" style="width: 400px;">
-          <p
-            v-for="(item, i) in icons"
-            :key="i"
-            :class="['same-p']"
-            :title="item.chName"
-            @click="jsutTest(item.raw)"
-          >
-            <i :class="['iconfont', item.name]" :style="{ fontSize: item.size }" />
+        <div :class="['same-div']" style="width: 400px">
+          <p v-for="(item, i) in icons" :key="i" :class="['same-p']"
+            :title="item.chName" @click="jsutTest(item.raw)">
+            <i :class="['iconfont', item.name]"
+              :style="{ fontSize: item.size }" />
           </p>
           <p :class="['tool-p']" />
           <p :class="['run-select-container']" :style="{ width: '40%' }">
-            <el-select
-              v-if="update"
-              v-model="value1"
-              :class="['run-selest']"
+            <el-select v-if="update" v-model="value1" :class="['run-selest']"
               :multiple="multipleFlag === 2 ? false : isMultiple"
               :disabled="multipleFlag === 2 ? true : false"
-              :clearable="multipleFlag === 2 ? false : isMultiple"
-              size="mini"
-              placeholder="RUN"
-              collapse-tags
-              filterable
-              @focus="getOptions()"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
+              :clearable="multipleFlag === 2 ? false : isMultiple" size="mini"
+              placeholder="RUN" collapse-tags filterable @focus="getOptions()">
+              <el-option v-for="item in options" :key="item.value"
+                :label="item.label" :value="item.value" />
             </el-select>
           </p>
         </div>
-        <div :class="['same-div']" style="width: calc(100% - 800px);" />
-        <div :class="['same-div', 'search-tag']" style="width: 400px;">
+        <div :class="['same-div']" style="width: calc(100% - 800px)" />
+        <div :class="['same-div', 'search-tag']" style="width: 400px">
           <p :class="['run-select-container']" :style="{ margin: '0 0 0 0' }">
-            <i
-              :class="['el-icon-refresh']"
-              style="font-size: 19px; color: whitesmoke; cursor: pointer;"
-              @click="isClicked"
-            />
-            <i
-              v-for="item in settingHelp"
-              :key="item.id"
+            <i :class="['el-icon-refresh']"
+              style="font-size: 19px; color: whitesmoke; cursor: pointer"
+              @click="isClicked" />
+            <i v-for="item in settingHelp" :key="item.id"
               :class="['iconfont', item.name, 'icon-setting-help']"
               :style="{ fontSize: item.size, cursor: 'pointer' }"
-              @click="getTigger(item)"
-            />
+              @click="getTigger(item)" />
           </p>
         </div>
       </div>
-      <div
-        id="full-screen1"
-        class="layout-content layout-same-style"
-        style="background-color: white;"
-      >
-        <div
-          :class="['right-slider', rightRetract.retractFlage ? 'right-slider-last' : '']"
-          :style="{ right: rightRetract.setBackLeft, width: rightRetract.width }"
-        >
-          <p
-            v-for="item in rightSilderIcons"
-            v-show="item.shaowFlag && selectedRaw !== 'graph'"
-            :key="item.id"
-            @click="rightSilder(item)"
-          >
-            <i :class="['iconfont', item.name]" :style="{ fontSize: item.size }" />
+      <div id="full-screen1" class="layout-content layout-same-style"
+        style="background-color: white">
+        <div :class="[
+            'right-slider',
+            rightRetract.retractFlage ? 'right-slider-last' : '',
+          ]" :style="{
+            right: rightRetract.setBackLeft,
+            width: rightRetract.width,
+          }" v-if="!(todoName == 'transformertext')">
+          <p v-for="item in rightSilderIcons" v-show="item.shaowFlag"
+            :key="item.id" @click="rightSilder(item)">
+            <i :class="['iconfont', item.name]"
+              :style="{ fontSize: item.size }" />
           </p>
         </div>
-        <router-view
-          id="full-screen"
-          :class="[rawShape, 'layout-same-style']"
-          :style="{ width: contentsStyle.leftWidth }"
-        />
-        <router-view
-          v-show="contentsStyle.rightShowFlag"
-          name="right"
-          class="layout-content-paramenter layout-same-style"
-        />
+        <router-view id="full-screen" :class="[rawShape, 'layout-same-style']"
+          :style="{ width: 'auto' }" />
+        <router-view v-show="contentsStyle.rightShowFlag"
+          v-if="!(todoName == 'transformertext')" name="right"
+          class="layout-content-paramenter layout-same-style" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import * as d3 from 'd3'
-import { createNamespacedHelpers } from 'vuex'
-import download from '@/utils/download'
-import constants from '@/utils/constants'
-
-// import { param2Obj } from '@/utils'
-import Logo from '@/components/layout/Logo'
+import * as d3 from "d3";
+import { createNamespacedHelpers } from "vuex";
+import download from "@/utils/download";
+import constants from "@/utils/constants";
+import Logo from "@/components/layout/Logo";
 const {
   mapMutations: mapLayoutMutations,
   mapActions: mapLayoutActions,
   mapGetters: mapLayoutGetters,
-  mapState: mapLayoutState
-} = createNamespacedHelpers('layout')
-const { mapMutations: mapCustomMutations } = createNamespacedHelpers('custom')
+  mapState: mapLayoutState,
+} = createNamespacedHelpers("layout");
+const { mapMutations: mapCustomMutations } = createNamespacedHelpers("custom");
 
 export default {
   components: {
-    Logo
+    Logo,
   },
-  data() {
+  data () {
     return {
       timer: null,
       downloadList: [],
-      downloadState: ['graph', 'scalar', 'statistic'],
+      downloadState: ["graph", "scalar", "statistic"],
       init: 1,
-      screenWidth: '0px',
+      screenWidth: "0px",
       titleSrc:
-      'data:image/png;base64,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',
+        "data:image/png;base64,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",
       selected: -1,
-      selectedRaw: '',
-      value: '',
+      selectedRaw: "",
+      value: "",
       setintervalFlag: null,
       initFlag: true,
       initId: 0,
-      inputValue: '',
-      isMultiple: '',
+      inputValue: "",
+      isMultiple: "",
       update: true,
       logoImgStyleFlage: false,
       dialogFormVisible: false,
       initWaitVisible: true,
-      formLabelWidth: '120px',
+      formLabelWidth: "120px",
       autoFontSize: 16,
       actegoryClickStyle: {
-        divTop: '',
-        divAim: '',
-        divBottom: ''
+        divTop: "",
+        divAim: "",
+        divBottom: "",
       },
       form: {
-        name: '',
-        type: 'png',
-        input: '下载'
+        name: "",
+        type: "png",
+        input: "下载",
       },
       rightRetract: {
-        setBackLeft: '0',
-        width: '290px',
-        retractFlage: false
+        setBackLeft: "0",
+        width: "290px",
+        retractFlage: false,
       },
-      todoName: '',
-      logoSourse: 'static/img/left_logo.png',
+      todoName: "",
+      logoSourse: "static/img/left_logo.png",
       logoFlag: true,
-      rawShape: 'layout-content-panel',
+      rawShape: "layout-content-panel",
       leftStyle: {
-        width: '180px',
-        height: '100%',
-        categoryFlage: false
+        width: "180px",
+        height: "100%",
+        categoryFlage: false,
       },
       rightStyle: {
-        width: 'calc(100% - 180px)',
-        height: '100%'
+        width: "calc(100% - 180px)",
+        height: "100%",
       },
       contentsStyle: {
-        leftWidth: 'calc(100% - 290px)',
-        rightShowFlag: true
+        leftWidth: "calc(100% - 290px)",
+        rightShowFlag: true,
       },
-      options: '',
+      options: "",
       value1: [],
       icons: [
         {
           value: 0,
-          chName: '定制',
-          raw: 'custom',
-          name: 'icon-ziyuan104',
-          size: '16px'
+          chName: "定制",
+          raw: "custom",
+          name: "icon-ziyuan104",
+          size: "16px",
         },
         {
           value: 1,
-          chName: '下载',
-          raw: 'download',
-          name: 'icon-xiazai3',
-          size: '16px'
+          chName: "下载",
+          raw: "download",
+          name: "icon-xiazai3",
+          size: "16px",
         },
         {
           value: 2,
-          chName: '全屏',
-          raw: 'fullScreen',
-          name: 'icon-ziyuan111',
-          size: '16px'
-        }
+          chName: "全屏",
+          raw: "fullScreen",
+          name: "icon-ziyuan111",
+          size: "16px",
+        },
       ],
       sync: false,
       leftSilderIcons: [
         {
           value: 0,
-          name: 'icon-zuohua',
-          ref: 'left',
+          name: "icon-zuohua",
+          ref: "left",
           shaowFlag: true,
-          size: '25px',
-          margin: '90px'
+          size: "25px",
+          margin: "90px",
         },
         {
           value: 1,
-          name: 'icon-zhegeyidinghang',
-          ref: 'right',
+          name: "icon-zhegeyidinghang",
+          ref: "right",
           shaowFlag: false,
-          size: '25px',
-          margin: '10px'
-        }
+          size: "25px",
+          margin: "10px",
+        },
       ],
       rightSilderIcons: [
         {
           value: 2,
-          name: 'icon-zhegeyidinghang',
-          ref: 'right',
+          name: "icon-zhegeyidinghang",
+          ref: "right",
           shaowFlag: true,
-          size: '25px'
+          size: "25px",
         },
         {
           value: 3,
-          name: 'icon-zuohua',
-          ref: 'left',
+          name: "icon-zuohua",
+          ref: "left",
           shaowFlag: false,
-          size: '25px'
-        }
+          size: "25px",
+        },
       ],
       settingHelp: [
         {
           id: 0,
-          name: 'icon-ziyuan107',
-          ref: 'setting',
-          size: '19px'
+          name: "icon-ziyuan107",
+          ref: "setting",
+          size: "19px",
         },
         {
           id: 1,
-          name: 'icon-ziyuan105',
-          ref: 'help',
-          size: '19px'
-        }
+          name: "icon-ziyuan105",
+          ref: "help",
+          size: "19px",
+        },
       ],
       syncDataBool: false, // 用来设定timeSync显示是否正常 和 作为开关是否进行同步
       dataSyncVisible: false, // 用来是否显示整个设定数据同步界面
-      timeSync: '5',
-      operationGuide: false
-    }
+      timeSync: "5",
+      operationGuide: false,
+    };
   },
   computed: {
     ...mapLayoutGetters([
-      'allCategoryInform',
-      'initShowPanelInfo',
-      'initRunFile',
-      'waitingPage',
-      'initWaitingMessage',
-      'getErrorMessage',
-      'setDownloadSvgClass',
-      'getStateStore'
+      "allCategoryInform",
+      "initShowPanelInfo",
+      "initRunFile",
+      "waitingPage",
+      "initWaitingMessage",
+      "getErrorMessage",
+      "setDownloadSvgClass",
+      "getStateStore",
     ]),
     ...mapLayoutState([
-      'userSelectRunFile',
-      'multipleFlag',
-      'svgDownloadList',
-      'initSidebarId',
-      'categoryIndex',
-      'stateStore'
-    ])
+      "userSelectRunFile",
+      "multipleFlag",
+      "svgDownloadList",
+      "initSidebarId",
+      "categoryIndex",
+      "stateStore",
+    ]),
   },
   watch: {
-    getErrorMessage(val) {
+    // 报错信息
+    getErrorMessage (val) {
       this.$message({
-        message: val.split('_')[0],
-        type: 'error'
-      })
+        message: val.split("_")[0],
+        type: "error",
+      });
     },
-    selectedRaw(val) {
-      if (val === 'media') {
-        this.rightSilder(this.rightSilderIcons[0])
-      } else if (val === 'graph') {
-        this.rightSilder(this.rightSilderIcons[1])
+    // 路由跳转时候侧栏隐藏
+    selectedRaw (val) {
+      if (val === "media") {
+        this.rightSilder(this.rightSilderIcons[0]);
+      } else if (val === "graph") {
+        this.rightSilder(this.rightSilderIcons[1]);
       } else if (this.screenWidth < 1000) {
-        this.rightSilder(this.rightSilderIcons[0])
+        this.rightSilder(this.rightSilderIcons[0]);
       } else if (this.screenWidth >= 1000) {
-        this.rightSilder(this.rightSilderIcons[1])
+        this.rightSilder(this.rightSilderIcons[1]);
       }
     },
-    screenWidth(val) {
+    // 浏览拉伸拉伸，侧栏隐藏
+    screenWidth (val) {
       if (val < 1000) {
-        this.isHide(this.leftSilderIcons[0])
-        if (this.selectedRaw !== 'graph') {
-          this.rightSilder(this.rightSilderIcons[0])
+        this.isHide(this.leftSilderIcons[0]);
+        if (this.selectedRaw !== "graph") {
+          this.rightSilder(this.rightSilderIcons[0]);
         }
       }
     },
-    $route() {
-      const path = this.$route.path.split('/')
-      const name = path[path.length - 1]
-      const id = this.categoryIndex.indexOf(constants.CATEGORYORDER.indexOf(name))
-      const item = this.allCategoryInform[id]
-      this.initFlag = false
-      this.selected = item.id
-      this.init = 1
-      this.selectedRaw = item.rawName
-      this.setRunCategory(item.rawName)
-      this.todoName = item.rawName
-      // 同步更新
-      if (this.syncDataBool) {
-        // 开启同步
-        this.clearSync()
-        // this.timingFeatchCategory([this.timeSync * 1000, this.$route.path])
-      } else {
-        // 关闭同步
-        this.clearSync()
+    // 路由信息更新
+    $route: {
+      immediate: false,
+      handler (val) {
+        const path = this.$route.path.split("/");
+        const name = path[path.length - 1];
+        const id = this.categoryIndex.indexOf(
+          constants.CATEGORYORDER.indexOf(name)
+        );
+        const item = this.allCategoryInform[id];
+        this.initFlag = false;
+        this.selected = item.id;
+        this.init = 1;
+        this.selectedRaw = item.rawName;
+        this.setRunCategory(item.rawName);
+        this.todoName = item.rawName;
+        // 同步更新
+        if (this.syncDataBool) {
+          // 开启同步
+          this.clearSync();
+          // this.timingFeatchCategory([this.timeSync * 1000, this.$route.path])
+        } else {
+          // 关闭同步
+          this.clearSync();
+        }
+      },
+    },
+    // $route(val) {
+
+    // },
+    initShowPanelInfo () {
+      if (this.$route.path === "/index") {
+        this.$router.push({ path: this.initShowPanelInfo.routerName });
       }
+      this.initId = this.initSidebarId;
+      this.todoName = this.$route.path.match(/[^\/]+$/g)[0];
     },
-    initShowPanelInfo() {
-      if (this.$route.path === '/index') {
-        this.$router.push({ path: this.initShowPanelInfo.routerName })
-      }
-      this.initId = this.initSidebarId
+    userSelectRunFile () {
+      this.$forceUpdate();
+      this.value1 = this.userSelectRunFile;
     },
-    userSelectRunFile() {
-      this.$forceUpdate()
-      this.value1 = this.userSelectRunFile
+    // runfiles
+    value1 () {
+      this.getStateStore[this.selectedRaw] = this.value1;
+      this.setUserSelectRunFile(this.value1);
     },
-    value1() {
-      // console.log(this.value1)
-      this.getStateStore[this.selectedRaw] = this.value1
-      this.setUserSelectRunFile(this.value1)
+    inputValue () { },
+    multipleFlag () {
+      this.isMultiple = this.multipleFlag;
     },
-    inputValue() {},
-    multipleFlag() {
-      this.isMultiple = this.multipleFlag
-    },
-    isMultiple() {
-      this.update = false
+    isMultiple () {
+      this.update = false;
       setTimeout(() => {
-        this.update = true
-      })
+        this.update = true;
+      });
     },
-    initWaitingMessage() {
-      this.initWaitVisible = false
-      if (this.initWaitingMessage === 'error') {
-        this.$alert('对不起您没有权限', '警告', {
-          confirmButtonText: '确定',
-          type: 'error'
-        })
+    initWaitingMessage () {
+      this.initWaitVisible = false;
+      if (this.initWaitingMessage === "error") {
+        this.$alert("对不起您没有权限", "警告", {
+          confirmButtonText: "确定",
+          type: "error",
+        });
       } else {
-        this.initFeatchCategory(this.$route.path)
-        this.fontSize()
+        this.initFeatchCategory(this.$route.path);
+        this.fontSize();
       }
     },
-    syncDataBool() {
+    syncDataBool () {
       // if (this.syncDataBool) {
       //   // 开启同步
       //   this.timingFeatchCategory([this.timeSync * 1000, this.$route.path])
@@ -989,30 +916,31 @@ export default {
       //   this.clearSync()
       // }
     },
-    allCategoryInform() {
+    allCategoryInform () {
       if (!this.leftSilderIcons[0].shaowFlag) {
-        this.isHide(this.leftSilderIcons[0])
+        this.isHide(this.leftSilderIcons[0]);
       }
     },
-    dataSyncVisible(val) {
-      var self = this
+    // 数据同步
+    dataSyncVisible (val) {
+      var self = this;
       if (!val && this.syncDataBool) {
         if (self.timer) {
-          clearTimeout(self.timer)
+          clearTimeout(self.timer);
         }
-        self.timer = setInterval(function() {
-          self.featchCategory(self.$route.path)
-          self.setTimer()
-        }, 1000 * self.timeSync)
+        self.timer = setInterval(function () {
+          self.featchCategory(self.$route.path);
+          self.setTimer();
+        }, 1000 * self.timeSync);
       } else if (!val && !this.syncDataBool) {
         if (self.timer) {
-          clearTimeout(self.timer)
+          clearTimeout(self.timer);
         }
-        self.timer = null
+        self.timer = null;
       }
-    }
+    },
   },
-  created() {
+  created () {
     // const params = param2Obj(window.location.href)
     // if (typeof (params.id) === 'undefined' || typeof (params.trainJobName) === 'undefined') {
     //   // 查看sessionStorage里面是否有这两个数据
@@ -1034,228 +962,224 @@ export default {
     // }
     // TODO 临时解决方案，最终使用上面的方案
     const params = {
-      trainJobName: 'test'
-    }
-    this.setParams(params)
-    this.initWaitingPage({})
+      trainJobName: "test",
+      id: "test",
+    };
+    this.setParams(params);
+    this.initWaitingPage(params);
   },
-  mounted() {
+  mounted () {
     const h =
-      window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
-    const hReal = h * 0.905 * 0.075 * 0.5
-    this.actegoryClickStyle.divTop = `0 0 ${hReal / 2}px 0`
-    this.actegoryClickStyle.divAim = `${hReal}px 0 0 ${hReal}px`
-    this.actegoryClickStyle.divBottom = `0 ${hReal / 2}px 0 0`
-    const that = this
+      window.innerHeight ||
+      document.documentElement.clientHeight ||
+      document.body.clientHeight;
+    const hReal = h * 0.905 * 0.075 * 0.5;
+    this.actegoryClickStyle.divTop = `0 0 ${hReal / 2}px 0`;
+    this.actegoryClickStyle.divAim = `${hReal}px 0 0 ${hReal}px`;
+    this.actegoryClickStyle.divBottom = `0 ${hReal / 2}px 0 0`;
+    const that = this;
     window.onresize = () => {
       return (() => {
-        window.screenWidth = document.body.clientWidth
-        that.screenWidth = window.screenWidth
-      })()
-    }
-    that.screenWidth = document.body.clientWidth
-    const secondIndex = 2
-    this.selectedRaw = this.$route.path.split('/')[secondIndex]
+        window.screenWidth = document.body.clientWidth;
+        that.screenWidth = window.screenWidth;
+      })();
+    };
+    that.screenWidth = document.body.clientWidth;
+    const secondIndex = 2;
+    this.selectedRaw = this.$route.path.split("/")[secondIndex];
   },
   methods: {
     ...mapLayoutActions([
-      'featchCategory',
-      'initFeatchCategory',
-      'timingFeatchCategory',
-      'timingFeatchCategoryOnce',
-      'initWaitingPage'
+      "featchCategory",
+      "initFeatchCategory",
+      "timingFeatchCategory",
+      "timingFeatchCategoryOnce",
+      "initWaitingPage",
     ]),
     ...mapLayoutMutations([
-      'setCategory',
-      'setUserSelectRunFile',
-      'setRunCategory',
-      'setTimer',
-      'clearSync',
-      'setParams',
-      'setErrorMessage'
+      "setCategory",
+      "setUserSelectRunFile",
+      "setRunCategory",
+      "setTimer",
+      "clearSync",
+      "setParams",
+      "setErrorMessage",
     ]),
-    ...mapCustomMutations(['setData']),
-    isClicked() {
-      d3.select('.el-icon-refresh').attr('class', 'el-icon-refresh anim')
+    ...mapCustomMutations(["setData"]),
+    // 手动刷新页面
+    isClicked () {
+      d3.select(".el-icon-refresh").attr("class", "el-icon-refresh anim");
       setTimeout(() => {
-        d3.select('.anim').attr('class', 'el-icon-refresh')
-      }, 5000)
+        d3.select(".anim").attr("class", "el-icon-refresh");
+      }, 5000);
       // 手动的数据同步
-      this.timingFeatchCategoryOnce(this.$route.path)
+      this.timingFeatchCategoryOnce(this.$route.path);
     },
-    change(item) {
-      this.initFlag = false
-      this.selected = item.id
-      this.todoName = item.rawName
+    change (item) {
+      this.initFlag = false;
+      this.selected = item.id;
+      this.todoName = item.rawName;
     },
-    getOptions() {
-      this.options = this.initRunFile
+    getOptions () {
+      this.options = this.initRunFile;
     },
-    isHide(item) {
-      if (item.ref === 'left') {
-        item.shaowFlag = false
-        this.leftSilderIcons[1].shaowFlag = true
-        this.leftStyle.width = '62px'
-        this.rightStyle.width = 'calc(100% - 62px)'
-        this.logoFlag = false
+    isHide (item) {
+      if (item.ref === "left") {
+        item.shaowFlag = false;
+        this.leftSilderIcons[1].shaowFlag = true;
+        this.leftStyle.width = "62px";
+        this.rightStyle.width = "calc(100% - 62px)";
+        this.logoFlag = false;
         this.allCategoryInform.forEach((val) => {
-          val.name = ''
-        })
-        this.leftStyle.categoryFlage = true
-        this.logoImgStyleFlage = true
-      } else if (item.ref === 'right') {
-        item.shaowFlag = false
-        this.leftSilderIcons[0].shaowFlag = true
-        this.leftStyle.width = '180px'
-        this.rightStyle.width = 'calc(100% - 180px)'
-        this.logoFlag = true
+          val.name = "";
+        });
+        this.leftStyle.categoryFlage = true;
+        this.logoImgStyleFlage = true;
+      } else if (item.ref === "right") {
+        item.shaowFlag = false;
+        this.leftSilderIcons[0].shaowFlag = true;
+        this.leftStyle.width = "180px";
+        this.rightStyle.width = "calc(100% - 180px)";
+        this.logoFlag = true;
         this.allCategoryInform.forEach((val) => {
-          val.icon = val.iconCopy
-          val.name = val.nameCopy
-        })
-        this.leftStyle.categoryFlage = false
-        this.logoImgStyleFlage = false
+          val.icon = val.iconCopy;
+          val.name = val.nameCopy;
+        });
+        this.leftStyle.categoryFlage = false;
+        this.logoImgStyleFlage = false;
       }
     },
-    rightSilder(item) {
-      if (item.ref === 'right') {
-        item.shaowFlag = false
-        this.rightSilderIcons[1].shaowFlag = true
-        this.contentsStyle.leftWidth = 'calc(100% - 26px)'
-        this.contentsStyle.rightShowFlag = false
-        this.rightRetract.setBackLeft = '0.5'
-        this.rightRetract.width = '26px'
-        this.rightRetract.retractFlage = true
-      } else if (item.ref === 'left') {
-        item.shaowFlag = false
-        this.rightSilderIcons[0].shaowFlag = true
-        this.contentsStyle.leftWidth = 'calc(100% - 290px)'
-        this.contentsStyle.rightShowFlag = true
-        this.rightRetract.setBackLeft = '0'
-        this.rightRetract.width = '290px'
-        this.rightRetract.retractFlage = false
+    // 右侧栏隐藏
+    rightSilder (item) {
+      if (item.ref === "right") {
+        item.shaowFlag = false;
+        this.rightSilderIcons[1].shaowFlag = true;
+        this.contentsStyle.leftWidth = "calc(100% - 26px)";
+        this.contentsStyle.rightShowFlag = false;
+        this.rightRetract.setBackLeft = "0.5";
+        this.rightRetract.width = "26px";
+        this.rightRetract.retractFlage = true;
+      } else if (item.ref === "left") {
+        item.shaowFlag = false;
+        this.rightSilderIcons[0].shaowFlag = true;
+        this.contentsStyle.leftWidth = "calc(100% - 290px)";
+        this.contentsStyle.rightShowFlag = true;
+        this.rightRetract.setBackLeft = "0";
+        this.rightRetract.width = "290px";
+        this.rightRetract.retractFlage = false;
       }
     },
-    jsutTest(val) {
-      if (val === 'download') {
+    // 按钮功能
+    jsutTest (val) {
+      if (val === "download") {
         if (this.downloadState.indexOf(this.selectedRaw) >= 0) {
           if (this.svgDownloadList[this.selectedRaw].length === 0) {
             this.setErrorMessage(
-              `${'请先在当前页面勾选需要下载的图片' + '_'}${new Date().getTime()}`
-            )
+              `${"请先在当前页面勾选需要下载的图片" + "_"
+              }${new Date().getTime()}`
+            );
           } else {
-            this.dialogFormVisible = true
+            this.dialogFormVisible = true;
           }
         } else {
-          this.setErrorMessage(`${'当前页面不支持下载' + '_'}${new Date().getTime()}`)
-          this.dialogFormVisible = false
+          this.setErrorMessage(
+            `${"当前页面不支持下载" + "_"}${new Date().getTime()}`
+          );
+          this.dialogFormVisible = false;
         }
-      } else if (val === 'fullScreen') {
+      } else if (val === "fullScreen") {
         const isFull =
           document.fullscreenElement ||
           document.mozFullScreenElement ||
           document.webkitFullscreenElement ||
-          document.msFullscreenElement
+          document.msFullscreenElement;
         if (isFull) {
           if (document.cancelFullScreen) {
-            document.cancelFullScreen()
+            document.cancelFullScreen();
           } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen()
+            document.mozCancelFullScreen();
           } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen()
+            document.webkitCancelFullScreen();
           } else if (document.msExitFullscreen) {
-            document.msExitFullscreen()
+            document.msExitFullscreen();
           }
         } else {
-          let element
-          if (this.selectedRaw === 'graph') {
-            element = document.getElementById('full-screen1')
+          let element;
+          if (this.selectedRaw === "graph") {
+            element = document.getElementById("full-screen1");
           } else {
-            element = document.getElementById('full-screen')
+            element = document.getElementById("full-screen");
           }
           if (element.requestFullscreen) {
-            element.requestFullscreen()
+            element.requestFullscreen();
           } else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen()
+            element.msRequestFullscreen();
           } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen()
+            element.mozRequestFullScreen();
           } else if (element.webkitRequestFullScreen) {
-            element.webkitRequestFullScreen()
+            element.webkitRequestFullScreen();
           }
         }
-      } else if (val === 'custom') {
+      } else if (val === "custom") {
         const { className } = document
-          .getElementsByClassName('category-selected')[0]
-          .getElementsByTagName('i')[0]
-        const iconName = className.split(' ')[1]
-        let index = 0
+          .getElementsByClassName("category-selected")[0]
+          .getElementsByTagName("i")[0];
+        const iconName = className.split(" ")[1];
+        let index = 0;
         for (; index < this.allCategoryInform.length; index += 1) {
           if (this.allCategoryInform[index].icon === iconName) {
-            index = this.allCategoryInform[index].rawName
-            break
+            index = this.allCategoryInform[index].rawName;
+            break;
           }
         }
-        this.setData(index)
-        if (this.$route.path !== '/index/custom') {
-          this.$router.push({ path: '/index/custom' })
+        this.setData(index);
+        if (this.$route.path !== "/index/custom") {
+          this.$router.push({ path: "/index/custom" });
         }
       }
     },
-    downloadSvg() {
-      this.dialogFormVisible = false
+    // 图片下载
+    downloadSvg () {
+      this.dialogFormVisible = false;
       this.svgDownloadList[this.selectedRaw].forEach((val) => {
-        const testDOM = document.querySelector(val)
+        const testDOM = document.querySelector(val);
         download.covertSVG2Image(
           testDOM,
           this.form.input,
           testDOM.width.baseVal.value,
           testDOM.height.baseVal.value,
           this.form.type
-        )
-      })
-      this.form.input = '下载'
-      this.form.type = 'png'
+        );
+      });
+      this.form.input = "下载";
+      this.form.type = "png";
     },
-    downCancel() {
-      this.dialogFormVisible = false
-      this.form.input = '下载'
-      this.form.type = 'png'
+    downCancel () {
+      this.dialogFormVisible = false;
+      this.form.input = "下载";
+      this.form.type = "png";
     },
-    testDownloadJson2csv() {
-      const testObject = [
-        {
-          name: 'xds',
-          age: '26',
-          gender: 'male'
-        },
-        {
-          name: 'zhngsnan',
-          age: '22',
-          gender: 'male'
-        }
-      ]
-      download.downloadJSON2CSV(testObject)
-    },
-    getTigger(val) {
+    // 右上方按钮
+    getTigger (val) {
       // const time = new Date()
       // const currentTime = time.toLocaleString()
       // if (val.ref === 'setting') {
       //   this.setTimer(currentTime)
       // }
-      if (val.ref === 'setting') {
+      if (val.ref === "setting") {
         // 将同步窗口显示
-        this.dataSyncVisible = true
+        this.dataSyncVisible = true;
       }
-      if (val.ref === 'help') {
-        this.operationGuide = true
+      if (val.ref === "help") {
+        this.operationGuide = true;
       }
     },
-    fontSize() {
-      const deviceWidth = document.documentElement.offsetWidth
-      this.autoFontSize = parseInt(deviceWidth / 109, 10)
-    }
-  }
-}
+    fontSize () {
+      const deviceWidth = document.documentElement.offsetWidth;
+      this.autoFontSize = parseInt(deviceWidth / 109, 10);
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -1337,7 +1261,7 @@ export default {
     top: 10%;
   }
 
-  /deep/ .el-select__caret{
+  /deep/ .el-select__caret {
     margin: 20% 0 0 0;
   }
 
@@ -1565,10 +1489,14 @@ export default {
   position: relative;
   width: 100%;
   height: 96.5%;
+  display: flex;
+  flex-direction: row;
+  // flex: auto;
 
   .layout-content-panel {
-    z-index: 0;
-    float: left;
+    // z-index: 0;
+    flex: auto;
+    // float: left;
     height: 100%;
     background-color: white;
   }
@@ -1580,8 +1508,9 @@ export default {
   }
 
   .layout-content-paramenter {
-    z-index: 0;
-    float: right;
+    // z-index: 0;
+    // float: right;
+    flex: 0 0 auto;
     width: 290px;
     height: 94%;
     margin-right: 0;
@@ -2194,7 +2123,8 @@ export default {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
-    box-shadow: rgba(12, 13, 14, 0.2) 0 1px 0, rgb(255, 255, 255) 0 0 0 2px inset;
+    box-shadow: rgba(12, 13, 14, 0.2) 0 1px 0,
+      rgb(255, 255, 255) 0 0 0 2px inset;
   }
   .md-comment {
     font-family: var(--monospace);
@@ -2348,7 +2278,8 @@ export default {
   }
 
   body {
-    font-family: 'Open Sans', 'Clear Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Open Sans', 'Clear Sans', 'Helvetica Neue', Helvetica, Arial,
+      sans-serif;
     line-height: 1.6;
     color: rgb(51, 51, 51);
   }
