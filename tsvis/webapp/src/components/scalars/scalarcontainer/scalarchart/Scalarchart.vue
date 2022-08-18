@@ -7,46 +7,47 @@
  * @LastEditTime: 2021-07-29 00:15:45
  -->
  <style lang="less" scoped>
-   .chart{
-     height:100%;
-     width:100%;
-     background-color: white;
-     position: relative;
-   }
-   .tooltip{
-     background-color:rgba(0, 73, 134);
-     border-radius:5px;
-     position:absolute;
-     padding:5px;
-     visibility:hidden;
-     margin-left: 5%;
-     margin-right: 5%;
-     width:90%;
-     bottom:5%;
-     color:white;
-   }
-   .font1{
-     font-size: 30px;
-   }
-   .font2{
-     font-size: 10px;
-   }
-   table{
-     width:100%;
-   }
-   td{
-     text-align:center;
-   }
-   .td1{
-     width: 40%;
-   }
-   .td2{
-     width: 20%;
-   }
- </style>
+.chart {
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  position: relative;
+}
+.tooltip {
+  background-color: rgba(0, 73, 134);
+  border-radius: 5px;
+  position: absolute;
+  padding: 5px;
+  visibility: hidden;
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 90%;
+  bottom: 5%;
+  color: white;
+}
+.font1 {
+  font-size: 30px;
+}
+.font2 {
+  font-size: 10px;
+}
+table {
+  width: 100%;
+}
+td {
+  text-align: center;
+}
+.td1 {
+  width: 40%;
+}
+.td2 {
+  width: 20%;
+}
+</style>
 <template>
   <div :id="classname" class="chart">
-    <div :class="['tooltip',scaleLargeSmall?'font1':'font2']" :scale="scaleLargeSmall">
+    <div :class="['tooltip',scaleLargeSmall?'font1':'font2']"
+      :scale="scaleLargeSmall">
       <table>
         <tr>
           <td class="td1">wall_time</td>
@@ -82,7 +83,7 @@ export default {
     isaddmain: Boolean,
     title: String
   },
-  data() {
+  data () {
     return {
       data: [],
       yname: [],
@@ -107,13 +108,12 @@ export default {
     ])
   },
   watch: {
-    freshnumber: function(val) {
+    freshnumber: function (val) {
       if (this.mergetype === '') {
-        // d3.select('#svg' + this.classname).remove()
         this.SvgDraw()
       }
     },
-    isaddmain: function(val) {
+    isaddmain: function (val) {
       if (val) {
         if (this.mergetype === 'single') {
           this.thisid = ''
@@ -137,7 +137,7 @@ export default {
         this.deleteScalar(this.thisid)
       }
     },
-    smoothvalue: function() {
+    smoothvalue: function () {
       if (this.grade[this.classname] === 'main') {
         if (this.mergetype === 'single') {
           d3.select('#svg' + this.classname).remove()
@@ -151,7 +151,7 @@ export default {
         this.SvgDraw()
       }
     },
-    yaxis: function() {
+    yaxis: function () {
       if (this.grade[this.classname] === 'main') {
         if (this.mergetype === 'single') {
           d3.select('#svg' + this.classname).remove()
@@ -165,7 +165,7 @@ export default {
         this.SvgDraw()
       }
     },
-    start: function(val) {
+    start: function (val) {
       if (val) {
         if (Object.keys(this.mergeditem[this.classname]).length === 1) {
           this.mergetype = 'single'
@@ -188,7 +188,7 @@ export default {
         this.setmergestep()
       }
     },
-    end: function(val) {
+    end: function (val) {
       if (val) {
         this.deleteScalar(this.thisid)
         this.mergeddata = []
@@ -204,7 +204,7 @@ export default {
         this.SvgDraw()
       }
     },
-    getTimer: function() {
+    getTimer: function () {
       if (this.grade[this.classname] === 'main') {
         if (Object.keys(this.mergeditem[this.classname]).length === 1) {
           this.mergetype = 'single'
@@ -246,7 +246,7 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     if (this.grade[this.classname] === 'main') {
       if (Object.keys(this.mergeditem[this.classname]).length === 1) {
         this.mergetype = 'single'
@@ -287,7 +287,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     if (this.mergetype === 'double') {
       this.DYMergeSvgDraw()
     } else if (this.mergetype === 'single') {
@@ -303,7 +303,7 @@ export default {
     ...mapCustomMutations([
       'setScalar', 'deleteScalar'
     ]),
-    SvgDraw() {
+    SvgDraw () {
       let data = [].concat(JSON.parse(JSON.stringify(this.data)))
       const datamid = [].concat(JSON.parse(JSON.stringify(this.data)))
       const smooth = this.smoothvalue * 1
@@ -324,13 +324,13 @@ export default {
         }
       }
       const smoothdata = [].concat(JSON.parse(JSON.stringify(data)))
-      
+
       if (smoothdata.length === 0) {
         return
       } else {
         d3.select('#svg' + this.classname).remove()
       }
-      
+
       let last = smoothdata[0].value
       for (let i = 1; i < smoothdata.length; i++) {
         smoothdata[i].value = last * smooth + (1 - smooth) * smoothdata[i].value
@@ -378,9 +378,8 @@ export default {
         .attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2')
 
       // Add X axis
-      const xdomain = d3.extent(data, function(d) { return d.step })
+      const xdomain = d3.extent(data, function (d) { return d.step })
       const xgap = xdomain[1] - xdomain[0]
-      // xdomain[0] = xdomain[0] - xgap / 4
       xdomain[1] = xdomain[1] + xgap / 4
       var x = d3.scaleLinear()
         .domain(xdomain)
@@ -418,7 +417,7 @@ export default {
         .text('step')
 
       // Add Y axis
-      const ydomain = d3.extent(data, function(d) { return d.value })
+      const ydomain = d3.extent(data, function (d) { return d.value })
       const ygap = ydomain[1] - ydomain[0]
       ydomain[0] = ydomain[0] - ygap / 4
       ydomain[1] = ydomain[1] + ygap / 4
@@ -483,8 +482,8 @@ export default {
         .attr('stroke-width', 1.5)
         .attr('stroke-opacity', 0.2)
         .attr('d', d3.line()
-          .x(function(d) { return x(d.step) })
-          .y(function(d) { return y(d.value) })
+          .x(function (d) { return x(d.step) })
+          .y(function (d) { return y(d.value) })
         )
       // Add the smooth line
       line.append('path')
@@ -494,8 +493,8 @@ export default {
         .attr('stroke', 'blue')
         .attr('stroke-width', 1.5)
         .attr('d', d3.line()
-          .x(function(d) { return x(d.step) })
-          .y(function(d) { return y(d.value) })
+          .x(function (d) { return x(d.step) })
+          .y(function (d) { return y(d.value) })
         )
       // Add the brushing
       line
@@ -514,19 +513,19 @@ export default {
         .enter()
         .append('circle')
         .attr('class', 'myCircle')
-        .attr('cx', function(d) { return x(d.step) })
-        .attr('cy', function(d) { return y(d.value) })
+        .attr('cx', function (d) { return x(d.step) })
+        .attr('cy', function (d) { return y(d.value) })
         .attr('r', 3)
         .attr('stroke-width', 10)
         .attr('stroke', 'black')
         .attr('fill', 'black')
         .attr('fill-opacity', 0)
         .attr('stroke-opacity', 0)
-        .on('mouseover', function(d) {
+        .on('mouseover', function (d) {
           d3.select(this).attr('fill-opacity', 1)
           Tooltip.style('visibility', 'visible')
         })
-        .on('mousemove', function(d) {
+        .on('mousemove', function (d) {
           const unixTimestamp = new Date(d.wall_time * 1000)
           const commonTime = unixTimestamp.toLocaleString('en-GB', { hour12: false })
           const tim = commonTime.split('\/')
@@ -556,17 +555,17 @@ export default {
           td2.html(d.step)
           td3.html(vv)
         })
-        .on('mouseout', function(d) {
+        .on('mouseout', function (d) {
           d3.select(this).attr('fill-opacity', 0)
           Tooltip.style('visibility', 'hidden')
         })
       // A function that set idleTimeOut to null
       var idleTimeout
-      function idled() { idleTimeout = null }
+      function idled () { idleTimeout = null }
 
       // A function that update the chart for given boundaries
-      function updateChart() {
-      // What are the selected boundaries?
+      function updateChart () {
+        // What are the selected boundaries?
         var extent = d3.event.selection
         if (!extent) {
           if (!idleTimeout) {
@@ -633,26 +632,26 @@ export default {
           .transition()
           .duration(1000)
           .attr('d', d3.line()
-            .x(function(d) { return x(d.step) })
-            .y(function(d) { return y(d.value) })
+            .x(function (d) { return x(d.step) })
+            .y(function (d) { return y(d.value) })
           )
         line
           .select('.originalline')
           .transition()
           .duration(1000)
           .attr('d', d3.line()
-            .x(function(d) { return x(d.step) })
-            .y(function(d) { return y(d.value) })
+            .x(function (d) { return x(d.step) })
+            .y(function (d) { return y(d.value) })
           )
         line
           .selectAll('.myCircle')
           .transition()
           .duration(1000)
-          .attr('cx', function(d) { return x(d.step) })
-          .attr('cy', function(d) { return y(d.value) })
+          .attr('cx', function (d) { return x(d.step) })
+          .attr('cy', function (d) { return y(d.value) })
       }
       // If user double click, reinitialize the chart
-      svg.on('dblclick', function() {
+      svg.on('dblclick', function () {
         x.domain(xdomain)
         xAxis.transition().call(
           d3.axisBottom(x)
@@ -706,26 +705,26 @@ export default {
           .transition()
           .duration(1000)
           .attr('d', d3.line()
-            .x(function(d) { return x(d.step) })
-            .y(function(d) { return y(d.value) })
+            .x(function (d) { return x(d.step) })
+            .y(function (d) { return y(d.value) })
           )
         line
           .selectAll('.originalline')
           .transition()
           .duration(1000)
           .attr('d', d3.line()
-            .x(function(d) { return x(d.step) })
-            .y(function(d) { return y(d.value) })
+            .x(function (d) { return x(d.step) })
+            .y(function (d) { return y(d.value) })
           )
         line
           .selectAll('.myCircle')
           .transition()
           .duration(1000)
-          .attr('cx', function(d) { return x(d.step) })
-          .attr('cy', function(d) { return y(d.value) })
+          .attr('cx', function (d) { return x(d.step) })
+          .attr('cy', function (d) { return y(d.value) })
       })
     },
-    MergeSvgDraw() {
+    MergeSvgDraw () {
       const legendnumber = this.legendnumber
       let data = [].concat(JSON.parse(JSON.stringify(this.mergeddata)))
       const datamid = [].concat(JSON.parse(JSON.stringify(this.mergeddata)))
@@ -766,7 +765,7 @@ export default {
         dataset = dataset.concat(smoothdata[i].value)
       }
       // color palette
-      var res = data.map(function(d) { return d.order }) // list of group names
+      var res = data.map(function (d) { return d.order }) // list of group names
       var color = d3.scaleOrdinal()
         .domain(res)
         .range(['#ed357b', '#1d276e', '#6ec6d0', '#0c9257', '#ffdf1e', '#fe8325'])
@@ -812,7 +811,7 @@ export default {
         .attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2')
 
       // Add X axis
-      const xdomain = d3.extent(dataset0, function(d) { return d.step })
+      const xdomain = d3.extent(dataset0, function (d) { return d.step })
       const xgap = xdomain[1] - xdomain[0]
       xdomain[0] = xdomain[0] - xgap / 4
       xdomain[1] = xdomain[1] + xgap / 4
@@ -852,7 +851,7 @@ export default {
         .text('step')
 
       // Add Y axis
-      const ydomain = d3.extent(dataset0, function(d) { return d.value })
+      const ydomain = d3.extent(dataset0, function (d) { return d.value })
       const ygap = ydomain[1] - ydomain[0]
       ydomain[0] = ydomain[0] - ygap / 4
       ydomain[1] = ydomain[1] + ygap / 4
@@ -915,12 +914,12 @@ export default {
         .append('path')
         .attr('class', 'smoothline')
         .attr('fill', 'none')
-        .attr('stroke', function(d) { return color(d.order) })
+        .attr('stroke', function (d) { return color(d.order) })
         .attr('stroke-width', 1.5)
-        .attr('d', function(d) {
+        .attr('d', function (d) {
           return d3.line()
-            .x(function(d) { return x(d.step) })
-            .y(function(d) { return y(d.value) })(d.value)
+            .x(function (d) { return x(d.step) })
+            .y(function (d) { return y(d.value) })(d.value)
         })
       // Add the brushing
       line
@@ -940,19 +939,19 @@ export default {
         .enter()
         .append('circle')
         .attr('class', 'myCircle')
-        .attr('cx', function(d) { return x(d.step) })
-        .attr('cy', function(d) { return y(d.value) })
+        .attr('cx', function (d) { return x(d.step) })
+        .attr('cy', function (d) { return y(d.value) })
         .attr('r', 3)
         .attr('stroke', 'black')
         .attr('stroke-width', 10)
         .attr('fill', 'black')
         .attr('fill-opacity', 0)
         .attr('stroke-opacity', 0)
-        .on('mouseover', function(d) {
+        .on('mouseover', function (d) {
           d3.select(this).attr('fill-opacity', 1)
           Tooltip.style('visibility', 'visible')
         })
-        .on('mousemove', function(d) {
+        .on('mousemove', function (d) {
           const unixTimestamp = new Date(d.wall_time * 1000)
           const commonTime = unixTimestamp.toLocaleString('en-GB', { hour12: false })
           const tim = commonTime.split('\/')
@@ -982,7 +981,7 @@ export default {
           td2.html(d.step)
           td3.html(vv)
         })
-        .on('mouseout', function(d) {
+        .on('mouseout', function (d) {
           d3.select(this).attr('fill-opacity', 0)
           Tooltip.style('visibility', 'hidden')
         })
@@ -993,7 +992,7 @@ export default {
         .enter()
         .append('g')
         .attr('class', 'legend')
-        .attr('transform', function(d, i) {
+        .attr('transform', function (d, i) {
           return 'translate(0,' + i * 20 + ')'
         })
 
@@ -1002,7 +1001,7 @@ export default {
         .attr('y', height + margin.top + 40)
         .attr('width', 18)
         .attr('height', 4)
-        .style('fill', function(d) {
+        .style('fill', function (d) {
           return color(d.order)
         })
 
@@ -1012,14 +1011,14 @@ export default {
         .attr('dy', '.5em')
         .attr('font-size', '10px')
         .style('text-anchor', 'start')
-        .text(function(d) { return d.run + ',' + d.tag })
+        .text(function (d) { return d.run + ',' + d.tag })
       // A function that set idleTimeOut to null
       var idleTimeout
-      function idled() { idleTimeout = null }
+      function idled () { idleTimeout = null }
 
       // A function that update the chart for given boundaries
-      function updateChart() {
-      // What are the selected boundaries?
+      function updateChart () {
+        // What are the selected boundaries?
         var extent = d3.event.selection
 
         // If no selection, back to initial coordinate. Otherwise, update X axis domain
@@ -1087,20 +1086,20 @@ export default {
           .selectAll('.smoothline')
           .transition()
           .duration(1000)
-          .attr('d', function(d) {
+          .attr('d', function (d) {
             return d3.line()
-              .x(function(d) { return x(d.step) })
-              .y(function(d) { return y(d.value) })(d.value)
+              .x(function (d) { return x(d.step) })
+              .y(function (d) { return y(d.value) })(d.value)
           })
         line
           .selectAll('.myCircle')
           .transition()
           .duration(1000)
-          .attr('cx', function(d) { return x(d.step) })
-          .attr('cy', function(d) { return y(d.value) })
+          .attr('cx', function (d) { return x(d.step) })
+          .attr('cy', function (d) { return y(d.value) })
       }
       // If user double click, reinitialize the chart
-      svg.on('dblclick', function() {
+      svg.on('dblclick', function () {
         x.domain(xdomain)
         xAxis.transition().call(
           d3.axisBottom(x)
@@ -1153,20 +1152,20 @@ export default {
           .selectAll('.smoothline')
           .transition()
           .duration(1000)
-          .attr('d', function(d) {
+          .attr('d', function (d) {
             return d3.line()
-              .x(function(d) { return x(d.step) })
-              .y(function(d) { return y(d.value) })(d.value)
+              .x(function (d) { return x(d.step) })
+              .y(function (d) { return y(d.value) })(d.value)
           })
         line
           .selectAll('.myCircle')
           .transition()
           .duration(1000)
-          .attr('cx', function(d) { return x(d.step) })
-          .attr('cy', function(d) { return y(d.value) })
+          .attr('cx', function (d) { return x(d.step) })
+          .attr('cy', function (d) { return y(d.value) })
       })
     },
-    DYMergeSvgDraw() {
+    DYMergeSvgDraw () {
       const legendnumber = this.legendnumber
       let data0 = [].concat(JSON.parse(JSON.stringify(this.mergeddata0)))
       let data1 = [].concat(JSON.parse(JSON.stringify(this.mergeddata1)))
@@ -1239,11 +1238,11 @@ export default {
         dataset1 = dataset1.concat(smoothdata1[i].value)
       }
       // color palette
-      var res0 = data0.map(function(d) { return d.order }) // list of group names
+      var res0 = data0.map(function (d) { return d.order }) // list of group names
       var color0 = d3.scaleOrdinal()
         .domain(res0)
         .range(['#ed357b', '#1d276e', '#6ec6d0', '#0c9257', '#ffdf1e', '#fe8325'])
-      var res1 = data1.map(function(d) { return d.order }) // list of group names
+      var res1 = data1.map(function (d) { return d.order }) // list of group names
       var color1 = d3.scaleOrdinal()
         .domain(res1)
         .range(['#fe8325', '#ffdf1e', '#0c9257', '#6ec6d0', '#1d276e', '#ed357b'])
@@ -1279,8 +1278,8 @@ export default {
         .attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2')
 
       // Add X axis
-      const xdomain0 = d3.extent(dataset00, function(d) { return d.step })
-      const xdomain1 = d3.extent(dataset11, function(d) { return d.step })
+      const xdomain0 = d3.extent(dataset00, function (d) { return d.step })
+      const xdomain1 = d3.extent(dataset11, function (d) { return d.step })
       const xdomain = []
       xdomain[0] = Math.min(xdomain0[0], xdomain1[0])
       xdomain[1] = Math.max(xdomain0[1], xdomain1[1])
@@ -1322,7 +1321,7 @@ export default {
         .text('step')
 
       // Add Y0 axis
-      const ydomain0 = d3.extent(dataset00, function(d) { return d.value })
+      const ydomain0 = d3.extent(dataset00, function (d) { return d.value })
       const ygap0 = ydomain0[1] - ydomain0[0]
       ydomain0[0] = ydomain0[0] - ygap0 / 4
       ydomain0[1] = ydomain0[1] + ygap0 / 4
@@ -1362,7 +1361,7 @@ export default {
         .text(yaxis0)
 
       // Add Y1 axis
-      const ydomain1 = d3.extent(dataset11, function(d) { return d.value })
+      const ydomain1 = d3.extent(dataset11, function (d) { return d.value })
       const ygap1 = ydomain1[1] - ydomain1[0]
       ydomain1[0] = ydomain1[0] - ygap1 / 4
       ydomain1[1] = ydomain1[1] + ygap1 / 4
@@ -1426,12 +1425,12 @@ export default {
         .append('path')
         .attr('class', 'smoothline0')
         .attr('fill', 'none')
-        .attr('stroke', function(d) { return color0(d.order) })
+        .attr('stroke', function (d) { return color0(d.order) })
         .attr('stroke-width', 1.5)
-        .attr('d', function(d) {
+        .attr('d', function (d) {
           return d3.line()
-            .x(function(d) { return x(d.step) })
-            .y(function(d) { return y0(d.value) })(d.value)
+            .x(function (d) { return x(d.step) })
+            .y(function (d) { return y0(d.value) })(d.value)
         })
       line.selectAll('.smoothline1')
         .data(smoothdata1)
@@ -1439,12 +1438,12 @@ export default {
         .append('path')
         .attr('class', 'smoothline1')
         .attr('fill', 'none')
-        .attr('stroke', function(d) { return color1(d.order) })
+        .attr('stroke', function (d) { return color1(d.order) })
         .attr('stroke-width', 1.5)
-        .attr('d', function(d) {
+        .attr('d', function (d) {
           return d3.line()
-            .x(function(d) { return x(d.step) })
-            .y(function(d) { return y1(d.value) })(d.value)
+            .x(function (d) { return x(d.step) })
+            .y(function (d) { return y1(d.value) })(d.value)
         })
       // Add the brushing
       line
@@ -1464,19 +1463,19 @@ export default {
         .enter()
         .append('circle')
         .attr('class', 'myCircle0')
-        .attr('cx', function(d) { return x(d.step) })
-        .attr('cy', function(d) { return y0(d.value) })
+        .attr('cx', function (d) { return x(d.step) })
+        .attr('cy', function (d) { return y0(d.value) })
         .attr('r', 3)
         .attr('stroke', 'black')
         .attr('stroke-width', 10)
         .attr('fill', 'black')
         .attr('fill-opacity', 0)
         .attr('stroke-opacity', 0)
-        .on('mouseover', function(d) {
+        .on('mouseover', function (d) {
           d3.select(this).attr('fill-opacity', 1)
           Tooltip.style('visibility', 'visible')
         })
-        .on('mousemove', function(d) {
+        .on('mousemove', function (d) {
           const unixTimestamp = new Date(d.wall_time * 1000)
           const commonTime = unixTimestamp.toLocaleString('en-GB', { hour12: false })
           const tim = commonTime.split('\/')
@@ -1506,7 +1505,7 @@ export default {
           td2.html(d.step)
           td3.html(vv)
         })
-        .on('mouseout', function(d) {
+        .on('mouseout', function (d) {
           d3.select(this).attr('fill-opacity', 0)
           Tooltip.style('visibility', 'hidden')
         })
@@ -1516,19 +1515,19 @@ export default {
         .enter()
         .append('circle')
         .attr('class', 'myCircle1')
-        .attr('cx', function(d) { return x(d.step) })
-        .attr('cy', function(d) { return y1(d.value) })
+        .attr('cx', function (d) { return x(d.step) })
+        .attr('cy', function (d) { return y1(d.value) })
         .attr('r', 3)
         .attr('stroke', 'black')
         .attr('stroke-width', 10)
         .attr('fill', 'black')
         .attr('fill-opacity', 0)
         .attr('stroke-opacity', 0)
-        .on('mouseover', function(d) {
+        .on('mouseover', function (d) {
           d3.select(this).attr('fill-opacity', 1)
           Tooltip.style('visibility', 'visible')
         })
-        .on('mousemove', function(d) {
+        .on('mousemove', function (d) {
           const unixTimestamp = new Date(d.wall_time * 1000)
           const commonTime = unixTimestamp.toLocaleString('en-GB', { hour12: false })
           const tim = commonTime.split('\/')
@@ -1558,7 +1557,7 @@ export default {
           td2.html(d.step)
           td3.html(vv)
         })
-        .on('mouseout', function(d) {
+        .on('mouseout', function (d) {
           d3.select(this).attr('fill-opacity', 0)
           Tooltip.style('visibility', 'hidden')
         })
@@ -1570,7 +1569,7 @@ export default {
         .enter()
         .append('g')
         .attr('class', 'legend0')
-        .attr('transform', function(d, i) {
+        .attr('transform', function (d, i) {
           return 'translate(0,' + i * 20 + ')'
         })
 
@@ -1579,7 +1578,7 @@ export default {
         .attr('y', height + margin.top + 40)
         .attr('width', 18)
         .attr('height', 4)
-        .style('fill', function(d) {
+        .style('fill', function (d) {
           return color0(d.order)
         })
 
@@ -1589,14 +1588,14 @@ export default {
         .attr('dy', '.5em')
         .attr('font-size', '10px')
         .style('text-anchor', 'start')
-        .text(function(d) { return d.run + ',' + d.tag })
+        .text(function (d) { return d.run + ',' + d.tag })
       // add the legend0
       var legend1 = svg.selectAll('.legend1')
         .data(smoothdata1)
         .enter()
         .append('g')
         .attr('class', 'legend1')
-        .attr('transform', function(d, i) {
+        .attr('transform', function (d, i) {
           return 'translate(0,' + (firstdatanumber + i) * 20 + ')'
         })
 
@@ -1605,7 +1604,7 @@ export default {
         .attr('y', height + margin.top + 40)
         .attr('width', 18)
         .attr('height', 4)
-        .style('fill', function(d) {
+        .style('fill', function (d) {
           return color1(d.order)
         })
 
@@ -1615,14 +1614,14 @@ export default {
         .attr('dy', '.5em')
         .attr('font-size', '10px')
         .style('text-anchor', 'start')
-        .text(function(d) { return d.run + ',' + d.tag })
+        .text(function (d) { return d.run + ',' + d.tag })
       // A function that set idleTimeOut to null
       var idleTimeout
-      function idled() { idleTimeout = null }
+      function idled () { idleTimeout = null }
 
       // A function that update the chart for given boundaries
-      function updateChart() {
-      // What are the selected boundaries?
+      function updateChart () {
+        // What are the selected boundaries?
         var extent = d3.event.selection
 
         // If no selection, back to initial coordinate. Otherwise, update X axis domain
@@ -1715,35 +1714,35 @@ export default {
           .selectAll('.smoothline0')
           .transition()
           .duration(1000)
-          .attr('d', function(d) {
+          .attr('d', function (d) {
             return d3.line()
-              .x(function(d) { return x(d.step) })
-              .y(function(d) { return y0(d.value) })(d.value)
+              .x(function (d) { return x(d.step) })
+              .y(function (d) { return y0(d.value) })(d.value)
           })
         line
           .selectAll('.smoothline1')
           .transition()
           .duration(1000)
-          .attr('d', function(d) {
+          .attr('d', function (d) {
             return d3.line()
-              .x(function(d) { return x(d.step) })
-              .y(function(d) { return y1(d.value) })(d.value)
+              .x(function (d) { return x(d.step) })
+              .y(function (d) { return y1(d.value) })(d.value)
           })
         line
           .selectAll('.myCircle0')
           .transition()
           .duration(1000)
-          .attr('cx', function(d) { return x(d.step) })
-          .attr('cy', function(d) { return y0(d.value) })
+          .attr('cx', function (d) { return x(d.step) })
+          .attr('cy', function (d) { return y0(d.value) })
         line
           .selectAll('.myCircle1')
           .transition()
           .duration(1000)
-          .attr('cx', function(d) { return x(d.step) })
-          .attr('cy', function(d) { return y1(d.value) })
+          .attr('cx', function (d) { return x(d.step) })
+          .attr('cy', function (d) { return y1(d.value) })
       }
       // If user double click, reinitialize the chart
-      svg.on('dblclick', function() {
+      svg.on('dblclick', function () {
         x.domain(xdomain)
         xAxis.transition().call(
           d3.axisBottom(x)
@@ -1820,32 +1819,32 @@ export default {
           .selectAll('.smoothline0')
           .transition()
           .duration(1000)
-          .attr('d', function(d) {
+          .attr('d', function (d) {
             return d3.line()
-              .x(function(d) { return x(d.step) })
-              .y(function(d) { return y0(d.value) })(d.value)
+              .x(function (d) { return x(d.step) })
+              .y(function (d) { return y0(d.value) })(d.value)
           })
         line
           .selectAll('.myCircle0')
           .transition()
           .duration(1000)
-          .attr('cx', function(d) { return x(d.step) })
-          .attr('cy', function(d) { return y0(d.value) })
+          .attr('cx', function (d) { return x(d.step) })
+          .attr('cy', function (d) { return y0(d.value) })
         line
           .selectAll('.smoothline1')
           .transition()
           .duration(1000)
-          .attr('d', function(d) {
+          .attr('d', function (d) {
             return d3.line()
-              .x(function(d) { return x(d.step) })
-              .y(function(d) { return y1(d.value) })(d.value)
+              .x(function (d) { return x(d.step) })
+              .y(function (d) { return y1(d.value) })(d.value)
           })
         line
           .selectAll('.myCircle1')
           .transition()
           .duration(1000)
-          .attr('cx', function(d) { return x(d.step) })
-          .attr('cy', function(d) { return y1(d.value) })
+          .attr('cx', function (d) { return x(d.step) })
+          .attr('cy', function (d) { return y1(d.value) })
       })
     }
   }

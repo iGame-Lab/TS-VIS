@@ -16,7 +16,7 @@
 <script>
 import Layout from '@/components/layout/Layout.vue'
 
-export default{
+export default {
   components: {
     Layout
   }
@@ -25,7 +25,6 @@ export default{
 
 <style lang='less' scoped>
 #app {
-  // font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -35,22 +34,21 @@ export default{
   display: flex;
   height: 100%;
   user-select: none;
-  // font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;;
   ::-webkit-scrollbar {
-      width: 5px;
-      height: 1px;
-      background-color: white;
-    }
-    /*定义滚动条轨道 内阴影+圆角*/
-    ::-webkit-scrollbar-track{
-      box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
-      border-radius: 0px;
-    }
-    /*定义滑块 内阴影+圆角*/
-    ::-webkit-scrollbar-thumb{
-      border-radius: 10px;
-      /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
-      background-color: #ccc;
-    }
+    width: 5px;
+    height: 1px;
+    background-color: white;
+  }
+  /*定义滚动条轨道 内阴影+圆角*/
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0px;
+  }
+  /*定义滑块 内阴影+圆角*/
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
+    background-color: #ccc;
+  }
 }
 </style>

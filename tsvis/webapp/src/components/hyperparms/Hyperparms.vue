@@ -1,15 +1,15 @@
 <style lang="less" scoped>
-.temp{
-    height: 100%;
-    overflow-y: hidden;
-    width: 100%;
-    background-color:white;
+.temp {
+  height: 100%;
+  overflow-y: hidden;
+  width: 100%;
+  background-color: white;
 }
-.display-panel{
+.display-panel {
   margin: 1% 1% 0 1%;
   height: 97.5%;
   border-radius: 5px 5px 0 0;
-  box-shadow: rgba(0,0,0,.3) 0px 0px 10px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;
   background-color: white;
   overflow-y: auto;
 }
@@ -36,49 +36,36 @@ export default {
     ...mapLayoutGetters(['getTimer'])
   },
   watch: {
-    userSelectRunFile(val) {
-      // this.$message(val)
-        if (val === '') {
-          this.setAllData('null')
-          this.setHypEmpty(true)
-        } else {
-          const param = { run: val }
-          this.featchAllData(param)
-          this.setHypEmpty(false)
-        }
-      // if (!this.getCategoryInfo) {
-      //   if (val === '') {
-      //     this.setAllData('null')
-      //     this.setHypEmpty(true)
-      //   } else {
-      //     const param = { run: val }
-      //     this.featchAllData(param)
-      //     this.setHypEmpty(false)
-      //   }
-      // } else {
-      //   this.setSelfCategoryInfo(false)
-      // }
+    userSelectRunFile (val) {
+      if (val === '') {
+        this.setAllData('null')
+        this.setHypEmpty(true)
+      } else {
+        const param = { run: val }
+        this.featchAllData(param)
+        this.setHypEmpty(false)
+      }
     },
-    getErrorMessage(val) {
+    getErrorMessage (val) {
       this.$message({
         message: val.split('_')[0],
         type: 'error'
       })
     },
-    getIntervalChange: function() {
+    getIntervalChange: function () {
       if (this.userSelectRunFile) {
         const param = { run: this.userSelectRunFile }
         this.featchAllData(param)
       }
     }
   },
-  mounted() {
+  mounted () {
     if (this.userSelectRunFile) {
       const param = { run: this.userSelectRunFile }
       this.featchAllData(param)
     }
   },
-  destroyed() {
+  destroyed () {
     this.setAllData('null')
   },
   methods: {

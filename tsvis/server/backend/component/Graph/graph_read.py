@@ -443,4 +443,268 @@ def get_data(graph):
 
     # 数据存入
     # 放回data
-    return data
+    # data = filter(data, graph)
+    return data, graph
+
+
+
+def filter(g, graph):
+    import re
+    import copy
+    moudle_base_name = {"Identity", "Linear", "Bilinear", "LazyLinear", "Conv1d", "Conv2d", "Conv3d", "ConvTranspose1d",
+                        "ConvTranspose2d", "ConvTranspose3d", "LazyConv1d", "LazyConv2d", "LazyConv3d",
+                        "LazyConvTranspose1d", "LazyConvTranspose2d", "LazyConvTranspose3d", "Threshold", "ReLU",
+                        "Hardtanh", "ReLU6", "Sigmoid", "Tanh", "Softmax", "Softmax2d", "LogSoftmax", "ELU", "SELU",
+                        "CELU", "GELU", "Hardshrink", "LeakyReLU", "LogSigmoid", "Softplus", "Softshrink",
+                        "MultiheadAttention", "PReLU", "Softsign", "Softmin", "Tanhshrink", "RReLU", "GLU",
+                        "Hardsigmoid", "Hardswish", "SiLU", "Mish", "L1Loss", "NLLLoss", "KLDivLoss", "MSELoss",
+                        "BCELoss", "BCEWithLogitsLoss", "NLLLoss2d", "CosineEmbeddingLoss", "CTCLoss",
+                        "HingeEmbeddingLoss", "MarginRankingLoss", "MultiLabelMarginLoss", "MultiLabelSoftMarginLoss",
+                        "MultiMarginLoss", "SmoothL1Loss", "HuberLoss", "SoftMarginLoss", "CrossEntropyLoss",
+                        "TripletMarginLoss", "TripletMarginWithDistanceLoss", "PoissonNLLLoss", "GaussianNLLLoss",
+                        "AvgPool1d", "AvgPool2d", "AvgPool3d", "MaxPool1d", "MaxPool2d", "MaxPool3d", "MaxUnpool1d",
+                        "MaxUnpool2d", "MaxUnpool3d", "FractionalMaxPool2d", "FractionalMaxPool3d", "LPPool1d",
+                        "LPPool2d", "AdaptiveMaxPool1d", "AdaptiveMaxPool2d", "AdaptiveMaxPool3d", "AdaptiveAvgPool1d",
+                        "AdaptiveAvgPool2d", "AdaptiveAvgPool3d", "BatchNorm1d", "BatchNorm2d", "BatchNorm3d",
+                        "SyncBatchNorm", "LazyBatchNorm1d", "LazyBatchNorm2d", "LazyBatchNorm3d", "InstanceNorm1d",
+                        "InstanceNorm2d", "InstanceNorm3d", "LazyInstanceNorm1d", "LazyInstanceNorm2d",
+                        "LazyInstanceNorm3d", "LocalResponseNorm", "CrossMapLRN2d", "LayerNorm", "GroupNorm", "Dropout",
+                        "Dropout2d", "Dropout3d", "AlphaDropout", "FeatureAlphaDropout", "ReflectionPad1d",
+                        "ReflectionPad2d", "ReflectionPad3d", "ReplicationPad1d", "ReplicationPad2d",
+                        "ReplicationPad3d", "ZeroPad2d", "ConstantPad1d", "ConstantPad2d", "ConstantPad3d", "RNN",
+                        "RNNBase", "LSTM", "GRU", "RNNCellBase", "RNNCell", "LSTMCell", "GRUCell", "BertLayer",
+                        "BertEmbeddings", "Flatten", "Unflatten"}
+    base_tree_name = []
+    need_deal_input = False
+    need_deel_op = ["TupleConstruct", "TupleUnpack", "ListConstruct", "Constant", "size", "NumToTensor", "Int", "slice", "to"]
+    def del_node_sub(node):
+        if node["uid"].find("/") != -1:
+            start = node["uid"].rindex("/")
+            node_name = node["uid"][start+1:]
+            node_name = re.sub(r"\[(.*?)\]", "", node_name)
+            if node_name in moudle_base_name:
+                node["sub_net"] = []
+                base_tree_name.append(node["uid"])
+
+        for kid_node in node["sub_net"]:
+            del_node_sub(kid_node)
+
+
+    for top_node in g:
+        if top_node["label"].lower() == 'input' or top_node["label"].lower() == "output":
+            if len(top_node["sub_net"]) > 1:
+                need_deal_input = True
+                need_input_node = top_node["sub_net"]
+
+            top_node["sub_net"] = []
+        else:
+            del_node_sub(top_node)
+
+    def del_node_kid(node,base_tree_name):
+        for target_node in reversed(node["targets"]):
+            for i in base_tree_name:
+                if i in target_node["id"] and i != target_node["id"]:
+                    node["targets"].remove(target_node)
+
+            # if target_node["id"].find("/") != -1:
+            #     start = target_node["id"].rindex("/")
+            #     node_name = target_node["id"][0:start]
+            #     if node_name.find("/") != -1:
+            #         start = node_name.rindex("/")
+            #         need_name = node_name[start+1:]
+            #         need_name = re.sub(r"\[(.*?)\]", "", need_name)
+            #         if need_name in moudle_base_name:
+            #             node["targets"].remove(target_node)
+
+        for sub_node in node["sub_net"]:
+            del_node_kid(sub_node, base_tree_name)
+
+
+    for top_node in g:
+        del_node_kid(top_node, base_tree_name)
+
+    new_g = []
+
+    def find_need_node(node):
+        for kid_sub_net in node["sub_net"]:
+            find_need_node(kid_sub_net)
+
+        for target_node in reversed(node["targets"]):
+            for base_name in base_tree_name:
+                if target_node["id"] in base_name and target_node["id"] != base_name:
+                    node["targets"].remove(target_node)
+                    break
+        tip = 0
+        for base_name in base_tree_name:
+            if node["uid"] in base_name and node["uid"] != base_name:
+                tip = 1
+                break
+        if tip == 0:
+            new_g.append(node)
+
+    def deal_io(node, base_tree_name):
+        for io_target in reversed(node["targets"]):
+            for base_name in base_tree_name:
+                if io_target["id"] in base_name and io_target["id"] != base_name:
+                    node["targets"].remove(io_target)
+                    break
+
+    for top_node in g:
+        if top_node["label"].lower() == 'input' or top_node["label"].lower() == "output":
+            deal_io(top_node, base_tree_name)
+            new_g.append(top_node)
+            if need_deal_input and top_node["label"].lower() == 'input':
+                need_del_input = top_node
+        else:
+            find_need_node(top_node)
+    if need_deal_input:
+        for input_kid in need_input_node:
+            del_node_kid(input_kid,base_tree_name)
+            deal_io(input_kid, base_tree_name)
+            input_kid["parent"] = ""
+            input_kid["uid"] = input_kid["uid"].replace("/", "to")
+            new_g.append(input_kid)
+        new_g.remove(need_del_input)
+
+
+    for need_node in new_g:
+        need_node["parent"] = ""
+        need_node["uid"] = need_node["uid"].replace("/", "to")
+        need_node["layer"] = 1
+
+        for change_name in need_node["targets"]:
+            change_name["id"] = change_name["id"].replace("/", "to")
+    for s_node in reversed(new_g):
+        for i in s_node["targets"]:
+            if (("output" in i["id"]) and i["id"]!="output"):
+                s_node["targets"].remove(i)
+
+    # return new_g
+
+    #处理循环
+
+    relu_name = []
+    relu_num = []
+    for need_node in new_g:    #去除控制边
+        if len(need_node["targets"]) > 1 and need_node["op"] == "":
+            for kid_node in need_node["targets"]:
+                if kid_node["info"] != "":
+                    for target_node in reversed(need_node["targets"]):
+                        if target_node["info"] == "":
+                            need_node["targets"].remove(target_node)
+                    break
+        if need_node["op"] != "":
+            if "::" in need_node["op"]:
+                need_node["label"] = need_node["op"].split("::")[1]
+            else:
+                need_node["label"] = need_node["op"]
+            if "_" in need_node["label"]:
+                need_node["label"] = need_node["label"].replace("_", "")
+        if "relu" in need_node["label"]:
+            relu_name.append(need_node["uid"])
+            relu_num.append([0])
+    for need_node in new_g:
+        for target_name in need_node["targets"]:
+            if target_name["id"] in relu_name:
+                relu_index = relu_name.index(target_name["id"])
+                relu_num[relu_index][0] += 1
+                relu_num[relu_index].append(need_node["uid"])
+    temp = 0
+    contxt_relu = []
+    while(temp<len(relu_num)):
+        if relu_num[temp][0] > 1:
+            need_deel_relu_name = relu_name[temp]
+            input_relu = relu_num[temp][1:]
+            for need_node in reversed(new_g):
+                temp_name = ""
+                new_relu_node = None
+                i = 0
+                j = 0
+                if need_node["uid"] == need_deel_relu_name:
+                    output_relu = [i["id"] for i in need_node["targets"]]
+                    for graph_node in graph._node:
+                        for out_name in reversed(output_relu):
+                            if out_name in graph_node.replace("/", "to"):
+                                out_target = {
+                                    "id": out_name,
+                                    "info": need_node["targets"][0]["info"],
+                                    "control": 'false',
+                                    "num": 1
+                                }
+                                new_relu_node["targets"].append(out_target)
+                                output_relu.remove(out_name)
+                                # k = 1
+                        for input_name in reversed(input_relu):
+                            if input_name in graph_node.replace("/", "to"):
+                                if j != 0:
+                                    contxt_relu.append({temp_name: new_relu_node})
+                                new_relu_node = copy.deepcopy(need_node)
+                                temp_name = input_name
+                                new_relu_node["targets"] = []
+                                new_relu_node["uid"] =new_relu_node["uid"]+str(i)
+                                input_relu.remove(input_name)
+                                i += 1
+                                j = 1
+                                break
+                    contxt_relu.append({temp_name: new_relu_node})
+                    new_g.remove(need_node)
+        temp += 1
+
+    for need_node in new_g:
+        for conxtnet in contxt_relu:
+            if need_node["uid"] == list(conxtnet.keys())[0]:
+                for target in reversed(need_node["targets"]):
+                    if target["id"] in list(conxtnet.values())[0]["uid"]:
+                        target["id"] = list(conxtnet.values())[0]["uid"]
+                        new_g.append(list(conxtnet.values())[0])
+
+    #删除多余操作符
+    for need_node in reversed(new_g):
+        if need_node["label"] in need_deel_op:
+            need_deal_id = need_node["uid"]
+            for item in new_g:
+                for target_node in reversed(item["targets"]):
+                    if target_node["id"] == need_deal_id:
+                        item["targets"].remove(target_node)
+                        item["targets"].extend(need_node["targets"])
+                        break
+            new_g.remove(need_node)
+
+    #创造虚拟结点
+    def create_virtualNode(uid):
+        return {
+            "label": 'VirtualNode',
+            "parent": "",
+            "uid": uid,
+            "op": "",
+            "layer": 1,
+            "attrs": "",
+            "targets": [],
+            "sub_net": [],
+            "type": "VirtualNode"
+        }
+    for need_node in reversed(new_g):
+        if len(need_node["targets"]) >= 10:
+            new_node = create_virtualNode(need_node["uid"] + "[VirtualNode]")
+            new_g.append(new_node)
+            for index, kid_target in enumerate(need_node["targets"]):
+                new_node = create_virtualNode(need_node["uid"] + "[VirtualNode]"+str(index))
+                new_node["targets"].append(kid_target)
+                new_g.append(new_node)
+            need_node["targets"] = [
+                {
+                    "id": need_node["uid"] + "[VirtualNode]",
+                    "info": "",
+                    "control": "false",
+                    "num": 1,
+                }
+            ]
+
+    return new_g
+
+
+
+
+
+
+

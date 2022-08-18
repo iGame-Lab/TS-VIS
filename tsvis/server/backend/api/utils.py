@@ -21,7 +21,8 @@ from django.http import HttpResponseNotAllowed, HttpResponseBadRequest, \
     JsonResponse, HttpResponse
 from django.core.cache import cache
 
-def validate_get_request(request, func, accept_params=None, args=None):
+
+def validate_get_request(request: object, func: object, accept_params: object = None, args: object = None) -> object:
     """Check if method of request is GET and request params is legal
 
     Args:
@@ -88,6 +89,7 @@ def process_category(path):
         if run.is_dir():
             key = run.name if not (run.name == 'root') else '.'
             runs[key] = get_component(run)
+    merge_category(runs)
     return runs
 
 
@@ -99,6 +101,7 @@ def get_component(path):
                 components['statistic'] = {'histogram': get_tags(component)}
             elif component.name == 'graph':
                 components['graph'] = get_tags(component)
+                components['graph'].append("s_graph")
             elif component.name == 'hyperparm':
                 components['hyperparm'] = ['true']
             elif component.name == 'projector':
@@ -146,7 +149,7 @@ def get_init_data(request):
         _parser = LogParser(logdir, cachedir)
         _parser.start_parse()
         cache.set('finished', True)
-    return { 'msg': 'success' }
+    return {'msg': 'success'}
 
 
 def get_category_data(request):
@@ -207,3 +210,13 @@ def get_api_params(request, params):
     # 只有一个结果则不返回列表
     ret = ret[0] if len(ret) == 1 else ret
     return ret
+
+
+def merge_category(category):
+    for i in category:
+        if isinstance(category[i], dict):
+            merge_category(category[i])
+        if 'featuremap' in list(category.keys()):
+            category['graph'].extend(category['featuremap'])
+            del category['featuremap']
+            break

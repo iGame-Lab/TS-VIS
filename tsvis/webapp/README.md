@@ -29,7 +29,7 @@ npm test
 ## 文件说明
 ``` bash
 # 组件说明
-1. 目前只提供6个组件接口供大家调试接口在:/components/ 下包括scalars，images...
+1. 目前只提供9个组件接口供大家调试接口在:/components/ 下包括scalars，images...
 
 2. 每个组件下面有两个子组件如:Scalars.vue、ScalarsPanel.vue 分别对应内容(展示图表等)和参数选项(参数设置)；
 大家可以把自己的组件写到这两个组件里面作为他们的子组件。(组件不推荐很大，大家可以灵活的将自己负责的组件拆分成小组件，放在对应的目录下)；
@@ -54,10 +54,12 @@ npm test
     graph: '/api/getGraph',  // ...
     statistic: '/api/getStatistic',
     embedding: '/api/getEmbedding',
-    feature: '/api/getFeature',
-    roc: '/api/getRoc',
     hyperparm: '/api/getHyperparm',
-    custom: '/api/getCustom'
+    features: '/api/featuremap',
+    transformer: '/api/transformer',
+    state: '/api/state',
+    custom: '/api/getCustom',
+
   }
 # 使用方法：
 import http from '@/utils/request'

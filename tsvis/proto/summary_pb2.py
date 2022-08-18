@@ -3,6 +3,7 @@
 # source: tsvis/proto/summary.proto
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -13,441 +14,21 @@ _sym_db = _symbol_database.Default()
 
 from tsvis.proto import tensor_pb2 as tsvis_dot_proto_dot_tensor__pb2
 from tsvis.proto import projector_pb2 as tsvis_dot_proto_dot_projector__pb2
+from tsvis.proto import transtext_pb2 as tsvis_dot_proto_dot_transtext__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='tsvis/proto/summary.proto',
-  package='tsvis',
-  syntax='proto3',
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x19tsvis/proto/summary.proto\x12\x05tsvis\x1a\x18tsvis/proto/tensor.proto\x1a\x1btsvis/proto/projector.proto\"\x87\x01\n\x0eHistogramProto\x12\x0b\n\x03min\x18\x01 \x01(\x01\x12\x0b\n\x03max\x18\x02 \x01(\x01\x12\x0b\n\x03num\x18\x03 \x01(\x01\x12\x0b\n\x03sum\x18\x04 \x01(\x01\x12\x13\n\x0bsum_squares\x18\x05 \x01(\x01\x12\x18\n\x0c\x62ucket_limit\x18\x06 \x03(\x01\x42\x02\x10\x01\x12\x12\n\x06\x62ucket\x18\x07 \x03(\x01\x42\x02\x10\x01\"\xb0\x01\n\x0fSummaryMetadata\x12\x36\n\x0bplugin_data\x18\x01 \x01(\x0b\x32!.tsvis.SummaryMetadata.PluginData\x12\x14\n\x0c\x64isplay_name\x18\x02 \x01(\t\x12\x1b\n\x13summary_description\x18\x03 \x01(\t\x1a\x32\n\nPluginData\x12\x13\n\x0bplugin_name\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"\xac\x04\n\x07Summary\x12#\n\x05value\x18\x01 \x03(\x0b\x32\x14.tsvis.Summary.Value\x1a}\n\x05\x41udio\x12\x13\n\x0bsample_rate\x18\x01 \x01(\x02\x12\x14\n\x0cnum_channels\x18\x02 \x01(\x03\x12\x15\n\rlength_frames\x18\x03 \x01(\x03\x12\x1c\n\x14\x65ncoded_audio_string\x18\x04 \x01(\x0c\x12\x14\n\x0c\x63ontent_type\x18\x05 \x01(\t\x1aX\n\x05Image\x12\x0e\n\x06height\x18\x01 \x01(\x05\x12\r\n\x05width\x18\x02 \x01(\x05\x12\x12\n\ncolorspace\x18\x03 \x01(\x05\x12\x1c\n\x14\x65ncoded_image_string\x18\x04 \x01(\x0c\x1a\xa2\x02\n\x05Value\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12(\n\x08metadata\x18\t \x01(\x0b\x32\x16.tsvis.SummaryMetadata\x12\x16\n\x0csimple_value\x18\x02 \x01(\x02H\x00\x12%\n\x05image\x18\x04 \x01(\x0b\x32\x14.tsvis.Summary.ImageH\x00\x12&\n\x05histo\x18\x05 \x01(\x0b\x32\x15.tsvis.HistogramProtoH\x00\x12%\n\x05\x61udio\x18\x06 \x01(\x0b\x32\x14.tsvis.Summary.AudioH\x00\x12%\n\tprojector\x18\x07 \x01(\x0b\x32\x10.tsvis.ProjectorH\x00\x12$\n\x06tensor\x18\x08 \x01(\x0b\x32\x12.tsvis.TensorProtoH\x00\x42\x07\n\x05valueb\x06proto3'
-  ,
-  dependencies=[tsvis_dot_proto_dot_tensor__pb2.DESCRIPTOR,tsvis_dot_proto_dot_projector__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19tsvis/proto/summary.proto\x12\x05tsvis\x1a\x18tsvis/proto/tensor.proto\x1a\x1btsvis/proto/projector.proto\x1a\x1btsvis/proto/transtext.proto\"\x87\x01\n\x0eHistogramProto\x12\x0b\n\x03min\x18\x01 \x01(\x01\x12\x0b\n\x03max\x18\x02 \x01(\x01\x12\x0b\n\x03num\x18\x03 \x01(\x01\x12\x0b\n\x03sum\x18\x04 \x01(\x01\x12\x13\n\x0bsum_squares\x18\x05 \x01(\x01\x12\x18\n\x0c\x62ucket_limit\x18\x06 \x03(\x01\x42\x02\x10\x01\x12\x12\n\x06\x62ucket\x18\x07 \x03(\x01\x42\x02\x10\x01\"\xb0\x01\n\x0fSummaryMetadata\x12\x36\n\x0bplugin_data\x18\x01 \x01(\x0b\x32!.tsvis.SummaryMetadata.PluginData\x12\x14\n\x0c\x64isplay_name\x18\x02 \x01(\t\x12\x1b\n\x13summary_description\x18\x03 \x01(\t\x1a\x32\n\nPluginData\x12\x13\n\x0bplugin_name\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\x0c\"\xfd\x05\n\x07Summary\x12#\n\x05value\x18\x01 \x03(\x0b\x32\x14.tsvis.Summary.Value\x1a}\n\x05\x41udio\x12\x13\n\x0bsample_rate\x18\x01 \x01(\x02\x12\x14\n\x0cnum_channels\x18\x02 \x01(\x03\x12\x15\n\rlength_frames\x18\x03 \x01(\x03\x12\x1c\n\x14\x65ncoded_audio_string\x18\x04 \x01(\x0c\x12\x14\n\x0c\x63ontent_type\x18\x05 \x01(\t\x1aX\n\x05Image\x12\x0e\n\x06height\x18\x01 \x01(\x05\x12\r\n\x05width\x18\x02 \x01(\x05\x12\x12\n\ncolorspace\x18\x03 \x01(\x05\x12\x1c\n\x14\x65ncoded_image_string\x18\x04 \x01(\x0c\x1a\xd5\x02\n\x05Value\x12\x0b\n\x03tag\x18\x01 \x01(\t\x12(\n\x08metadata\x18\t \x01(\x0b\x32\x16.tsvis.SummaryMetadata\x12\x16\n\x0csimple_value\x18\x02 \x01(\x02H\x00\x12%\n\x05image\x18\x04 \x01(\x0b\x32\x14.tsvis.Summary.ImageH\x00\x12&\n\x05histo\x18\x05 \x01(\x0b\x32\x15.tsvis.HistogramProtoH\x00\x12%\n\x05\x61udio\x18\x06 \x01(\x0b\x32\x14.tsvis.Summary.AudioH\x00\x12%\n\tprojector\x18\x07 \x01(\x0b\x32\x10.tsvis.ProjectorH\x00\x12$\n\x06tensor\x18\x08 \x01(\x0b\x32\x12.tsvis.TensorProtoH\x00\x12\x31\n\x0btransformer\x18\n \x01(\x0b\x32\x1a.tsvis.Summary.TransformerH\x00\x42\x07\n\x05value\x1a\x9b\x01\n\x0bTransformer\x12+\n\rattentionItem\x18\x01 \x03(\x0b\x32\x14.tsvis.AttentionItem\x12\x16\n\x0e\x64\x65\x66\x61ult_filter\x18\x02 \x01(\t\x12\x15\n\rbidirectional\x18\x03 \x01(\t\x12\x13\n\x0b\x64isplayMode\x18\x04 \x01(\t\x12\r\n\x05layer\x18\x05 \x01(\x05\x12\x0c\n\x04head\x18\x06 \x01(\x05\x62\x06proto3')
 
 
 
-
-_HISTOGRAMPROTO = _descriptor.Descriptor(
-  name='HistogramProto',
-  full_name='tsvis.HistogramProto',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='min', full_name='tsvis.HistogramProto.min', index=0,
-      number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='max', full_name='tsvis.HistogramProto.max', index=1,
-      number=2, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='num', full_name='tsvis.HistogramProto.num', index=2,
-      number=3, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='sum', full_name='tsvis.HistogramProto.sum', index=3,
-      number=4, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='sum_squares', full_name='tsvis.HistogramProto.sum_squares', index=4,
-      number=5, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bucket_limit', full_name='tsvis.HistogramProto.bucket_limit', index=5,
-      number=6, type=1, cpp_type=5, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\020\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bucket', full_name='tsvis.HistogramProto.bucket', index=6,
-      number=7, type=1, cpp_type=5, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\020\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=92,
-  serialized_end=227,
-)
-
-
-_SUMMARYMETADATA_PLUGINDATA = _descriptor.Descriptor(
-  name='PluginData',
-  full_name='tsvis.SummaryMetadata.PluginData',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='plugin_name', full_name='tsvis.SummaryMetadata.PluginData.plugin_name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='content', full_name='tsvis.SummaryMetadata.PluginData.content', index=1,
-      number=2, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=356,
-  serialized_end=406,
-)
-
-_SUMMARYMETADATA = _descriptor.Descriptor(
-  name='SummaryMetadata',
-  full_name='tsvis.SummaryMetadata',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='plugin_data', full_name='tsvis.SummaryMetadata.plugin_data', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='display_name', full_name='tsvis.SummaryMetadata.display_name', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='summary_description', full_name='tsvis.SummaryMetadata.summary_description', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SUMMARYMETADATA_PLUGINDATA, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=230,
-  serialized_end=406,
-)
-
-
-_SUMMARY_AUDIO = _descriptor.Descriptor(
-  name='Audio',
-  full_name='tsvis.Summary.Audio',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='sample_rate', full_name='tsvis.Summary.Audio.sample_rate', index=0,
-      number=1, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='num_channels', full_name='tsvis.Summary.Audio.num_channels', index=1,
-      number=2, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='length_frames', full_name='tsvis.Summary.Audio.length_frames', index=2,
-      number=3, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='encoded_audio_string', full_name='tsvis.Summary.Audio.encoded_audio_string', index=3,
-      number=4, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='content_type', full_name='tsvis.Summary.Audio.content_type', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=457,
-  serialized_end=582,
-)
-
-_SUMMARY_IMAGE = _descriptor.Descriptor(
-  name='Image',
-  full_name='tsvis.Summary.Image',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='height', full_name='tsvis.Summary.Image.height', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='width', full_name='tsvis.Summary.Image.width', index=1,
-      number=2, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='colorspace', full_name='tsvis.Summary.Image.colorspace', index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='encoded_image_string', full_name='tsvis.Summary.Image.encoded_image_string', index=3,
-      number=4, type=12, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"",
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=584,
-  serialized_end=672,
-)
-
-_SUMMARY_VALUE = _descriptor.Descriptor(
-  name='Value',
-  full_name='tsvis.Summary.Value',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='tag', full_name='tsvis.Summary.Value.tag', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='metadata', full_name='tsvis.Summary.Value.metadata', index=1,
-      number=9, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='simple_value', full_name='tsvis.Summary.Value.simple_value', index=2,
-      number=2, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='image', full_name='tsvis.Summary.Value.image', index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='histo', full_name='tsvis.Summary.Value.histo', index=4,
-      number=5, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='audio', full_name='tsvis.Summary.Value.audio', index=5,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='projector', full_name='tsvis.Summary.Value.projector', index=6,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='tensor', full_name='tsvis.Summary.Value.tensor', index=7,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='value', full_name='tsvis.Summary.Value.value',
-      index=0, containing_type=None,
-      create_key=_descriptor._internal_create_key,
-    fields=[]),
-  ],
-  serialized_start=675,
-  serialized_end=965,
-)
-
-_SUMMARY = _descriptor.Descriptor(
-  name='Summary',
-  full_name='tsvis.Summary',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='value', full_name='tsvis.Summary.value', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SUMMARY_AUDIO, _SUMMARY_IMAGE, _SUMMARY_VALUE, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=409,
-  serialized_end=965,
-)
-
-_SUMMARYMETADATA_PLUGINDATA.containing_type = _SUMMARYMETADATA
-_SUMMARYMETADATA.fields_by_name['plugin_data'].message_type = _SUMMARYMETADATA_PLUGINDATA
-_SUMMARY_AUDIO.containing_type = _SUMMARY
-_SUMMARY_IMAGE.containing_type = _SUMMARY
-_SUMMARY_VALUE.fields_by_name['metadata'].message_type = _SUMMARYMETADATA
-_SUMMARY_VALUE.fields_by_name['image'].message_type = _SUMMARY_IMAGE
-_SUMMARY_VALUE.fields_by_name['histo'].message_type = _HISTOGRAMPROTO
-_SUMMARY_VALUE.fields_by_name['audio'].message_type = _SUMMARY_AUDIO
-_SUMMARY_VALUE.fields_by_name['projector'].message_type = tsvis_dot_proto_dot_projector__pb2._PROJECTOR
-_SUMMARY_VALUE.fields_by_name['tensor'].message_type = tsvis_dot_proto_dot_tensor__pb2._TENSORPROTO
-_SUMMARY_VALUE.containing_type = _SUMMARY
-_SUMMARY_VALUE.oneofs_by_name['value'].fields.append(
-  _SUMMARY_VALUE.fields_by_name['simple_value'])
-_SUMMARY_VALUE.fields_by_name['simple_value'].containing_oneof = _SUMMARY_VALUE.oneofs_by_name['value']
-_SUMMARY_VALUE.oneofs_by_name['value'].fields.append(
-  _SUMMARY_VALUE.fields_by_name['image'])
-_SUMMARY_VALUE.fields_by_name['image'].containing_oneof = _SUMMARY_VALUE.oneofs_by_name['value']
-_SUMMARY_VALUE.oneofs_by_name['value'].fields.append(
-  _SUMMARY_VALUE.fields_by_name['histo'])
-_SUMMARY_VALUE.fields_by_name['histo'].containing_oneof = _SUMMARY_VALUE.oneofs_by_name['value']
-_SUMMARY_VALUE.oneofs_by_name['value'].fields.append(
-  _SUMMARY_VALUE.fields_by_name['audio'])
-_SUMMARY_VALUE.fields_by_name['audio'].containing_oneof = _SUMMARY_VALUE.oneofs_by_name['value']
-_SUMMARY_VALUE.oneofs_by_name['value'].fields.append(
-  _SUMMARY_VALUE.fields_by_name['projector'])
-_SUMMARY_VALUE.fields_by_name['projector'].containing_oneof = _SUMMARY_VALUE.oneofs_by_name['value']
-_SUMMARY_VALUE.oneofs_by_name['value'].fields.append(
-  _SUMMARY_VALUE.fields_by_name['tensor'])
-_SUMMARY_VALUE.fields_by_name['tensor'].containing_oneof = _SUMMARY_VALUE.oneofs_by_name['value']
-_SUMMARY.fields_by_name['value'].message_type = _SUMMARY_VALUE
-DESCRIPTOR.message_types_by_name['HistogramProto'] = _HISTOGRAMPROTO
-DESCRIPTOR.message_types_by_name['SummaryMetadata'] = _SUMMARYMETADATA
-DESCRIPTOR.message_types_by_name['Summary'] = _SUMMARY
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_HISTOGRAMPROTO = DESCRIPTOR.message_types_by_name['HistogramProto']
+_SUMMARYMETADATA = DESCRIPTOR.message_types_by_name['SummaryMetadata']
+_SUMMARYMETADATA_PLUGINDATA = _SUMMARYMETADATA.nested_types_by_name['PluginData']
+_SUMMARY = DESCRIPTOR.message_types_by_name['Summary']
+_SUMMARY_AUDIO = _SUMMARY.nested_types_by_name['Audio']
+_SUMMARY_IMAGE = _SUMMARY.nested_types_by_name['Image']
+_SUMMARY_VALUE = _SUMMARY.nested_types_by_name['Value']
+_SUMMARY_TRANSFORMER = _SUMMARY.nested_types_by_name['Transformer']
 HistogramProto = _reflection.GeneratedProtocolMessageType('HistogramProto', (_message.Message,), {
   'DESCRIPTOR' : _HISTOGRAMPROTO,
   '__module__' : 'tsvis.proto.summary_pb2'
@@ -492,6 +73,13 @@ Summary = _reflection.GeneratedProtocolMessageType('Summary', (_message.Message,
     # @@protoc_insertion_point(class_scope:tsvis.Summary.Value)
     })
   ,
+
+  'Transformer' : _reflection.GeneratedProtocolMessageType('Transformer', (_message.Message,), {
+    'DESCRIPTOR' : _SUMMARY_TRANSFORMER,
+    '__module__' : 'tsvis.proto.summary_pb2'
+    # @@protoc_insertion_point(class_scope:tsvis.Summary.Transformer)
+    })
+  ,
   'DESCRIPTOR' : _SUMMARY,
   '__module__' : 'tsvis.proto.summary_pb2'
   # @@protoc_insertion_point(class_scope:tsvis.Summary)
@@ -500,8 +88,29 @@ _sym_db.RegisterMessage(Summary)
 _sym_db.RegisterMessage(Summary.Audio)
 _sym_db.RegisterMessage(Summary.Image)
 _sym_db.RegisterMessage(Summary.Value)
+_sym_db.RegisterMessage(Summary.Transformer)
 
+if _descriptor._USE_C_DESCRIPTORS == False:
 
-_HISTOGRAMPROTO.fields_by_name['bucket_limit']._options = None
-_HISTOGRAMPROTO.fields_by_name['bucket']._options = None
+  DESCRIPTOR._options = None
+  _HISTOGRAMPROTO.fields_by_name['bucket_limit']._options = None
+  _HISTOGRAMPROTO.fields_by_name['bucket_limit']._serialized_options = b'\020\001'
+  _HISTOGRAMPROTO.fields_by_name['bucket']._options = None
+  _HISTOGRAMPROTO.fields_by_name['bucket']._serialized_options = b'\020\001'
+  _HISTOGRAMPROTO._serialized_start=121
+  _HISTOGRAMPROTO._serialized_end=256
+  _SUMMARYMETADATA._serialized_start=259
+  _SUMMARYMETADATA._serialized_end=435
+  _SUMMARYMETADATA_PLUGINDATA._serialized_start=385
+  _SUMMARYMETADATA_PLUGINDATA._serialized_end=435
+  _SUMMARY._serialized_start=438
+  _SUMMARY._serialized_end=1203
+  _SUMMARY_AUDIO._serialized_start=486
+  _SUMMARY_AUDIO._serialized_end=611
+  _SUMMARY_IMAGE._serialized_start=613
+  _SUMMARY_IMAGE._serialized_end=701
+  _SUMMARY_VALUE._serialized_start=704
+  _SUMMARY_VALUE._serialized_end=1045
+  _SUMMARY_TRANSFORMER._serialized_start=1048
+  _SUMMARY_TRANSFORMER._serialized_end=1203
 # @@protoc_insertion_point(module_scope)

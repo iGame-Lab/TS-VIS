@@ -428,7 +428,6 @@ def graph(model, args, verbose=False, use_cuda=False, **kwargs):
     # https://github.com/tensorflow/tensorboard/blob/master/tensorboard/plugins/graph/tf_graph_common/test/graph-test.ts
     # and
     # https://github.com/tensorflow/tensorboard/blob/master/tensorboard/compat/proto/step_stats.proto
-
     if use_cuda:
         device = "/device:GPU:0"
     else:

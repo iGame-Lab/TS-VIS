@@ -21,9 +21,12 @@ __all__ = [
     "get_image_meta_data", "get_image_data", "get_graph_data",
     "get_hparams_data", "get_projector_meta_data", "get_projector_raw_data",
     "get_projector_sample_data", "get_projector_data", "get_exception_meta_data",
-    "get_exception_data", "get_exception_hist_data", "get_exception_box_data"
+    "get_exception_data", "get_exception_hist_data", "get_exception_box_data",
+    "get_featuremap_data", "get_transformer_text_data", "get_transformer_image_data",
+    "get_state_data", "get_state_select_data"
            ]
-
+# "get_attentionmap_data"
+from tsvis.server.backend.component.featuremap.provider import get_featuremap_data
 from tsvis.server.backend.component.Audio.provider import get_audio_meta_data, \
     get_audio_data
 from tsvis.server.backend.component.Distribution.provider import get_distribution_data
@@ -38,3 +41,5 @@ from tsvis.server.backend.component.Projector.provider import get_projector_meta
     get_projector_raw_data, get_projector_sample_data, get_projector_data
 from tsvis.server.backend.component.Scalar.provider import get_scalar_data
 from tsvis.server.backend.component.Text.provider import get_text_data
+from tsvis.server.backend.component.transformer.provider import get_transformer_image_data, get_transformer_text_data
+from tsvis.server.backend.component.hidden_state.provider import get_state_data, get_state_select_data

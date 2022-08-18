@@ -69,61 +69,61 @@ const getters = {
   getIntervalChange: (state) => state.IntervalChange
 }
 
-const actions = {
-  async getSelfCategoryInfo(context, param) {
-    const initDetailData = {}
-    const initshowrun = {}
+const actions = {
+  async getSelfCategoryInfo (context, param) {
+    const initDetailData = {}
+    const initshowrun = {}
     for (let i = 0; i < param[1].length; i++) {
-      Object.keys(param[1][i]).forEach(value => {
-        initDetailData[value] = []
+      Object.keys(param[1][i]).forEach(value => {
+        initDetailData[value] = []
         if (!(value in initshowrun)) {
-          initshowrun[value] = {}
+          initshowrun[value] = {}
         }
         initshowrun[value][param[0][i]] = true
       })
     }
     context.commit('setinitshowrun', initshowrun)
-    context.commit('setSelfCategoryInfo', param)
-    context.commit('setInitDetailDataInfo', initDetailData)
-    if (param[2]['initStateFlag']) {
+    context.commit('setSelfCategoryInfo', param)
+    context.commit('setInitDetailDataInfo', initDetailData)
+    if (param[2]['initStateFlag']) {
       context.commit('setfreshnumber')
     }
   },
-  async getIntervalSelfCategoryInfo(context, param) {
+  async getIntervalSelfCategoryInfo (context, param) {
     context.commit('setIntervalSelfCategoryInfo', param)
   },
-  async getData(context, param) {
+  async getData (context, param) {
     //if (context.state.detailData[param[0]].length === 0) {
-      for (let j = 0; j < param[1].length; j++) {
-        for (let i = 0; i < context.state.categoryInfo[0].length; i++) {
-          if (Object.keys(context.state.categoryInfo[1][i]).indexOf(param[0]) > -1) {
-            if (context.state.categoryInfo[1][i][param[0]].indexOf(param[1][j]) > -1) {
-              const parameter = {
-                run: context.state.categoryInfo[0][i],
-                tag: param[1][j]
-              }
-              await http.useGet(port.category.scalar, parameter).then(res => { // port.category.scalar 'scalar' 换成你需要的接口
-                if (+res.data.code !== 200) {
-                  context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
-                  return
-                }
-                
-                context.commit('setDetailData', [param[0], { 'run': context.state.categoryInfo[0][i], 'value': res.data.data}])
-              })
+    for (let j = 0; j < param[1].length; j++) {
+      for (let i = 0; i < context.state.categoryInfo[0].length; i++) {
+        if (Object.keys(context.state.categoryInfo[1][i]).indexOf(param[0]) > -1) {
+          if (context.state.categoryInfo[1][i][param[0]].indexOf(param[1][j]) > -1) {
+            const parameter = {
+              run: context.state.categoryInfo[0][i],
+              tag: param[1][j]
             }
+            await http.useGet(port.category.scalar, parameter).then(res => { // port.category.scalar 'scalar' 换成你需要的接口
+              if (+res.data.code !== 200) {
+                context.commit('setErrorMessage', res.data.msg + '_' + new Date().getTime())
+                return
+              }
+
+              context.commit('setDetailData', [param[0], { 'run': context.state.categoryInfo[0][i], 'value': res.data.data }])
+            })
           }
         }
       }
+    }
     //}
   }
 }
 
 const mutations = {
   setIntervalSelfCategoryInfo: (state, param) => {
-    if(Object.keys(state.detailData).length < param[0].length){
+    if (Object.keys(state.detailData).length < param[0].length) {
       for (let i = 0; i < param[1].length; i++) {
-        for (let value of Object.keys(param[1][i])){
-          if(Object.keys(state.detailData).indexOf(value) == -1){
+        for (let value of Object.keys(param[1][i])) {
+          if (Object.keys(state.detailData).indexOf(value) == -1) {
             state.detailData[value] = []
           }
         }
@@ -131,12 +131,12 @@ const mutations = {
     }
 
     const keys = Object.keys(state.initshowrun)
-    let tag = keys.length > 0?false:true
-    for (let i =0;i < param[0].length; i++){
+    let tag = keys.length > 0 ? false : true
+    for (let i = 0; i < param[0].length; i++) {
       const keys = Object.keys(param[1][i])
-      for (let j=0;j<keys.length;j++){
-        if(keys[j] in state.initshowrun) {
-          if(! (param[0][i] in state.initshowrun[keys[j]])) {
+      for (let j = 0; j < keys.length; j++) {
+        if (keys[j] in state.initshowrun) {
+          if (!(param[0][i] in state.initshowrun[keys[j]])) {
             state.initshowrun[keys[j]][param[0][i]] = tag
           }
         } else {
@@ -145,7 +145,7 @@ const mutations = {
         }
       }
     }
-    
+
     state.categoryInfo = param
     state.freshnumber += 1
   },
@@ -163,23 +163,23 @@ const mutations = {
     // param[1]param[1]['run']存储训练模型名称，param[1]['value']存储对应param[0]的标量数据类型
     let keys = [] // keys存储标量数据类型及模型名称，如loss-log
 
-    for(let k in param[1]['value']) {
+    for (let k in param[1]['value']) {
       keys.push(k + '-' + param[1]['run'])
     }
-  
+
     let keys2 = [] // keys2存储第一次加载数据的存储标量数据类型及模型名称，用于和keys比较，判断替换下一次请求的数据
     let index = [] // 一个tag下多个模型编号
-    for(let key in state.detailData[param[0]] ) {
-        for(let kk in state.detailData[param[0]][key]['value']) {
-          keys2.push(kk + '-' + state.detailData[param[0]][key]['run'])
-          index.push(key)
-        }
+    for (let key in state.detailData[param[0]]) {
+      for (let kk in state.detailData[param[0]][key]['value']) {
+        keys2.push(kk + '-' + state.detailData[param[0]][key]['run'])
+        index.push(key)
+      }
     }
 
-    for(let i=0; i < keys.length; i++) {
-      if(keys2.indexOf(keys[i]) != -1) {
-        state.detailData[param[0]][index[keys2.indexOf(keys[i])]]['value'] = param[1]['value']
-      }else{
+    for (let i = 0; i < keys.length; i++) {
+      if (keys2.indexOf(keys[i]) != -1) {
+        state.detailData[param[0]][index[keys2.indexOf(keys[i])]]['value'] = param[1]['value']
+      } else {
         state.detailData[param[0]].push(param[1])
       }
     }

@@ -26,10 +26,14 @@ which support visualization of the most popular deep learning frameworks, such a
 * Support real-time visualization during training
 * Support embedding sample visualization
 * Support neural network exception visualization
+* Supports multiple feature map visualizations
+* Support Transformer visualization
+* Support RNN hidden state visualization
 
 ## Features
 
 - Graph: Visualize neural network structure, including computational graph and structure graph
+- FeatureMap：Visualize convolutional features of convolutional neural networks
 - Scalar: Visualize arbitrary scalar data including `accuary` and `loss`
 - Media: Visualize media data including images, text, and audio
 - Distribution: Visualize the distribution of weights, biases, etc. in neural network
@@ -37,6 +41,8 @@ which support visualization of the most popular deep learning frameworks, such a
 - Hyperparameter: Visualize neural network indicators under different hyperparameters
 - Exception: Map neural network tensor data to two dimensions, visualize tensor data statistics
 - Custom: Move the charts in `Scalar`, `Media`, and `Distribution` to this module for comparison and viewing
+- Attention:Visualize Attention Data for Image and Text Transformer Models
+- HiddenState:Visualize RNN hidden state values and perform matching analysis
 
 ## Install
 

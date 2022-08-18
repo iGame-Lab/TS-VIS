@@ -7,74 +7,76 @@
  * @LastEditTime: 2021-07-29 00:18:45
  -->
  <style lang="less" scoped>
-  .scalarcontainer{
-    width: 100%;
-    height: 100%;
-    background-color: white;
+.scalarcontainer {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+.scalarContainerTitle,
+.scalarContainerTitleLarge {
+  color: white;
+  background-color: #9fa5fa;
+  text-align: left;
+  padding: 0% 2% 0 2%;
+  border-radius: 2px;
+  display: flex;
+  height: 30px;
+  line-height: 30px;
+  .scale:hover {
+    cursor: pointer;
   }
-  .scalarContainerTitle, .scalarContainerTitleLarge{
-    color: white;
-    background-color: #9FA5FA;
-    text-align: left;
-    padding: 0% 2% 0 2%;
-    border-radius:2px;
-    display:flex;
-    height: 30px;
-    line-height: 30px;
-    .scale:hover{
-      cursor: pointer;
-    }
-    .titleRight{
-      margin-left: auto;
-      margin-right: 1%;
-    }
+  .titleRight {
+    margin-left: auto;
+    margin-right: 1%;
   }
-  .scalarContainerTitle{
+}
+.scalarContainerTitle {
+  font-size: 11px;
+  .iconfont {
     font-size: 11px;
-    .iconfont{
-      font-size: 11px;
-    }
   }
-  .scalarContainerTitleLarge {
+}
+.scalarContainerTitleLarge {
+  font-size: 16px;
+  .iconfont {
     font-size: 16px;
-    .iconfont{
-      font-size: 16px;
-    }
   }
-  .el-col {
-    margin-bottom: 20px;
-  }
+}
+.el-col {
+  margin-bottom: 20px;
+}
 </style>
 <template>
   <div v-show="isshow[chartgrade]" class="scalarcontainer">
     <el-col :span="size">
       <el-card :body-style="{ padding: '0px' }" class="box-card">
-        <div :class="[scaleLargeSmall?'scalarContainerTitleLarge':'scalarContainerTitle']">
+        <div
+          :class="[scaleLargeSmall?'scalarContainerTitleLarge':'scalarContainerTitle']">
           <div>
             <span class="tagShow">{{ info }}</span>
           </div>
           <div class="titleRight">
-            <el-tooltip class="item" effect="dark" content="点击可放大此图表" placement="top">
-              <span class="scale" @click="sizebig()"><i class="iconfont icon-fangda" /></span>
+            <el-tooltip class="item" effect="dark" content="点击可放大此图表"
+              placement="top">
+              <span class="scale" @click="sizebig()"><i
+                  class="iconfont icon-fangda" /></span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="点击可缩小此图表" placement="top">
-              <span class="scale" @click="sizesmall()"><i class="iconfont icon-suoxiao1" /></span>
+            <el-tooltip class="item" effect="dark" content="点击可缩小此图表"
+              placement="top">
+              <span class="scale" @click="sizesmall()"><i
+                  class="iconfont icon-suoxiao1" /></span>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="勾选图表参与合并，或选中后点击定制按钮会跳转到用户定制界面" placement="top">
-              <span class="scale"><i :class="['iconfont',chartchecked?'icon-xuanzhong1':'icon-weixuanzhong1']" @click="ischecked()" /></span>
+            <el-tooltip class="item" effect="dark"
+              content="勾选图表参与合并，或选中后点击定制按钮会跳转到用户定制界面" placement="top">
+              <span class="scale"><i
+                  :class="['iconfont',chartchecked?'icon-xuanzhong1':'icon-weixuanzhong1']"
+                  @click="ischecked()" /></span>
             </el-tooltip>
           </div>
         </div>
-        <scalarchart
-          :chartdata="chartdata"
-          :start="start"
-          :end="end"
-          :ytext="ytext"
-          :scaleLargeSmall="scaleLargeSmall"
-          :classname="classname"
-          :isaddmain="isaddmain"
-          :title="id"
-        />
+        <scalarchart :chartdata="chartdata" :start="start" :end="end"
+          :ytext="ytext" :scaleLargeSmall="scaleLargeSmall"
+          :classname="classname" :isaddmain="isaddmain" :title="id" />
       </el-card>
     </el-col>
   </div>
@@ -93,7 +95,7 @@ export default {
     content: Object,
     subname: String,
   },
-  data() {
+  data () {
     return {
       scaleLargeSmall: false,
       size: 8,
@@ -106,7 +108,7 @@ export default {
       chartgrade: 'general',
       info: '',
       id: '',
-      chartdata: { 'run': '', 'value': {}},
+      chartdata: { 'run': '', 'value': {} },
       classname: '',
       isaddmain: false
     }
@@ -134,12 +136,12 @@ export default {
     ])
   },
   watch: {
-    mergestep: function(val) {
+    mergestep: function (val) {
       if (val === this.checkedorder.length && val !== 0 && this.mergedorder[this.classname] === this.mergednumber && this.grade[this.classname] === 'main') {
         this.setdatainit()
       }
     },
-    getTimer: function() {
+    getTimer: function () {
       let content = this.content.value[Object.keys(this.content.value)[0]]
       this.chartdata.run = this.content.run
       this.chartdata.value[Object.keys(this.content.value)[0]] = []
@@ -173,7 +175,7 @@ export default {
         this.setmergedorder([this.classname, 1000])
       }
     },
-    startmerged: function(val) {
+    startmerged: function (val) {
       if (val) {
         if (this.checkedorder.indexOf(this.classname) > 0) {
           this.setgrade([this.classname, 'subordinate'])
@@ -194,7 +196,7 @@ export default {
         }
       }
     },
-    endmerged: function(val) {
+    endmerged: function (val) {
       if (val && this.backednumber.indexOf(this.mergedorder[this.classname]) > -1) {
         if (this.grade[this.classname] === 'main') {
           this.end = val
@@ -208,7 +210,7 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     let content = this.content.value[Object.keys(this.content.value)[0]]
     this.chartdata.run = this.content.run
     this.chartdata.value[Object.keys(this.content.value)[0]] = []
@@ -242,7 +244,7 @@ export default {
       this.setmergedorder([this.classname, 1000])
     }
   },
-  mounted: function() {
+  mounted: function () {
     this.chartgrade = this.grade[this.classname]
   },
   methods: {
@@ -265,19 +267,19 @@ export default {
     ...mapCustomMutations([
       'setScalar', 'deleteScalar'
     ]),
-    sizebig() {
+    sizebig () {
       this.size = 24
       this.info = this.id
       this.scaleLargeSmall = true
     },
-    sizesmall() {
+    sizesmall () {
       this.size = 8
       this.scaleLargeSmall = false
       if (this.info.length > 20) {
         this.info = this.info.slice(0, 17) + '...'
       }
     },
-    ischecked() {
+    ischecked () {
       if (this.checked[this.classname]) {
         this.setchecked([this.classname, false])
         this.chartchecked = this.checked[this.classname]

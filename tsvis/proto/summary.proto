@@ -18,6 +18,7 @@ package tsvis;
 
 import "tsvis/proto/tensor.proto";
 import "tsvis/proto/projector.proto";
+import "tsvis/proto/transtext.proto";
 
 message HistogramProto {
   double min = 1;
@@ -85,7 +86,16 @@ message Summary {
       Audio audio = 6;            // audio
       Projector projector = 7;    // embedding, exception
       TensorProto tensor = 8;     // text
+      Transformer transformer = 10;
     }
   }
+  message Transformer {
+    repeated AttentionItem attentionItem = 1;
+    string default_filter = 2;
+    string bidirectional = 3;
+    string displayMode = 4;
+    int32 layer = 5;
+    int32 head = 6;
+  }
   repeated Value value = 1;
-}
+};

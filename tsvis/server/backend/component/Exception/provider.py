@@ -111,3 +111,5 @@ def get_exception_box_data(request):
         return {step: data}
     else:
         raise ValueError('No such data')
+
+
